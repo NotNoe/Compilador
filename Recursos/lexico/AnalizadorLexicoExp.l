@@ -58,7 +58,7 @@ build = build
 digitoPositivo = [1-9]
 digito = ({digitoPositivo}|0)
 letra = ([A-Z]|[a-z]|"_")
-identificador = {letra}({letra}|{digito})
+identificador = {letra}({letra}|{digito})*
 numeroEntero = {digitoPositivo}{digito}*
 separador = [ \t\r\b\n]
 comentario = "\\"[^\n]* 
@@ -145,7 +145,7 @@ coma = ","
 {modulo}		  {return ops.unidadModulo();}
 {punto}			  {return ops.unidadPunto();}
 {puntoComa}		  {return ops.unidadPuntoComa();}
-{coma}			  {returno ops.unidadComa();}	  
+{coma}			  {return ops.unidadComa();}	  
 
 
 [^]                       {errores.errorLexico(fila(),columna(),lexema());}  
