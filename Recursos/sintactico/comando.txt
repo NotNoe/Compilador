@@ -1,0 +1,1 @@
+java -cp cup.jar java_cup.Main -parser AnalizadorSintactico -symbols ClaseLexica -nopositions Gramatica.cup
