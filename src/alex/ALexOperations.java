@@ -33,7 +33,7 @@ public Symbol unidadContinue() {
 	return new UnidadLexica(alex.fila(),alex.columna(),ClaseLexica.CONTINUE,"continue");
 }
 public Symbol unidadDefault() {
-	// TODO Auto-generated method stub
+	return new UnidadLexica(alex.fila(),alex.columna(),ClaseLexica.DEFAULT,"default");
 }
 public Symbol unidadSwitch() {
 	return new UnidadLexica(alex.fila(),alex.columna(),ClaseLexica.SWITCH,"switch");
@@ -160,6 +160,16 @@ public Symbol unidadFalse() {
 }
 public Symbol unidadWhile() {
 	return new UnidadLexica(alex.fila(),alex.columna(),ClaseLexica.WHILE,"while");
+}
+
+public Symbol unidadCaracter() {
+	return new UnidadLexica(alex.fila(),alex.columna(),ClaseLexica.CARACTER,String.valueOf(alex.lexema().charAt(1)));
+}
+public Symbol unidadTypedef() {
+	return new UnidadLexica(alex.fila(),alex.columna(),ClaseLexica.TYPEDEF,"typedef");
+}
+public Symbol unidadElse() {
+	return new UnidadLexica(alex.fila(),alex.columna(),ClaseLexica.ELSE,"else");
 }
 
 }

@@ -51,8 +51,9 @@ true = true
 false = false
 this = this
 delete = delete
-build = build
-
+typedef = typedef
+else = else
+pointer = pointer
 
 
 digitoPositivo = [1-9]
@@ -87,7 +88,7 @@ modulo = "%"
 punto = "."
 puntoComa = ";"
 coma = ","
-
+caracter = "'"[^]"'"
 
 
 %%
@@ -116,7 +117,8 @@ coma = ","
 {false}			  {return ops.unidadFalse();}
 {this}			  {return ops.unidadThis();}		  
 {delete}		  {return ops.unidadDelete();}
-{build}			  {return ops.unidadBuild();}
+{typedef}		  {return ops.unidadTypedef();}
+{else}			  {return ops.unidadElse();}
 
 
 {identificador}		  {return ops.unidadIdenti();}
@@ -145,7 +147,8 @@ coma = ","
 {modulo}		  {return ops.unidadModulo();}
 {punto}			  {return ops.unidadPunto();}
 {puntoComa}		  {return ops.unidadPuntoComa();}
-{coma}			  {return ops.unidadComa();}	  
+{coma}			  {return ops.unidadComa();}
+{caracter}		  {return ops.unidadCaracter();}	  
 
 
 [^]                       {errores.errorLexico(fila(),columna(),lexema());}  
