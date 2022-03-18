@@ -54,13 +54,14 @@ delete = delete
 typedef = typedef
 else = else
 pointer = pointer
+null = NULL
 
 
 digitoPositivo = [1-9]
 digito = ({digitoPositivo}|0)
 letra = ([A-Z]|[a-z]|"_")
 identificador = {letra}({letra}|{digito})*
-numeroEntero = {digitoPositivo}{digito}*
+numeroEntero = ({digitoPositivo}{digito}* | 0)
 separador = [ \t\r\b\n]
 comentario = "\\"[^\n]* 
 operadorSuma = \+
@@ -119,6 +120,8 @@ caracter = "'"[^]"'"
 {delete}		  {return ops.unidadDelete();}
 {typedef}		  {return ops.unidadTypedef();}
 {else}			  {return ops.unidadElse();}
+{pointer}		  {return ops.unidadPointer();}
+{null}			  {return ops.unidadNull();}
 
 
 {identificador}		  {return ops.unidadIdenti();}
