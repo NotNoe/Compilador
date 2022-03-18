@@ -5,7 +5,7 @@ public class Num extends E {
   public Num(String v) {
    this.v = v;   
   }
-  public String num() {return v;}
+  public String val() {return v;}
   public KindE kind() {return KindE.NUM;}   
   public String toString() {return v;}  
 }

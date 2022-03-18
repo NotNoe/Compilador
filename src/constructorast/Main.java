@@ -10,8 +10,8 @@ import alex.UnidadLexica;
 public class Main {
    public static void main(String[] args) throws Exception {
      Reader input = new InputStreamReader(new FileInputStream(args[0]));
-	 //AnalizadorLexicoExp alex = new AnalizadorLexicoExp(input);
-	 //ConstructorASTExp constructorast = new ConstructorASTExp(alex);
+	 AnalizadorLexicoExp alex = new AnalizadorLexicoExp(input);
+	 ConstructorASTExp constructorast = new ConstructorASTExp(alex);
 	 //System.out.println(constructorast.lexema());
 	 /*
 	 UnidadLexica unidad;
@@ -22,9 +22,7 @@ public class Main {
 	 */
 	 
 	 
-     AnalizadorLexicoExp alex = new AnalizadorLexicoExp(input);
-	 AnalizadorSintactico asint = new AnalizadorSintactico(alex);
-	 asint.parse();
+	 // asint.parse();
 	 
  }
 }   
