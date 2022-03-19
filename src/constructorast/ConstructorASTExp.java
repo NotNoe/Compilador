@@ -12,6 +12,8 @@ import alex.UnidadLexica;
 import alex.TokenValue;
 import errors.GestionErroresExp;
 import ast.*;
+import ast.Expresiones.E;
+import ast.Expresiones.Num;
 import java_cup.runtime.ComplexSymbolFactory.Location;
 
 /** CUP v0.11b beta 20140220 generated parser.
