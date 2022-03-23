@@ -1,6 +1,6 @@
 package ast.tipo;
 
-public class Pointer extends Tipo {
+public class Pointer implements Tipo {
 	
 	private Tipo p;
 	

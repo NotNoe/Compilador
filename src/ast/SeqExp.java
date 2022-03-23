@@ -1,6 +1,6 @@
 package ast;
 
-import ast.Expresiones.E;
+import ast.expresiones.E;
 
 public class SeqExp implements ASTNode {
 

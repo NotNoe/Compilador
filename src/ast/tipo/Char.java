@@ -1,8 +1,8 @@
 package ast.tipo;
 
-public class Char extends Tipo {
+public class Char implements Tipo {
 	
-	public String toString() {return "Char";}
+	public String toString() {return "char()";}
 
 	@Override
 	public KindType kindType() {

@@ -1,0 +1,6 @@
+package ast.instrucciones;
+
+public enum KindI {
+	EXPRESION, DECLARACION, ASIGNACION, INSTRUCCION, FOR, SWITCH, RETURN, BREAK, CONTINUE, DELETE, IF
+
+}

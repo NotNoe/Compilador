@@ -1,8 +1,8 @@
 package ast.tipo;
 
-public class Bool extends Tipo {
+public class Bool implements Tipo {
 	
-	public String toString() {return "Bool";}
+	public String toString() {return "bool()";}
 
 	@Override
 	public KindType kindType() {

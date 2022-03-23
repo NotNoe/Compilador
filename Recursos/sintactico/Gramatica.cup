@@ -6,6 +6,12 @@ import alex.UnidadLexica;
 import alex.TokenValue;
 import errors.GestionErroresExp;
 import ast.*;
+import ast.designadores.*;
+import ast.expresiones.*;
+import ast.externos.*;
+import ast.externos.util.*;
+import ast.instrucciones.*;
+import ast.tipo.*;
 
 scan with {: return getScanner().next_token(); :};
 //action code {:
@@ -24,93 +30,181 @@ init with {:
 :};
 
 
-terminal  INT, CHAR, BOOL, CLASS, STRUCT, FOR, WHILE, IF,
+terminal INT, CHAR, BOOL, CLASS, STRUCT, FOR, WHILE, IF,
 SWITCH, BREAK, CONTINUE, CONST, VOID, DEFAULT, CASE, NEW, RETURN,
-TRUE, FALSE, THIS, DELETE, IDEN, ENT, SUMA, AST, RESTA, DIV,
+TRUE, FALSE, THIS, DELETE, SUMA, AST, RESTA, DIV,
 AND, OR, PAP, PCIERRE, CAP, CCIERRE, LAP, LCIERRE, MAYORIG,
 MAYOR, MENORIG, MENOR, IGUAL, DESIG, NEG, ASIG, REF, MOD,
-PUNTO, PUNTOCOMA, COMA, CARACTER, TYPEDEF, ELSE, POINTER, NULL;
+PUNTO, PUNTOCOMA, COMA, TYPEDEF, ELSE, POINTER, NULL, ENT, CARACTER;
 
-non terminal P, ASIGNACION, FUNCION, PROCEDIMIENTO, CLASE, ESTRUCTURADO, DEFTIPO, DECLARACION, TIPO, BLOQUE_INSTRUCCIONES, INSTRUCCION, PARAMETROS, AUX1, CUERPO_CLASE,
-DESIGNADOR, EXPRESION, I1, I2, I3, CONDICIONAL, MIENTRAS, PARA, SELECTOR, DEVOLVER, BORRADO, CASE_INDIVIDUAL, CUERPO_CASE, E0, 
-E1, E2, E3, E4, E5, E6, E7, E8, E9, E10, E11, E12, E13, E14, E15 ,LISTA, SEQ_EXPRE, SEQ_EXPRE_NOVACIA, T1, LLAMADA, GENCORCHETES ;
+terminal String IDEN;
 
-P ::= DECLARACION P | FUNCION P | PROCEDIMIENTO P | CLASE P | ESTRUCTURADO P | DEFTIPO P | ;
+non terminal Programa P;
+non terminal Designador DESIGNADOR, I1, I2, I3;
+non terminal Tipo TIPO, T1;
+non terminal Declaracion DECLARACION;
+non terminal ArrayDimensiones GENCORCHETES;
+non terminal Asignacion ASIGNACION;
+non terminal Externo ESTRUCTURADO, CLASE, DEFTIPO;
+non terminal BloqueInstrucciones BLOQUE_INSTRUCCIONES;
+non terminal Declaraciones BLOQUE_DECLARACIONES;
+non terminal DefFuncion FUNCION;
+non terminal Parametros PARAMETROS, AUX1;
+non terminal DefProcedimiento PROCEDIMIENTO;
+non terminal CuerpoClase CUERPO_CLASE;
+non terminal Instruccion CONDICIONAL, MIENTRAS, PARA, SELECTOR, BORRADO, DEVOLVER, INSTRUCCION;
+non terminal Cuerpo_Switch CUERPO_CASE;
+non terminal SwitchCase CASE_INDIVIDUAL;
+non terminal E EXPRESION, E0, E1, E2, E3, E4, E5, E6, E7, E8, E9, E10, E11, E12, E13, E14, E15, LISTA;
+non terminal Llamada LLAMADA;
+non terminal SeqExp SEQ_EXPRE, SEQ_EXPRE_NOVACIA;
 
-
-DESIGNADOR ::= DESIGNADOR CAP EXPRESION CCIERRE | I1 ;
-I1 ::= I1 PUNTO IDEN | I1 PUNTO LLAMADA | I2;
-I2 ::= AST I2 | I3 ;
-I3 ::= IDEN | THIS ;
-
-TIPO ::= POINTER T1 | T1 ;
-T1 ::= INT | CHAR | BOOL | IDEN;
-
-
-DECLARACION ::= TIPO IDEN GENCORCHETES ASIG EXPRESION PUNTOCOMA | TIPO IDEN GENCORCHETES PUNTOCOMA | CONST TIPO IDEN GENCORCHETES ASIG EXPRESION PUNTOCOMA ;
-
-GENCORCHETES ::= CAP EXPRESION CCIERRE GENCORCHETES | ;
-
-ASIGNACION ::= DESIGNADOR ASIG EXPRESION PUNTOCOMA ;
-
-ESTRUCTURADO ::= STRUCT LAP BLOQUE_INSTRUCCIONES LCIERRE IDEN PUNTOCOMA ;
-
-BLOQUE_INSTRUCCIONES ::= INSTRUCCION BLOQUE_INSTRUCCIONES | ;
-FUNCION ::= TIPO IDEN PAP PARAMETROS PCIERRE LAP BLOQUE_INSTRUCCIONES LCIERRE ;
-AUX1 ::= TIPO IDEN COMA AUX1 | TIPO IDEN | TIPO REF IDEN | TIPO REF IDEN COMA AUX1 ;
-PARAMETROS ::= AUX1 | ;
-PROCEDIMIENTO ::= VOID IDEN PAP PARAMETROS PCIERRE LAP BLOQUE_INSTRUCCIONES LCIERRE ;
-CUERPO_CLASE ::= DECLARACION CUERPO_CLASE | FUNCION CUERPO_CLASE | PROCEDIMIENTO CUERPO_CLASE | ;
-CLASE ::= CLASS LAP CUERPO_CLASE LCIERRE IDEN PUNTOCOMA ;
-DEFTIPO ::= TYPEDEF TIPO IDEN PUNTOCOMA ;
+P ::= DECLARACION:d P:p {: RESULT = new Programa(d, p); :} 
+| FUNCION:d P:p {: RESULT = new Programa(d, p); :}
+| PROCEDIMIENTO:d P:p {: RESULT = new Programa(d, p); :}
+| CLASE:d P:p {: RESULT = new Programa(d, p); :} 
+| ESTRUCTURADO:d P:p {: RESULT = new Programa(d, p); :} 
+| DEFTIPO:d P:p {: RESULT = new Programa(d, p); :}
+| {: RESULT = new Programa(); :} ;
 
 
-INSTRUCCION ::= DECLARACION | ASIGNACION | MIENTRAS | PARA | SELECTOR | DEVOLVER | BREAK PUNTOCOMA | CONTINUE PUNTOCOMA | BORRADO | EXPRESION PUNTOCOMA | CONDICIONAL;
+DESIGNADOR ::= DESIGNADOR:d CAP EXPRESION:e CCIERRE {: RESULT = new Corchetes(d, e); :} | I1:a {: RESULT = a; :} ;
+I1 ::= I1:d PUNTO IDEN:id {: RESULT = new Punto(d, new Identificador(id)); :}| I1:d PUNTO LLAMADA:l {: RESULT = new Punto(d, l); :} | I2:a {: RESULT = a; :};
+I2 ::= AST I2:d {: RESULT = new Asterisco(d); :}| I3:a {: RESULT = a; :} ;
+I3 ::= IDEN:id {: RESULT = new Identificador(id); :} | THIS {:RESULT = new This(); :} ;
 
 
-CONDICIONAL ::= IF PAP EXPRESION PCIERRE LAP BLOQUE_INSTRUCCIONES LCIERRE | IF PAP EXPRESION PCIERRE LAP BLOQUE_INSTRUCCIONES LCIERRE ELSE LAP BLOQUE_INSTRUCCIONES LCIERRE;
-
-MIENTRAS ::= WHILE PAP EXPRESION PCIERRE LAP BLOQUE_INSTRUCCIONES LCIERRE;
-
-PARA ::= FOR PAP DECLARACION EXPRESION PUNTOCOMA INSTRUCCION PCIERRE LAP BLOQUE_INSTRUCCIONES LCIERRE;
-
-DEVOLVER ::= RETURN EXPRESION PUNTOCOMA;
-
-BORRADO ::= DELETE DESIGNADOR PUNTOCOMA;
-
-SELECTOR ::= SWITCH PAP EXPRESION PCIERRE LAP CUERPO_CASE LCIERRE;
-
-CUERPO_CASE ::= CASE_INDIVIDUAL CUERPO_CASE | ;
-CASE_INDIVIDUAL ::= CASE EXPRESION LAP BLOQUE_INSTRUCCIONES LCIERRE | DEFAULT LAP BLOQUE_INSTRUCCIONES LCIERRE;
+TIPO ::= POINTER T1:t {: RESULT = new Pointer(t); :} 
+| T1:a {: RESULT = a; :} ;
+T1 ::= INT {: RESULT = new Int(); :} 
+| CHAR {: RESULT = new Char(); :} 
+| BOOL {: RESULT = new Bool(); :} 
+| IDEN:id {: RESULT = new Identificador(id); :};
 
 
+DECLARACION ::= TIPO:t IDEN:i GENCORCHETES:c ASIG EXPRESION:e PUNTOCOMA {: RESULT = new Declaracion(false, t, new Identificador(i), c, e); :}
+| TIPO:t IDEN:i GENCORCHETES:c PUNTOCOMA {: RESULT = new Declaracion(t, new Identificador(i), c); :}
+| CONST TIPO:t IDEN:i GENCORCHETES:c ASIG EXPRESION:e PUNTOCOMA {: RESULT = new Declaracion(true, t, new Identificador(i), c, e); :};
+
+GENCORCHETES ::= CAP EXPRESION:e CCIERRE GENCORCHETES:g {: RESULT = new ArrayDimensiones(e, g); :}|
+{: RESULT = new ArrayDimensiones(); :} ;
+
+ASIGNACION ::= DESIGNADOR:d ASIG EXPRESION:e PUNTOCOMA {: RESULT = new Asignacion(d, e); :} ;
+
+ESTRUCTURADO ::= STRUCT LAP BLOQUE_DECLARACIONES:d LCIERRE IDEN:i PUNTOCOMA {: RESULT = new DefStruct(d,new Identificador(i)); :};
+
+BLOQUE_INSTRUCCIONES ::= INSTRUCCION:i BLOQUE_INSTRUCCIONES:b {: RESULT = new BloqueInstrucciones(i, b); :}
+| {: RESULT = new BloqueInstrucciones(); :} ;
+
+BLOQUE_DECLARACIONES ::= DECLARACION:d BLOQUE_DECLARACIONES:b {: RESULT = new Declaraciones(d, b); :}
+| {: RESULT = new Declaraciones(); :} ;
+
+FUNCION ::= TIPO:t IDEN:i PAP PARAMETROS:p PCIERRE LAP BLOQUE_INSTRUCCIONES:b LCIERRE {: RESULT = new DefFuncion(t, new Identificador(i), p, b); :} ;
+
+AUX1 ::= TIPO:t IDEN:i COMA AUX1:p {: RESULT = new Parametros(new Parametro(t, false, new Identificador(i)), p); :}
+| TIPO:t IDEN:i {: RESULT = new Parametros(new Parametro(t, false, new Identificador(i)), new Parametros()); :}
+| TIPO:t REF IDEN:i {: RESULT = new Parametros(new Parametro(t, true, new Identificador(i)), new Parametros()); :}
+| TIPO:t REF IDEN:i COMA AUX1:p {: RESULT = new Parametros(new Parametro(t, true, new Identificador(i)), p); :};
+PARAMETROS ::= AUX1:a {: RESULT = a; :} | {:RESULT = new Parametros(); :} ;
+
+PROCEDIMIENTO ::= VOID IDEN:i PAP PARAMETROS:p PCIERRE LAP BLOQUE_INSTRUCCIONES:b LCIERRE {: RESULT = new DefProcedimiento(new Identificador(i), p, b); :} ;
+
+CUERPO_CLASE ::= DECLARACION:d CUERPO_CLASE:c {: RESULT = new CuerpoClase(d, c); :}
+| FUNCION:d CUERPO_CLASE:c {: RESULT = new CuerpoClase(d, c); :}
+| PROCEDIMIENTO:d CUERPO_CLASE:c {: RESULT = new CuerpoClase(d, c); :}
+| {: RESULT = new CuerpoClase(); :} ;
+
+CLASE ::= CLASS LAP CUERPO_CLASE:c LCIERRE IDEN:i PUNTOCOMA {: RESULT = new DefClase(c, new Identificador(i)); :} ;
+
+DEFTIPO ::= TYPEDEF TIPO:t IDEN:i PUNTOCOMA {: RESULT = new DefTipo(t, new Identificador(i)); :} ;
 
 
-EXPRESION ::= EXPRESION OR E0 | E0;
-E0 ::= E0 AND E1 | E1 ;
-E1 ::= E1 IGUAL E2 | E2 ;
-E2 ::= E2 DESIG E3 | E3 ;
-E3 ::= E3 MENORIG E4 | E4 ;
-E4 ::= E4 MENOR E5 | E5 ;
-E5 ::= E5 MAYORIG E6 | E6 ;
-E6 ::= E6 MAYOR E7 | E7 ;
-E7 ::= E7 SUMA E8 | E8 ;
-E8 ::= E8 RESTA E9 | E9 ;
-E9 ::= E9 DIV E10 | E10 ;
-E10 ::= E10 MOD E11 | E11 ;
-E11 ::= E11 AST E12 | E12 ;
-E12 ::= REF E12 | E13 ;
-E13 ::= NEG E13 | E14 ;
-E14 ::= RESTA E14 | E15 ;
-E15 ::= TRUE | FALSE | ENT | CARACTER | PAP EXPRESION PCIERRE | LISTA | LLAMADA | DESIGNADOR | NEW TIPO GENCORCHETES| NULL;
+INSTRUCCION ::= DECLARACION:d {:RESULT = d; :} 
+| ASIGNACION:d {:RESULT = d; :} 
+| MIENTRAS:d {:RESULT = d; :} 
+| PARA:d {:RESULT = d; :} 
+| SELECTOR:d {:RESULT = d; :} 
+| DEVOLVER:d {:RESULT = d; :} 
+| BREAK PUNTOCOMA {:RESULT = new Break(); :}
+| CONTINUE PUNTOCOMA {:RESULT = new Continue(); :}
+| BORRADO:d {:RESULT = d; :} 
+| EXPRESION:d PUNTOCOMA {:RESULT = d; :} 
+| CONDICIONAL:d {:RESULT = d; :} ;
+
+
+CONDICIONAL ::= IF PAP EXPRESION:e PCIERRE LAP BLOQUE_INSTRUCCIONES:b LCIERRE {: RESULT = new If(e, b); :} 
+| IF PAP EXPRESION:e PCIERRE LAP BLOQUE_INSTRUCCIONES:b1 LCIERRE ELSE LAP BLOQUE_INSTRUCCIONES:b2 LCIERRE {: RESULT = new If(e, b1, b2); :} ;
+
+MIENTRAS ::= WHILE PAP EXPRESION:e PCIERRE LAP BLOQUE_INSTRUCCIONES:b LCIERRE {: RESULT = new While(e, b); :};
+
+PARA ::= FOR PAP DECLARACION:d EXPRESION:e PUNTOCOMA INSTRUCCION:i PCIERRE LAP BLOQUE_INSTRUCCIONES:b LCIERRE
+{: RESULT = new For(d, e, i, b); :} ;
+
+DEVOLVER ::= RETURN EXPRESION:e PUNTOCOMA {: RESULT = new Return(e); :} ;
+
+BORRADO ::= DELETE DESIGNADOR:d PUNTOCOMA {: RESULT = new Delete(d); :} ;
+
+SELECTOR ::= SWITCH PAP EXPRESION:e PCIERRE LAP CUERPO_CASE:c LCIERRE {: RESULT = new Switch(e, c); :} ;
+
+CUERPO_CASE ::= CASE_INDIVIDUAL:i CUERPO_CASE:c {: RESULT = new Cuerpo_Switch(i, c); :} 
+| {: RESULT = new Cuerpo_Switch(); :} ;
+CASE_INDIVIDUAL ::= CASE EXPRESION:e LAP BLOQUE_INSTRUCCIONES:b LCIERRE {: RESULT = new Case(e, b); :}
+| DEFAULT LAP BLOQUE_INSTRUCCIONES:b LCIERRE {:RESULT = new Default(b); :} ;
 
 
 
-LLAMADA ::= IDEN PAP SEQ_EXPRE PCIERRE ;
 
-SEQ_EXPRE_NOVACIA ::= EXPRESION | EXPRESION COMA SEQ_EXPRE_NOVACIA;
-SEQ_EXPRE ::= SEQ_EXPRE_NOVACIA | ;
-LISTA ::= CAP SEQ_EXPRE CCIERRE ;
+EXPRESION ::= EXPRESION:e1 OR E0:e2 {: RESULT = new EBin(e1, e2, "||"); :}
+| E0:e {: RESULT = e; :} ;
+E0 ::= E0:e1 AND E1:e2 {: RESULT = new EBin(e1, e2, "&&"); :} 
+| E1:e {: RESULT = e; :} ;
+E1 ::= E1:e1 IGUAL E2:e2 {: RESULT = new EBin(e1, e2, "=="); :} 
+| E2:e {: RESULT = e; :} ;
+E2 ::= E2:e1 DESIG E3:e2 {: RESULT = new EBin(e1, e2, "!="); :}
+| E3:e {: RESULT = e; :} ;
+E3 ::= E3:e1 MENORIG E4:e2 {: RESULT = new EBin(e1, e2, "<="); :}
+| E4:e {: RESULT = e; :} ;
+E4 ::= E4:e1 MENOR E5:e2 {: RESULT = new EBin(e1, e2, "<"); :}
+| E5:e {: RESULT = e; :} ;
+E5 ::= E5:e1 MAYORIG E6:e2 {: RESULT = new EBin(e1, e2, ">="); :}
+| E6:e {: RESULT = e; :} ;
+E6 ::= E6:e1 MAYOR E7:e2 {: RESULT = new EBin(e1, e2, ">"); :}
+| E7:e {: RESULT = e; :} ;
+E7 ::= E7:e1 SUMA E8:e2 {: RESULT = new EBin(e1, e2, "+"); :}
+| E8:e {: RESULT = e; :} ;
+E8 ::= E8:e1 RESTA E9:e2 {: RESULT = new EBin(e1, e2, "-"); :}
+| E9:e {: RESULT = e; :} ;
+E9 ::= E9:e1 DIV E10:e2 {: RESULT = new EBin(e1, e2, "/"); :}
+| E10:e {: RESULT = e; :} ;
+E10 ::= E10:e1 MOD E11:e2 {: RESULT = new EBin(e1, e2, "%"); :}
+| E11:e {: RESULT = e; :} ;
+E11 ::= E11:e1 AST E12:e2 {: RESULT = new EBin(e1, e2, "*"); :}
+| E12:e {: RESULT = e; :} ;
+E12 ::= REF E12:e {: RESULT = new OpUn(e, "&"); :} 
+| E13:e {: RESULT = e; :} ;
+E13 ::= NEG E13:e {: RESULT = new OpUn(e, "!"); :}  
+| E14:e {: RESULT = e; :} ;
+E14 ::= RESTA E14:e {: RESULT = new OpUn(e, "-"); :} 
+| E15:e {: RESULT = e; :} ;
+E15 ::= TRUE {: RESULT = new True(); :}
+| FALSE {: RESULT = new False(); :}
+| ENT:e {: RESULT = new Num((String) e); :}
+| CARACTER:c {: RESULT = new Caracter((String) c); :}
+| PAP EXPRESION:e PCIERRE {: RESULT = e; :}
+| LISTA:l {: RESULT = l; :}
+| LLAMADA:l {: RESULT = l; :}
+| DESIGNADOR:d {: RESULT = d; :}
+| NEW TIPO:t GENCORCHETES:c {: RESULT = new New(t, c); :}
+| NULL{: RESULT = new Null(); :} ;
+
+
+
+LLAMADA ::= IDEN:i PAP SEQ_EXPRE:e PCIERRE {: RESULT = new Llamada(new Identificador(i), e); :} ;
+
+SEQ_EXPRE_NOVACIA ::= EXPRESION:e {: RESULT = new SeqExp(e, new SeqExp()); :} 
+| EXPRESION:e COMA SEQ_EXPRE_NOVACIA:s {: RESULT = new SeqExp(e, s); :} ;
+SEQ_EXPRE ::= SEQ_EXPRE_NOVACIA:s {:RESULT = s;:} | {: RESULT = new SeqExp(); :};
+LISTA ::= CAP SEQ_EXPRE:s CCIERRE {:RESULT = new Lista(s); :} ;
 
 
 
