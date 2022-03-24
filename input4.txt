@@ -1,2 +1,86 @@
-void main(){ 
+1;
+
+void main(){}
+
+asdfasdf;
+
+int b = !!!!!;
+
+pointer ponter int a;
+pointer pointer pinter int bb;
+
+hola = !!!;
+
+struct{
+	int a = 2;
+	bool b = true;
+	!! = a;
+	asfd[*].funcion();
+}stc;
+
+funcion(){}
+
+int funcion(asdf, int a){
+	int aux;
+	*******;
 }
+
+void prod(asdf ,*){
+	hola = adios;
+}
+
+class{
+	[[[[[]]]]]]];
+	classss build(sdfasdf){
+		int g = 0;
+	}
+}classsss;
+
+typedef tipouser;
+
+void tengoif(){
+	if(.){
+		if(true){
+			continue;
+		else{
+			if(*******-[[][[hola){
+				break;
+			else{
+				i = i + 1;
+			}
+		}
+		}
+	}
+	if hola){
+		return adios;
+	}
+}
+
+pointer int bucles(){
+	while (!*!!!!true){
+		while ohno,,,,,,{
+			a = a;
+		}
+	}
+	
+	for i;i;i) {
+		for estoy peor ; incluso_peor){
+			return .;
+			delete &;
+		}
+	}
+}
+
+tipouser selector(int *){
+	switch ...){
+		case adios {
+			1 + 1 = 7;
+		}
+	}
+	lista = [ . , hola];
+	return *;
+}
+
+
+
+int main(){}

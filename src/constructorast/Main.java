@@ -12,8 +12,6 @@ public class Main {
 	 AnalizadorLexicoExp alex = new AnalizadorLexicoExp(input);
 	 AnalizadorSintactico constructorast = new AnalizadorSintactico(alex);
 	 System.out.println(constructorast.parse().value);
-	 
-	 
  }
 }   
    

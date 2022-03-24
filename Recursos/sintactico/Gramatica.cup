@@ -66,7 +66,9 @@ P ::= DECLARACION:d P:p {: RESULT = new Programa(d, p); :}
 | CLASE:d P:p {: RESULT = new Programa(d, p); :} 
 | ESTRUCTURADO:d P:p {: RESULT = new Programa(d, p); :} 
 | DEFTIPO:d P:p {: RESULT = new Programa(d, p); :}
-| {: RESULT = new Programa(); :} ;
+| {: RESULT = new Programa(); :} 
+| error LCIERRE P 
+| error PUNTOCOMA P ;
 
 
 DESIGNADOR ::= DESIGNADOR:d CAP EXPRESION:e CCIERRE {: RESULT = new Corchetes(d, e); :} | I1:a {: RESULT = a; :} ;
@@ -75,8 +77,11 @@ I2 ::= AST I2:d {: RESULT = new Asterisco(d); :}| I3:a {: RESULT = a; :} ;
 I3 ::= IDEN:id {: RESULT = new Identificador(id.lexema); :} | THIS {:RESULT = new This(); :} ;
 
 
-TIPO ::= POINTER T1:t {: RESULT = new Pointer(t); :} 
-| T1:a {: RESULT = a; :} ;
+TIPO ::= POINTER TIPO:t {: RESULT = new Pointer(t); :} 
+| T1:a {: RESULT = a; :}
+| error INT
+| error BOOL
+| error CHAR;
 T1 ::= INT {: RESULT = new Int(); :} 
 | CHAR {: RESULT = new Char(); :} 
 | BOOL {: RESULT = new Bool(); :} 
@@ -85,39 +90,55 @@ T1 ::= INT {: RESULT = new Int(); :}
 
 DECLARACION ::= TIPO:t IDEN:i GENCORCHETES:c ASIG EXPRESION:e PUNTOCOMA {: RESULT = new Declaracion(false, t, new Identificador(i.lexema), c, e); :}
 | TIPO:t IDEN:i GENCORCHETES:c PUNTOCOMA {: RESULT = new Declaracion(t, new Identificador(i.lexema), c); :}
-| CONST TIPO:t IDEN:i GENCORCHETES:c ASIG EXPRESION:e PUNTOCOMA {: RESULT = new Declaracion(true, t, new Identificador(i.lexema), c, e); :};
+| CONST TIPO:t IDEN:i GENCORCHETES:c ASIG EXPRESION:e PUNTOCOMA {: RESULT = new Declaracion(true, t, new Identificador(i.lexema), c, e); :}
+| error ASIG EXPRESION PUNTOCOMA
+| CONST error ASIG EXPRESION PUNTOCOMA
+| TIPO IDEN GENCORCHETES ASIG error PUNTOCOMA
+| error ASIG error PUNTOCOMA
+| CONST error ASIG error PUNTOCOMA
+| CONST TIPO IDEN GENCORCHETES ASIG error PUNTOCOMA;
 
 GENCORCHETES ::= CAP EXPRESION:e CCIERRE GENCORCHETES:g {: RESULT = new ArrayDimensiones(e, g); :}|
 {: RESULT = new ArrayDimensiones(); :} ;
 
-ASIGNACION ::= DESIGNADOR:d ASIG EXPRESION:e PUNTOCOMA {: RESULT = new Asignacion(d, e); :} ;
+ASIGNACION ::= DESIGNADOR:d ASIG EXPRESION:e PUNTOCOMA {: RESULT = new Asignacion(d, e); :} 
+| DESIGNADOR ASIG error PUNTOCOMA;
 
-ESTRUCTURADO ::= STRUCT LAP BLOQUE_DECLARACIONES:d LCIERRE IDEN:i PUNTOCOMA {: RESULT = new DefStruct(d,new Identificador(i.lexema)); :};
+ESTRUCTURADO ::= STRUCT LAP BLOQUE_DECLARACIONES:d LCIERRE IDEN:i PUNTOCOMA {: RESULT = new DefStruct(d,new Identificador(i.lexema)); :}
+| STRUCT LAP BLOQUE_DECLARACIONES LCIERRE error PUNTOCOMA;
 
 BLOQUE_INSTRUCCIONES ::= INSTRUCCION:i BLOQUE_INSTRUCCIONES:b {: RESULT = new BloqueInstrucciones(i, b); :}
-| {: RESULT = new BloqueInstrucciones(); :} ;
+| {: RESULT = new BloqueInstrucciones(); :} 
+| error PUNTOCOMA BLOQUE_INSTRUCCIONES;
 
 BLOQUE_DECLARACIONES ::= DECLARACION:d BLOQUE_DECLARACIONES:b {: RESULT = new Declaraciones(d, b); :}
-| {: RESULT = new Declaraciones(); :} ;
+| {: RESULT = new Declaraciones(); :} 
+| error PUNTOCOMA BLOQUE_DECLARACIONES;
 
-FUNCION ::= TIPO:t IDEN:i PAP PARAMETROS:p PCIERRE LAP BLOQUE_INSTRUCCIONES:b LCIERRE {: RESULT = new DefFuncion(t, new Identificador(i.lexema), p, b); :} ;
+FUNCION ::= TIPO:t IDEN:i PAP PARAMETROS:p PCIERRE LAP BLOQUE_INSTRUCCIONES:b LCIERRE {: RESULT = new DefFuncion(t, new Identificador(i.lexema), p, b); :}
+| TIPO IDEN PAP error LAP BLOQUE_INSTRUCCIONES LCIERRE
+| error PAP PARAMETROS PCIERRE LAP BLOQUE_INSTRUCCIONES LCIERRE;
 
 AUX1 ::= TIPO:t IDEN:i COMA AUX1:p {: RESULT = new Parametros(new Parametro(t, false, new Identificador(i.lexema)), p); :}
 | TIPO:t IDEN:i {: RESULT = new Parametros(new Parametro(t, false, new Identificador(i.lexema)), new Parametros()); :}
 | TIPO:t REF IDEN:i {: RESULT = new Parametros(new Parametro(t, true, new Identificador(i.lexema)), new Parametros()); :}
-| TIPO:t REF IDEN:i COMA AUX1:p {: RESULT = new Parametros(new Parametro(t, true, new Identificador(i.lexema)), p); :};
+| TIPO:t REF IDEN:i COMA AUX1:p {: RESULT = new Parametros(new Parametro(t, true, new Identificador(i.lexema)), p); :}
+| error COMA AUX1;
 PARAMETROS ::= AUX1:a {: RESULT = a; :} | {:RESULT = new Parametros(); :} ;
 
-PROCEDIMIENTO ::= VOID IDEN:i PAP PARAMETROS:p PCIERRE LAP BLOQUE_INSTRUCCIONES:b LCIERRE {: RESULT = new DefProcedimiento(new Identificador(i.lexema), p, b); :} ;
+PROCEDIMIENTO ::= VOID IDEN:i PAP PARAMETROS:p PCIERRE LAP BLOQUE_INSTRUCCIONES:b LCIERRE {: RESULT = new DefProcedimiento(new Identificador(i.lexema), p, b); :} 
+| VOID IDEN PAP error LAP BLOQUE_INSTRUCCIONES LCIERRE;
 
 CUERPO_CLASE ::= DECLARACION:d CUERPO_CLASE:c {: RESULT = new CuerpoClase(d, c); :}
 | FUNCION:d CUERPO_CLASE:c {: RESULT = new CuerpoClase(d, c); :}
 | PROCEDIMIENTO:d CUERPO_CLASE:c {: RESULT = new CuerpoClase(d, c); :}
-| {: RESULT = new CuerpoClase(); :} ;
+| {: RESULT = new CuerpoClase(); :} 
+| error PUNTOCOMA CUERPO_CLASE;
 
 CLASE ::= CLASS LAP CUERPO_CLASE:c LCIERRE IDEN:i PUNTOCOMA {: RESULT = new DefClase(c, new Identificador(i.lexema)); :} ;
 
-DEFTIPO ::= TYPEDEF TIPO:t IDEN:i PUNTOCOMA {: RESULT = new DefTipo(t, new Identificador(i.lexema)); :} ;
+DEFTIPO ::= TYPEDEF TIPO:t IDEN:i PUNTOCOMA {: RESULT = new DefTipo(t, new Identificador(i.lexema)); :} 
+| TYPEDEF error PUNTOCOMA;
 
 
 INSTRUCCION ::= DECLARACION:d {:RESULT = d; :} 
@@ -134,23 +155,35 @@ INSTRUCCION ::= DECLARACION:d {:RESULT = d; :}
 
 
 CONDICIONAL ::= IF PAP EXPRESION:e PCIERRE LAP BLOQUE_INSTRUCCIONES:b LCIERRE {: RESULT = new If(e, b); :} 
-| IF PAP EXPRESION:e PCIERRE LAP BLOQUE_INSTRUCCIONES:b1 LCIERRE ELSE LAP BLOQUE_INSTRUCCIONES:b2 LCIERRE {: RESULT = new If(e, b1, b2); :} ;
+| IF PAP EXPRESION:e PCIERRE LAP BLOQUE_INSTRUCCIONES:b1 LCIERRE ELSE LAP BLOQUE_INSTRUCCIONES:b2 LCIERRE {: RESULT = new If(e, b1, b2); :} 
+| IF error PCIERRE LAP BLOQUE_INSTRUCCIONES LCIERRE
+| IF error PCIERRE LAP BLOQUE_INSTRUCCIONES LCIERRE ELSE LAP BLOQUE_INSTRUCCIONES LCIERRE
+| IF error LAP BLOQUE_INSTRUCCIONES LCIERRE
+| IF error LAP BLOQUE_INSTRUCCIONES LCIERRE ELSE LAP BLOQUE_INSTRUCCIONES LCIERRE;
 
-MIENTRAS ::= WHILE PAP EXPRESION:e PCIERRE LAP BLOQUE_INSTRUCCIONES:b LCIERRE {: RESULT = new While(e, b); :};
+MIENTRAS ::= WHILE PAP EXPRESION:e PCIERRE LAP BLOQUE_INSTRUCCIONES:b LCIERRE {: RESULT = new While(e, b); :}
+| WHILE error PCIERRE LAP BLOQUE_INSTRUCCIONES LCIERRE
+| WHILE error LAP BLOQUE_INSTRUCCIONES LCIERRE;
 
-PARA ::= FOR PAP DECLARACION:d EXPRESION:e PUNTOCOMA INSTRUCCION:i PCIERRE LAP BLOQUE_INSTRUCCIONES:b LCIERRE
-{: RESULT = new For(d, e, i, b); :} ;
+PARA ::= FOR PAP DECLARACION:d EXPRESION:e PUNTOCOMA INSTRUCCION:i PCIERRE LAP BLOQUE_INSTRUCCIONES:b LCIERRE {: RESULT = new For(d, e, i, b); :} 
+| FOR error PCIERRE LAP BLOQUE_INSTRUCCIONES LCIERRE
+| FOR error LAP BLOQUE_INSTRUCCIONES LCIERRE;
 
-DEVOLVER ::= RETURN EXPRESION:e PUNTOCOMA {: RESULT = new Return(e); :} ;
+DEVOLVER ::= RETURN EXPRESION:e PUNTOCOMA {: RESULT = new Return(e); :} 
+| RETURN error PUNTOCOMA;
 
-BORRADO ::= DELETE DESIGNADOR:d PUNTOCOMA {: RESULT = new Delete(d); :} ;
+BORRADO ::= DELETE DESIGNADOR:d PUNTOCOMA {: RESULT = new Delete(d); :} 
+| DELETE error PUNTOCOMA;
 
-SELECTOR ::= SWITCH PAP EXPRESION:e PCIERRE LAP CUERPO_CASE:c LCIERRE {: RESULT = new Switch(e, c); :} ;
+SELECTOR ::= SWITCH PAP EXPRESION:e PCIERRE LAP CUERPO_CASE:c LCIERRE {: RESULT = new Switch(e, c); :} 
+| SWITCH error PCIERRE LAP CUERPO_CASE LCIERRE
+| SWITCH error LAP CUERPO_CASE LCIERRE;
 
 CUERPO_CASE ::= CASE_INDIVIDUAL:i CUERPO_CASE:c {: RESULT = new Cuerpo_Switch(i, c); :} 
-| {: RESULT = new Cuerpo_Switch(); :} ;
+| {: RESULT = new Cuerpo_Switch(); :};
 CASE_INDIVIDUAL ::= CASE EXPRESION:e LAP BLOQUE_INSTRUCCIONES:b LCIERRE {: RESULT = new Case(e, b); :}
-| DEFAULT LAP BLOQUE_INSTRUCCIONES:b LCIERRE {:RESULT = new Default(b); :} ;
+| DEFAULT LAP BLOQUE_INSTRUCCIONES:b LCIERRE {:RESULT = new Default(b); :} 
+| CASE error LAP BLOQUE_INSTRUCCIONES LCIERRE;
 
 
 
@@ -200,10 +233,12 @@ E15 ::= TRUE {: RESULT = new True(); :}
 
 
 
-LLAMADA ::= IDEN:i PAP SEQ_EXPRE:e PCIERRE {: RESULT = new Llamada(new Identificador(i.lexema), e); :} ;
+LLAMADA ::= IDEN:i PAP SEQ_EXPRE:e PCIERRE {: RESULT = new Llamada(new Identificador(i.lexema), e); :} 
+| IDEN PAP error PCIERRE;
 
 SEQ_EXPRE_NOVACIA ::= EXPRESION:e {: RESULT = new SeqExp(e, new SeqExp()); :} 
-| EXPRESION:e COMA SEQ_EXPRE_NOVACIA:s {: RESULT = new SeqExp(e, s); :} ;
+| EXPRESION:e COMA SEQ_EXPRE_NOVACIA:s {: RESULT = new SeqExp(e, s); :} 
+| error COMA SEQ_EXPRE;
 
 SEQ_EXPRE ::= SEQ_EXPRE_NOVACIA:s {:RESULT = s;:} | {: RESULT = new SeqExp(); :};
 LISTA ::= CAP SEQ_EXPRE:s CCIERRE {:RESULT = new Lista(s); :} ;
