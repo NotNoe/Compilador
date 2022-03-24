@@ -6,6 +6,7 @@ public class OpUn extends E {
 	private KindE op;
 	
 	public OpUn(E opnd1, String op) {
+		this.opnd1 = opnd1;
 		switch(op) {
 		case "&":
 			this.op = KindE.REF;

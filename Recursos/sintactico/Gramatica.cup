@@ -35,9 +35,10 @@ SWITCH, BREAK, CONTINUE, CONST, VOID, DEFAULT, CASE, NEW, RETURN,
 TRUE, FALSE, THIS, DELETE, SUMA, AST, RESTA, DIV,
 AND, OR, PAP, PCIERRE, CAP, CCIERRE, LAP, LCIERRE, MAYORIG,
 MAYOR, MENORIG, MENOR, IGUAL, DESIG, NEG, ASIG, REF, MOD,
-PUNTO, PUNTOCOMA, COMA, TYPEDEF, ELSE, POINTER, NULL, ENT, CARACTER;
+PUNTO, PUNTOCOMA, COMA, TYPEDEF, ELSE, POINTER, NULL; 
 
-terminal String IDEN;
+terminal TokenValue IDEN, ENT, CARACTER;
+
 
 non terminal Programa P;
 non terminal Designador DESIGNADOR, I1, I2, I3;
@@ -69,9 +70,9 @@ P ::= DECLARACION:d P:p {: RESULT = new Programa(d, p); :}
 
 
 DESIGNADOR ::= DESIGNADOR:d CAP EXPRESION:e CCIERRE {: RESULT = new Corchetes(d, e); :} | I1:a {: RESULT = a; :} ;
-I1 ::= I1:d PUNTO IDEN:id {: RESULT = new Punto(d, new Identificador(id)); :}| I1:d PUNTO LLAMADA:l {: RESULT = new Punto(d, l); :} | I2:a {: RESULT = a; :};
+I1 ::= I1:d PUNTO IDEN:id {: RESULT = new Punto(d, new Identificador(id.lexema)); :}| I1:d PUNTO LLAMADA:l {: RESULT = new Punto(d, l); :} | I2:a {: RESULT = a; :};
 I2 ::= AST I2:d {: RESULT = new Asterisco(d); :}| I3:a {: RESULT = a; :} ;
-I3 ::= IDEN:id {: RESULT = new Identificador(id); :} | THIS {:RESULT = new This(); :} ;
+I3 ::= IDEN:id {: RESULT = new Identificador(id.lexema); :} | THIS {:RESULT = new This(); :} ;
 
 
 TIPO ::= POINTER T1:t {: RESULT = new Pointer(t); :} 
@@ -79,19 +80,19 @@ TIPO ::= POINTER T1:t {: RESULT = new Pointer(t); :}
 T1 ::= INT {: RESULT = new Int(); :} 
 | CHAR {: RESULT = new Char(); :} 
 | BOOL {: RESULT = new Bool(); :} 
-| IDEN:id {: RESULT = new Identificador(id); :};
+| IDEN:id {: RESULT = new Identificador(id.lexema); :};
 
 
-DECLARACION ::= TIPO:t IDEN:i GENCORCHETES:c ASIG EXPRESION:e PUNTOCOMA {: RESULT = new Declaracion(false, t, new Identificador(i), c, e); :}
-| TIPO:t IDEN:i GENCORCHETES:c PUNTOCOMA {: RESULT = new Declaracion(t, new Identificador(i), c); :}
-| CONST TIPO:t IDEN:i GENCORCHETES:c ASIG EXPRESION:e PUNTOCOMA {: RESULT = new Declaracion(true, t, new Identificador(i), c, e); :};
+DECLARACION ::= TIPO:t IDEN:i GENCORCHETES:c ASIG EXPRESION:e PUNTOCOMA {: RESULT = new Declaracion(false, t, new Identificador(i.lexema), c, e); :}
+| TIPO:t IDEN:i GENCORCHETES:c PUNTOCOMA {: RESULT = new Declaracion(t, new Identificador(i.lexema), c); :}
+| CONST TIPO:t IDEN:i GENCORCHETES:c ASIG EXPRESION:e PUNTOCOMA {: RESULT = new Declaracion(true, t, new Identificador(i.lexema), c, e); :};
 
 GENCORCHETES ::= CAP EXPRESION:e CCIERRE GENCORCHETES:g {: RESULT = new ArrayDimensiones(e, g); :}|
 {: RESULT = new ArrayDimensiones(); :} ;
 
 ASIGNACION ::= DESIGNADOR:d ASIG EXPRESION:e PUNTOCOMA {: RESULT = new Asignacion(d, e); :} ;
 
-ESTRUCTURADO ::= STRUCT LAP BLOQUE_DECLARACIONES:d LCIERRE IDEN:i PUNTOCOMA {: RESULT = new DefStruct(d,new Identificador(i)); :};
+ESTRUCTURADO ::= STRUCT LAP BLOQUE_DECLARACIONES:d LCIERRE IDEN:i PUNTOCOMA {: RESULT = new DefStruct(d,new Identificador(i.lexema)); :};
 
 BLOQUE_INSTRUCCIONES ::= INSTRUCCION:i BLOQUE_INSTRUCCIONES:b {: RESULT = new BloqueInstrucciones(i, b); :}
 | {: RESULT = new BloqueInstrucciones(); :} ;
@@ -99,24 +100,24 @@ BLOQUE_INSTRUCCIONES ::= INSTRUCCION:i BLOQUE_INSTRUCCIONES:b {: RESULT = new Bl
 BLOQUE_DECLARACIONES ::= DECLARACION:d BLOQUE_DECLARACIONES:b {: RESULT = new Declaraciones(d, b); :}
 | {: RESULT = new Declaraciones(); :} ;
 
-FUNCION ::= TIPO:t IDEN:i PAP PARAMETROS:p PCIERRE LAP BLOQUE_INSTRUCCIONES:b LCIERRE {: RESULT = new DefFuncion(t, new Identificador(i), p, b); :} ;
+FUNCION ::= TIPO:t IDEN:i PAP PARAMETROS:p PCIERRE LAP BLOQUE_INSTRUCCIONES:b LCIERRE {: RESULT = new DefFuncion(t, new Identificador(i.lexema), p, b); :} ;
 
-AUX1 ::= TIPO:t IDEN:i COMA AUX1:p {: RESULT = new Parametros(new Parametro(t, false, new Identificador(i)), p); :}
-| TIPO:t IDEN:i {: RESULT = new Parametros(new Parametro(t, false, new Identificador(i)), new Parametros()); :}
-| TIPO:t REF IDEN:i {: RESULT = new Parametros(new Parametro(t, true, new Identificador(i)), new Parametros()); :}
-| TIPO:t REF IDEN:i COMA AUX1:p {: RESULT = new Parametros(new Parametro(t, true, new Identificador(i)), p); :};
+AUX1 ::= TIPO:t IDEN:i COMA AUX1:p {: RESULT = new Parametros(new Parametro(t, false, new Identificador(i.lexema)), p); :}
+| TIPO:t IDEN:i {: RESULT = new Parametros(new Parametro(t, false, new Identificador(i.lexema)), new Parametros()); :}
+| TIPO:t REF IDEN:i {: RESULT = new Parametros(new Parametro(t, true, new Identificador(i.lexema)), new Parametros()); :}
+| TIPO:t REF IDEN:i COMA AUX1:p {: RESULT = new Parametros(new Parametro(t, true, new Identificador(i.lexema)), p); :};
 PARAMETROS ::= AUX1:a {: RESULT = a; :} | {:RESULT = new Parametros(); :} ;
 
-PROCEDIMIENTO ::= VOID IDEN:i PAP PARAMETROS:p PCIERRE LAP BLOQUE_INSTRUCCIONES:b LCIERRE {: RESULT = new DefProcedimiento(new Identificador(i), p, b); :} ;
+PROCEDIMIENTO ::= VOID IDEN:i PAP PARAMETROS:p PCIERRE LAP BLOQUE_INSTRUCCIONES:b LCIERRE {: RESULT = new DefProcedimiento(new Identificador(i.lexema), p, b); :} ;
 
 CUERPO_CLASE ::= DECLARACION:d CUERPO_CLASE:c {: RESULT = new CuerpoClase(d, c); :}
 | FUNCION:d CUERPO_CLASE:c {: RESULT = new CuerpoClase(d, c); :}
 | PROCEDIMIENTO:d CUERPO_CLASE:c {: RESULT = new CuerpoClase(d, c); :}
 | {: RESULT = new CuerpoClase(); :} ;
 
-CLASE ::= CLASS LAP CUERPO_CLASE:c LCIERRE IDEN:i PUNTOCOMA {: RESULT = new DefClase(c, new Identificador(i)); :} ;
+CLASE ::= CLASS LAP CUERPO_CLASE:c LCIERRE IDEN:i PUNTOCOMA {: RESULT = new DefClase(c, new Identificador(i.lexema)); :} ;
 
-DEFTIPO ::= TYPEDEF TIPO:t IDEN:i PUNTOCOMA {: RESULT = new DefTipo(t, new Identificador(i)); :} ;
+DEFTIPO ::= TYPEDEF TIPO:t IDEN:i PUNTOCOMA {: RESULT = new DefTipo(t, new Identificador(i.lexema)); :} ;
 
 
 INSTRUCCION ::= DECLARACION:d {:RESULT = d; :} 
@@ -188,8 +189,8 @@ E14 ::= RESTA E14:e {: RESULT = new OpUn(e, "-"); :}
 | E15:e {: RESULT = e; :} ;
 E15 ::= TRUE {: RESULT = new True(); :}
 | FALSE {: RESULT = new False(); :}
-| ENT:e {: RESULT = new Num((String) e); :}
-| CARACTER:c {: RESULT = new Caracter((String) c); :}
+| ENT:e {: RESULT = new Num(e.lexema); :}
+| CARACTER:c {: RESULT = new Caracter(c.lexema); :}
 | PAP EXPRESION:e PCIERRE {: RESULT = e; :}
 | LISTA:l {: RESULT = l; :}
 | LLAMADA:l {: RESULT = l; :}
@@ -199,10 +200,11 @@ E15 ::= TRUE {: RESULT = new True(); :}
 
 
 
-LLAMADA ::= IDEN:i PAP SEQ_EXPRE:e PCIERRE {: RESULT = new Llamada(new Identificador(i), e); :} ;
+LLAMADA ::= IDEN:i PAP SEQ_EXPRE:e PCIERRE {: RESULT = new Llamada(new Identificador(i.lexema), e); :} ;
 
 SEQ_EXPRE_NOVACIA ::= EXPRESION:e {: RESULT = new SeqExp(e, new SeqExp()); :} 
 | EXPRESION:e COMA SEQ_EXPRE_NOVACIA:s {: RESULT = new SeqExp(e, s); :} ;
+
 SEQ_EXPRE ::= SEQ_EXPRE_NOVACIA:s {:RESULT = s;:} | {: RESULT = new SeqExp(); :};
 LISTA ::= CAP SEQ_EXPRE:s CCIERRE {:RESULT = new Lista(s); :} ;
 

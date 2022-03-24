@@ -6,7 +6,9 @@ public class Delete extends Instruccion {
 
 	private Designador opnd1;
 	
-	
+	public String toString() {
+		return "delete("+opnd1.toString()+")";
+	}
 	
 	public Designador getOpnd1() {
 		return opnd1;

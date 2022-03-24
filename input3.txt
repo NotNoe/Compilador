@@ -14,7 +14,7 @@ void main(){
         }
      }
      int i = 0;
-     bool finished = False;
+     bool finished = false;
      while(i <= 2 && !finished){
         delete hola[i];
         i = i + 1;

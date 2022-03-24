@@ -21,7 +21,7 @@ public class BloqueInstrucciones implements ASTNode {
 	}
 
 	public String toString() {
-		if(opnd1 == null) {
+		if(opnd1 != null) {
 			return "bloque_inst("+opnd1.toString()+","+opnd2.toString()+")";
 		}else {
 			return "bloque_inst()";

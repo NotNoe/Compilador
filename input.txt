@@ -1,5 +1,5 @@
 void main(){
-    int a = [5, 2];
+    int a[2] = [5, 2];
     switch(a){
     case 1 {
         int c = 3;

@@ -37,7 +37,7 @@ public class Programa implements ASTNode {
 	
 	public String toString() {
 		if(this.kind == KindP.VACIO)
-			return "programa()";
+			return "fin_programa()";
 		else
 			return "programa(" + opnd1.toString() + "," + opnd2.toString() + ")";
 	}

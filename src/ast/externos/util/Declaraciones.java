@@ -22,7 +22,13 @@ public class Declaraciones implements ASTNode {
 		this.kind = KindD.NO_VACIO;
 	}
 	
-	
+	public String toString() {
+		if(this.kind == KindD.VACIO) {
+			return "fin_declaraciones()";
+		}else {
+			return "declaraciones("+opnd1.toString()+","+opnd2.toString()+")";
+		}
+	}
 
 
 

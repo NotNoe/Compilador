@@ -21,6 +21,14 @@ public class Parametros implements ASTNode {
 		this.opnd1 = opnd1;
 		this.opnd2 = opnd2;
 	}
+	
+	public String toString() {
+		if(this.kind == KindP.VACIO) {
+			return "parametros()";
+		}else {
+			return "parametros("+opnd1.toString()+","+opnd2.toString()+")";
+		}
+	}
 
 
 	public Parametro getOpnd1() {
