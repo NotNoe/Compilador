@@ -56,27 +56,27 @@
 \section{Introducción}
 El objetivo de este documento es el de especificar la sintaxis de nuestro lenguaje, C$--$. Este va a ser un lenguaje de programación imperativo y fuertemente tipado. Nos vamos a basar en el padre de todos los lenguajes imperativos modernos: C. Nuestro objetico con C$--$ es el de crear una versión simplificada de C y añadirle algunas utilidades como la definición de clases (sin herencia y declaradas en el ámbito global de nuestro programa). Contaremos únicamente con un archivo de código.
 
-\noindent El punto de entrada de todo programa válido de nuestro lenguaje será una función 'main' (que será un identificador de función reservado), que no devolverá nada y recibirá un array de ints (potencialmente vacío).
+\noindent El punto de entrada de todo programa válido de nuestro lenguaje será una función 'main', que no devolverá nada y recibirá un array de ints (potencialmente vacío).
 
 \noindent Nuestro lenguaje implementará comentarios de una sola linea al estilo de C. Cabe destacar que la cadena // estará prohibida dentro de los comentarios. Por último, al final expondremos una lista de palabras reservadas. Estas son palabras que por su construcción bien podrían ser identificadores, pero nosotros las prohibiremos porque se usarán en otros contextos.
 
 \section{Identificadores y ámbitos de definición}
 El lenguaje permite declarar variables (o constantes) simples y arrays de cualquiera de los tipos descritos más adelante (incluidos arrays de varias dimensiones). Estas variables podrán estar alojadas en memoria estática o dinámica. Como es habitual, habrá anidamiento de bloques con sus respectivos y funciones, que podrán tener argumentos de cualquier tipo.
 
-\noindent Las funciones solo se podrán declarar en el ámbito más general del proyecto (fuera de cualquier función), así como, los tipos de usuario, tipos estructurados y clases. Las funciones podrán recibir como argumentos parámentros de cualquier tipo, incluido punteros o referencias.
+\noindent Las funciones solo se podrán definir en el ámbito más general del proyecto (fuera de cualquier función), así como, los tipos de usuario, tipos estructurados y clases. Las funciones podrán recibir como argumentos parámentros de cualquier tipo, incluido punteros o referencias.
 
-\noindent En el ámbito global, también se podrán declarar variables.
+\noindent En el ámbito global, también se podrán declarar variables, definir tipos nuevos .
 
 \section{Tipos}
 
 \subsection{Tipos básicos y de usuario}
 
-En nuestro lenguaje existirán tres tipos básicos, el tipo entero (con identificador int), el tipo booleano (con identificador bool) y el tipo caracter (con identificador char). Además, el usuario podrá declarar como tipo, las clases y los estructurados.
+En nuestro lenguaje existirán tres tipos básicos, el tipo entero (con identificador int), el tipo booleano (con identificador bool) y el tipo caracter (con identificador char). Además, el usuario podrá declarar pseudónimos de cualquier tipo del lenguaje así como, clases y estructurados.
 
 \subsection{Arrays y punteros}
 Con todos estos tipos, podremos crear arrays y punteros. La notación que identifica a los arrays será la habitual, es decir, el identificador seguido de tantos corchetes de apertura y cierre como dimensiones tenga el array. Los arrays no serán polimórficos.
 
-La notación pertinente a los punteros serán el identificador precedido de un asterisco. Añadiremos pues un operador de referencia que, dada una variable cualquiera devuelva un puntero que apunte a esa variable, que se expresará con el "\&".
+La notación pertinente a los punteros serán el identificador precedido de la palabra reservada 'pointer' seguida de otra identificador de tipo. Añadiremos pues un operador de referencia que, dada una variable cualquiera devuelva un puntero que apunte a esa variable, que se expresará con el "\&".
 
 \subsection{Funciones}
 
@@ -86,18 +86,18 @@ A nivel sintáctico, todas las funciones estarán tipadas. Para esto exisistirá
 
 Todo tipo que no sea una función se declará de la siguiente manera: identificador de tipo seguido de un identificador (no seguido de un paréntesis para diferenciarlo de una función). Adicionalmente, podrá ir seguido del signo igual y de una expresión del tipo a declarar. 
 
-\noindent Los tipos de array se declararán de la forma una expresión de tipo existente seguida del símbolo [, un número y ]. Los tipos punteros se definirán con el símbolo * y un identificador de tipo simple (no array).
+\noindent Los tipos de array se declararán de la forma una expresión de tipo existente seguida del símbolo [, una expresión y ]. Los tipos punteros se definirán con la palabra reservada 'pointer' seguida de un tipo cualquiera y terminada en un identificador seguido de un número arbitrario de corchetes cada uno conteniendo una expresión.
 
 \noindent Las funciones se declararán de la siguiente forma: un identificador de tipo (o identificador void), seguido de un identificador y de un parentesis. Una sucesión de declaración de variables separadas por comas, terminado por un paréntesis de cierre y seguido de un bloque de código de nuestro lenguaje.
 
-\noindent Los tipos estructurados se declarán en el ámbito general, serán inicializados por la palabra reservada "struct" seguidos de llaves que contendran declariones de variables y a continuación un identificador terminado en ';'.
+\noindent Los tipos estructurados se declarán en el ámbito general, serán inicializados por la palabra reservada "struct"  seguidos de llaves que contendran declariones de variables y a continuación un identificador terminado en ';'.
 
 \noindent Las clases se declarán en el ámbito general, serán inicializadas por la palabra reservada class seguida de llaves que contendrán instrucciones, declaraciones y declaraciones de funciones, después de las llaves aparecerá un identificador terminado en ';'.
 
 \section{Conjunto de instrucciones del lenguaje}
 
-\subsection{Identificador de variable}
-Se considerará un identificador de variable cualquier cadena alfanumérica o con el simbolo "\_" que no empiece por un número y también se considerará identificador de variable otro identificador de variable, seguido de un corchete de apertura, un número y un corchete de cierre. Esto es para considerar los accesos a arrays como identificadores de variables.
+\subsection{Designadores de variable}
+Se considerará un designador de variable cualquier cadena alfanumérica o con el simbolo "\_" que no empiece por un número y también se considerará designador de variable otro designador de variable, seguido de un corchete de apertura, un número y un corchete de cierre. Esto es para considerar los accesos a arrays como designadores de variables.
 
 \subsection{Asignaciones}
 Toda asignación será una construcción de la forma o bien un identificador de variable, o bien una declaración de variable, seguida de un simbolo = y por último una expresión.
@@ -130,7 +130,7 @@ Al definir un array, siempre se hará de manera constante, osea la apertura de u
 \subsection{Expresiones con punteros}
 
 Tenemos el operadores unarios "$*,\&$" precede a un identificador, para acceder al valor de un puntero o a su dirección respectivamente.
-También tenemos el operador binario infijo "." que se encontrará entre dos identificadores donde el de más a la izquierda hará referencia a un struct o una clase y el de la derecha a un identificador de variable o de función.
+También tenemos el operador binario infijo "." que se encontrará entre dos identificadores donde el de más a la izquierda hará referencia a un struct o una clase y el de la derecha a un identificador de variable o de función. La prioridad de estos operadores será la habitual de C.
 
 
 \subsection{Instrucción}
@@ -143,7 +143,7 @@ Para representar bucles condicionales utilizaremos la siguiente sintaxis: la pal
 
 \subsection{Instrucción for}
 
-Para representar bucles con contadores utilizaremos la suguiente sintaxis: la palabra reservada "for" seguida de paréntesis que contendrán exactamente 3 instrucciones (declaración de variable, expresión booleana y una instrucción) seguido de llaves que contendrán instrucciones.
+Para representar bucles con contadores utilizaremos la suguiente sintaxis: la palabra reservada "for" seguida de paréntesis que contendrán exactamente 3 instrucciones (declaración de variable, expresión booleana y una instrucción) seguido de llaves que contendrán instrucciones. Se separarán entre sí usando ';' y la última también habrá de terminar en este caracter.
 
 \subsection{Instrucción if simple}
 
@@ -177,6 +177,9 @@ La instrucción new tendrá la siguiente sintaxis: la palabra reservada 'new' se
 
 La instrucción delete tendrá la siguiente sintaxis: la palabra reservada 'delete' seguida de un identificador. Se utilizará para eliminar memoria dinámica.
 
+\subsection{Definición de tipos de usuario}
+La palabra reservada 'typedef' se usará en el ámbito global para definir alias de cualquier tipo.
+
 \subsection{Identificador this}
 
 La palabra reservada 'this' comporta como un identificador de clase y podrá aparecer allá donde aparecen estos. Luego a nivel semántico manejaremos qué pasa si la utilizamos en un contexto inadecuado.
@@ -191,12 +194,12 @@ La gestión de errores va a indicar el tipo de error, la ubicación en el ficher
 \begin{lstlisting}[style=CStyle]
 void main(){
     int a = 5;
-    int[5] b = [1, 2, 3];
-    *int c = new int;
+    int b[3] = [1, 2, 3];
+    pointer int c = new int;
     *c = 5 + (7 % 2);
     b = *c + a;
-    *int hola = new int[5]; //Esto es un array dinamico de tamanno 5.
-     for(int i = 0; i < 27 + b[2]; i = i + 1){
+    pointer int hola = new int[5];
+    for(int i = 0; i < 27 + b[2]; i = i + 1;){
         if(b[i] % 2 == 0){
             continue;
         }
@@ -205,7 +208,7 @@ void main(){
         }
      }
      int i = 0;
-     bool finished = False;
+     bool finished = false;
      while(i <= 2 && !finished){
         delete hola[i];
         i = i + 1;
@@ -231,7 +234,7 @@ class{
 
     void protocolo(int a){}
     int function() {
-        this.a = this.a + 1
+        this.a = this.a + 1;
         return this.a;
     }
 
@@ -241,9 +244,18 @@ void idonthaveatype(bool &b){
     b = false;
 }
 
-int ihaveatype(*int k, int j){
+int ihaveatype(pointer int k, int j){
     *k = j + 1;
     return *k;
+}
+
+void main(){
+    tClase ejemplo = tClase(5);
+    ejemplo.protocolo(2);
+    int a = ejemplo.funcion();
+    bool c = true;
+    idonthaveatype(c);
+    ihaveatype(&a, 5);
 }
 
 void main(){
@@ -257,16 +269,19 @@ void main(){
 \end{lstlisting}
 
 \begin{lstlisting}[style=CStyle]
+typedef int aux;
+
 void main(){
-    int a = 5;
+    int a[2] = [5, 2];
     switch(a){
     case 1 {
         int c = 3;
         break;
     }
     case 2 {
-        if(a == 2)
-            int b = 3;
+        if(a == 2){
+            aux b = 3;
+        }
     }
     default {
         int d = 3;
@@ -299,7 +314,8 @@ void main(){
     \item false
     \item this
     \item delete
-    \item build
+    \item typedef
+    \item pointer
 
 \end{itemize}
 \end{multicols}

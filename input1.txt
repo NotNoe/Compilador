@@ -1,3 +1,5 @@
+typedef int aux;
+
 void main(){
     int a[2] = [5, 2];
     switch(a){
@@ -7,7 +9,7 @@ void main(){
     }
     case 2 {
         if(a == 2){
-            int b = 3;
+            aux b = 3;
         }
     }
     default {
