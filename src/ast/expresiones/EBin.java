@@ -1,9 +1,19 @@
 package ast.expresiones;
 
+import java.util.Map;
+import java.util.Stack;
+
+import ast.ASTNode;
+
 public class EBin extends E {
 	private E opnd1;
 	private E opnd2;
 	private KindE op;
+	
+	public void bind (Stack<Map<String, ASTNode>> pila) {
+		this.opnd1.bind(pila);
+		this.opnd2.bind(pila);
+	}
 
 	public EBin(E opnd1, E opnd2, String op) {
 		this.opnd1 = opnd1;

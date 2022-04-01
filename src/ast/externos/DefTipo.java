@@ -1,5 +1,9 @@
 package ast.externos;
 
+import java.util.Map;
+import java.util.Stack;
+
+import ast.ASTNode;
 import ast.designadores.Identificador;
 import ast.externos.util.KindExt;
 import ast.tipo.Tipo;
@@ -8,14 +12,16 @@ public class DefTipo implements Externo {
 
 	private Tipo opnd1;
 	private Identificador opnd2;
-	
+
 	
 	
 	public Tipo getOpnd1() {
 		return opnd1;
 	}
 
-
+	public void bind (Stack<Map<String, ASTNode>> pila) {
+		
+	}
 
 	public Identificador getOpnd2() {
 		return opnd2;

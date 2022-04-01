@@ -1,5 +1,9 @@
 package ast.designadores;
 
+import java.util.Map;
+import java.util.Stack;
+
+import ast.ASTNode;
 import ast.expresiones.E;
 import ast.expresiones.Llamada;
 
@@ -16,6 +20,11 @@ public class Punto extends Designador {
 	public Punto(Designador opnd1, Llamada opnd2) {
 		this.opnd1 = opnd1;
 		this.opnd2 = opnd2;
+	}
+	
+	public void bind (Stack<Map<String, ASTNode>> pila) {
+		this.opnd1.bind(pila);
+		this.opnd2.bind(pila);
 	}
 	
 	public String toString() {

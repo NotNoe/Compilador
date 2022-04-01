@@ -1,5 +1,10 @@
 package ast.externos;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Stack;
+
+import ast.ASTNode;
 import ast.designadores.Identificador;
 import ast.externos.util.KindExt;
 import ast.externos.util.Parametros;
@@ -16,6 +21,14 @@ public class DefProcedimiento implements Externo {
 		this.opnd3 = opnd3;
 	}
 
+	public void bind (Stack<Map<String, ASTNode>> pila) {
+		pila.peek().put(this.opnd1.getIden(), this);
+		pila.push(new HashMap<String, ASTNode>());
+		this.opnd2.bind(pila);
+		this.opnd3.bind(pila);
+		pila.pop();
+	}
+	
 	public Identificador getOpnd1() {
 		return opnd1;
 	}
@@ -37,6 +50,8 @@ public class DefProcedimiento implements Externo {
 		return "defProcedimiento(" + this.opnd1.toString() + "," + this.opnd2.toString() + ","
 				+this.opnd3.toString() + ")";
 	}
+
+	
 	
 	 
 }

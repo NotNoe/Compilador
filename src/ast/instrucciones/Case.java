@@ -1,5 +1,10 @@
 package ast.instrucciones;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Stack;
+
+import ast.ASTNode;
 import ast.NodeKind;
 import ast.expresiones.E;
 
@@ -14,6 +19,13 @@ public class Case extends SwitchCase {
 		super();
 		this.opnd1 = opnd1;
 		this.opnd2 = opnd2;
+	}
+	
+	public void bind (Stack<Map<String, ASTNode>> pila) {
+		this.opnd1.bind(pila);
+		pila.push(new HashMap<String, ASTNode>());
+		this.opnd2.bind(pila);
+		pila.pop();
 	}
 	
 	public String toString() {

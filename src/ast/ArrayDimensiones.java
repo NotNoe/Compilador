@@ -1,5 +1,7 @@
 package ast;
 
+import java.util.Stack;
+import java.util.Map;
 import ast.expresiones.E;
 
 public class ArrayDimensiones implements ASTNode {
@@ -8,6 +10,14 @@ public class ArrayDimensiones implements ASTNode {
 	private ArrayDimensiones opnd2;
 	
 	public ArrayDimensiones() {
+	}
+	
+	public void bind(Stack<Map<String, ASTNode>> pila) {
+		if (this.opnd1 != null) {
+			this.opnd1.bind(pila);
+			this.opnd2.bind(pila);
+		}
+			
 	}
 	
 	public ArrayDimensiones(E opnd1, ArrayDimensiones opnd2) {

@@ -1,5 +1,9 @@
 package ast.expresiones;
 
+import java.util.Map;
+import java.util.Stack;
+
+import ast.ASTNode;
 import ast.SeqExp;
 
 public class Lista extends E {
@@ -15,6 +19,10 @@ public class Lista extends E {
 	
 	public KindE kind() {
 		return KindE.LISTA;
+	}
+	
+	public void bind (Stack<Map<String, ASTNode>> pila) {
+		this.seq.bind(pila);
 	}
 
 }

@@ -1,5 +1,9 @@
 package ast.designadores;
 
+import java.util.Map;
+import java.util.Stack;
+
+import ast.ASTNode;
 import ast.expresiones.E;
 
 public class Asterisco extends Designador {
@@ -8,6 +12,10 @@ public class Asterisco extends Designador {
 	
 	public Asterisco(Designador op1) {
 		this.opnd1 = op1;
+	}
+	
+	public void bind(Stack<Map<String, ASTNode>> pila) {
+		this.opnd1.bind(pila);
 	}
 	
 	public E opnd1() {return this.opnd1;} 

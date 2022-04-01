@@ -1,5 +1,8 @@
 package ast.instrucciones;
 
+import java.util.Map;
+import java.util.Stack;
+
 import ast.ASTNode;
 import ast.NodeKind;
 
@@ -14,6 +17,13 @@ public class BloqueInstrucciones implements ASTNode {
 		super();
 		this.opnd1 = opnd1;
 		this.opnd2 = opnd2;
+	}
+	
+	public void bind (Stack<Map<String, ASTNode>> pila) {
+		if(this.opnd1 != null) {
+			this.opnd1.bind(pila);
+			this.opnd2.bind(pila);
+		}
 	}
 
 	public BloqueInstrucciones() {

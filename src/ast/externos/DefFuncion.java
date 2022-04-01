@@ -1,5 +1,10 @@
 package ast.externos;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Stack;
+
+import ast.ASTNode;
 import ast.designadores.Identificador;
 import ast.externos.util.KindExt;
 import ast.externos.util.Parametros;
@@ -13,7 +18,13 @@ public class DefFuncion implements Externo {
 	private Parametros opnd3;
 	private BloqueInstrucciones opnd4;
 	
-	
+	public void bind (Stack<Map<String, ASTNode>> pila) {
+		pila.peek().put(this.opnd2.getIden(), this);
+		pila.push(new HashMap<String, ASTNode>());
+		this.opnd3.bind(pila);
+		this.opnd4.bind(pila);
+		pila.pop();
+	}
 	
 	public DefFuncion(Tipo opnd1, Identificador opnd2, Parametros opnd3, BloqueInstrucciones opnd4) {
 		this.opnd1 = opnd1;

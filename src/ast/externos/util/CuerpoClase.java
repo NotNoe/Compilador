@@ -1,5 +1,8 @@
 package ast.externos.util;
 
+import java.util.Map;
+import java.util.Stack;
+
 import ast.ASTNode;
 import ast.NodeKind;
 import ast.externos.DefFuncion;
@@ -12,6 +15,13 @@ public class CuerpoClase implements ASTNode {
 	private Externo opnd1;
 	private CuerpoClase opnd2;
 	private KindC kind;
+	
+	public void bind (Stack<Map<String, ASTNode>> pila) {
+		if(this.kind != KindC.VACIO) {
+			this.opnd1.bind(pila);
+			this.opnd2.bind(pila);
+		}
+	}
 	
 	public CuerpoClase(Declaracion opnd1, CuerpoClase opnd2) {
 		this.opnd1 = opnd1;

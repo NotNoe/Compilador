@@ -1,5 +1,9 @@
 package ast.expresiones;
 
+import java.util.Map;
+import java.util.Stack;
+
+import ast.ASTNode;
 import ast.ArrayDimensiones;
 import ast.tipo.Tipo;
 
@@ -14,7 +18,10 @@ public class New extends E {
 		this.opnd2 = opnd2;
 	}
 	
-	
+	public void bind (Stack<Map<String, ASTNode>> pila) {
+		this.opnd1.bind(pila);
+		this.opnd2.bind(pila);
+	}
 
 	public Tipo getOpnd1() {
 		return opnd1;

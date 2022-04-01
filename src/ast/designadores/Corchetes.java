@@ -1,5 +1,9 @@
 package ast.designadores;
 
+import java.util.Map;
+import java.util.Stack;
+
+import ast.ASTNode;
 import ast.expresiones.E;
 
 public class Corchetes extends Designador {
@@ -13,6 +17,10 @@ public class Corchetes extends Designador {
 		this.opnd2 = opnd2;
 	}
 	
+	public void bind(Stack<Map<String, ASTNode>> pila) {
+		this.opnd1.bind(pila);
+		this.opnd2.bind(pila);
+	}
 	
 	public Designador getOpnd1() {
 		return opnd1;

@@ -1,5 +1,8 @@
 package ast.externos.util;
 
+import java.util.Map;
+import java.util.Stack;
+
 import ast.ASTNode;
 import ast.NodeKind;
 import ast.designadores.Identificador;
@@ -20,6 +23,9 @@ public class Parametro implements ASTNode {
 		this.opnd2 = opnd2;
 	}
 	
+	public void bind (Stack<Map<String, ASTNode>> pila) {
+		pila.peek().put(this.opnd2.getIden(), this);
+	}
 
 
 

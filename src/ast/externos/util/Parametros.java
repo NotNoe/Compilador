@@ -1,5 +1,8 @@
 package ast.externos.util;
 
+import java.util.Map;
+import java.util.Stack;
+
 import ast.ASTNode;
 import ast.KindP;
 import ast.NodeKind;
@@ -14,7 +17,12 @@ public class Parametros implements ASTNode {
 		this.kind = KindP.VACIO;
 	}
 	
-	
+	public void bind (Stack<Map<String, ASTNode>> pila) {
+		if(this.kind == KindP.NO_VACIO) {
+			this.opnd1.bind(pila);
+			this.opnd2.bind(pila);
+		}
+	}
 	
 	public Parametros(Parametro opnd1, Parametros opnd2) {
 		this.kind = KindP.NO_VACIO;

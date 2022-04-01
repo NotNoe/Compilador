@@ -1,5 +1,8 @@
 package ast.externos.util;
 
+import java.util.Map;
+import java.util.Stack;
+
 import ast.ASTNode;
 import ast.NodeKind;
 import ast.instrucciones.Declaracion;
@@ -14,6 +17,12 @@ public class Declaraciones implements ASTNode {
 		this.kind = KindD.VACIO;
 	}
 	
+	public void bind (Stack<Map<String, ASTNode>> pila) {
+		if(this.kind == KindD.NO_VACIO) {
+			this.opnd1.bind(pila);
+			this.opnd2.bind(pila);
+		}
+	}
 	
 	
 	public Declaraciones(Declaracion opnd1, Declaraciones opnd2) {

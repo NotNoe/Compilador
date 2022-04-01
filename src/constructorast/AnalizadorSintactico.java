@@ -23,6 +23,7 @@ import java_cup.runtime.ComplexSymbolFactory.Location;
 /** CUP v0.11b beta 20140220 generated parser.
   * @version Thu Mar 24 23:38:04 CET 2022
   */
+@SuppressWarnings("unused")
 public class AnalizadorSintactico extends java_cup.runtime.lr_parser {
 
   /** Default constructor. */

@@ -1,5 +1,9 @@
 package ast.externos;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Stack;
+
 import ast.ASTNode;
 import ast.NodeKind;
 import ast.externos.util.KindP;
@@ -19,6 +23,17 @@ public class Programa implements ASTNode {
 		this.kind = KindP.NO_VACIO;
 		this.opnd1 = opnd1;
 		this.opnd2 = opnd2;
+	}
+	
+	public void vincular() {
+		Stack<Map<String, ASTNode>> global = new Stack<Map<String, ASTNode>>();
+		global.push(new HashMap<String, ASTNode>());
+		this.bind(global);
+	}
+	
+	public void bind (Stack<Map<String, ASTNode>> pila) {
+		this.opnd1.bind(pila);
+		this.opnd2.bind(pila);
 	}
 	
 	public KindP kindP() {return this.kind;}
