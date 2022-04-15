@@ -5,11 +5,14 @@ import java.util.Map;
 import java.util.Stack;
 
 import ast.ASTNode;
+import ast.NodeKind;
 import ast.designadores.Identificador;
 import ast.externos.util.Declaraciones;
 import ast.externos.util.KindExt;
+import ast.tipo.KindType;
+import ast.tipo.Tipo;
 
-public class DefStruct implements Externo {
+public class DefStruct implements Externo, Tipo {
 
 	private Declaraciones opnd1;
 	private Identificador opnd2;
@@ -45,11 +48,38 @@ public class DefStruct implements Externo {
 		return opnd2;
 	}
 
-
-
-
 	public KindExt kindExt() {
 		return KindExt.DEF_STRUCT;
 	}
 
+	@Override
+	public NodeKind nodeKind() {
+		return NodeKind.PROGRAMA;
+	}
+
+	@Override
+	public KindType kindType() {
+		return KindType.STRUCT;
+	}
+
+	@Override
+	public Tipo getBasicType(Map<String, Tipo> globalTypes) {
+		return this;
+	}
+
+	@Override
+	public void subsUserTypes(Map<String, Tipo> globalTypes) {
+		opnd1.subsUserTypes(globalTypes);
+	}
+
+	@Override
+	public void type(Tipo funcion, Tipo val_switch, Tipo current_class) {
+		opnd1.type(null, null, null);
+	}
+
+	public Map<String, ASTNode> getAmbito() {
+		return ambito;
+	}
+
+	
 }

@@ -1,5 +1,6 @@
 package ast.externos;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Stack;
@@ -9,11 +10,15 @@ import ast.designadores.Identificador;
 import ast.externos.util.KindExt;
 import ast.externos.util.Parametros;
 import ast.instrucciones.BloqueInstrucciones;
+import ast.tipo.Tipo;
 
 public class DefProcedimiento implements Externo {
+	
+	private Tipo tipo = null;
 	private Identificador opnd1;
 	private Parametros opnd2;
 	private BloqueInstrucciones opnd3;
+	private ArrayList<Tipo> listaTipos;
 	
 	public DefProcedimiento(Identificador opnd1, Parametros opnd2, BloqueInstrucciones opnd3) {
 		this.opnd1 = opnd1;
@@ -49,6 +54,24 @@ public class DefProcedimiento implements Externo {
 	public String toString() {
 		return "defProcedimiento(" + this.opnd1.toString() + "," + this.opnd2.toString() + ","
 				+this.opnd3.toString() + ")";
+	}
+
+	@Override
+	public void subsUserTypes(Map<String, Tipo> globalTypes) {
+		opnd2.subsUserTypes(globalTypes);
+		opnd3.subsUserTypes(globalTypes);
+	}
+
+	@Override
+	public void type(Tipo funcion, Tipo val_switch, Tipo current_class) {
+		opnd2.type(null, null, current_class);
+		this.listaTipos = new ArrayList<Tipo>();
+		opnd2.getListaTipos(listaTipos);
+		opnd3.type(null, null, current_class);
+	}
+
+	public ArrayList<Tipo> getListaTipos() {
+		return listaTipos;
 	}
 
 	

@@ -7,6 +7,7 @@ import java.util.Stack;
 import ast.ASTNode;
 import ast.NodeKind;
 import ast.externos.util.KindP;
+import ast.tipo.Tipo;
 
 public class Programa implements ASTNode {
 
@@ -32,10 +33,50 @@ public class Programa implements ASTNode {
 	}
 	
 	public void bind (Stack<Map<String, ASTNode>> pila) {
-		this.opnd1.bind(pila);
-		this.opnd2.bind(pila);
+		if(opnd1 != null) {
+			this.opnd1.bind(pila);
+			this.opnd2.bind(pila);
+		}
 	}
 	
+	public void tipar() {
+		this.vincular();
+		Map<String, Tipo> globalTypes = new HashMap<String, Tipo>();
+		getUserTypes(globalTypes);
+		this.subsUserTypes(globalTypes);
+		this.type(null, null, null);
+	}
+	
+	
+	public void subsUserTypes(Map<String, Tipo> globalTypes) {
+		if(this.kind == KindP.NO_VACIO) {
+			this.opnd1.subsUserTypes(globalTypes);
+			this.opnd2.subsUserTypes(globalTypes);
+		}
+	}
+
+	private Map<String, Tipo> getUserTypes(Map<String, Tipo> globalTypes){
+		if(this.kind == KindP.NO_VACIO) {
+			switch(this.opnd1.kindExt()) {
+			case DEF_CLASE:
+				globalTypes.put(((DefClase) opnd1).getOpnd2().getIden(), (DefClase) opnd1);
+				break;
+			case DEF_STRUCT:
+				globalTypes.put(((DefStruct) opnd1).getOpnd2().getIden(), (DefStruct) opnd1);
+				break;
+			case DEF_TIPO:
+				globalTypes.put(((DefTipo) opnd1).getOpnd2().getIden(),((DefTipo) opnd1).getBasicType(globalTypes));
+				break;
+			default:
+				break;
+			}
+			return opnd2.getUserTypes(globalTypes);
+		}else {
+			return globalTypes;
+		}
+	}
+	
+
 	public KindP kindP() {return this.kind;}
 	
 	public Externo getOpnd1() {
@@ -55,6 +96,14 @@ public class Programa implements ASTNode {
 			return "fin_programa()";
 		else
 			return "programa(" + opnd1.toString() + "," + opnd2.toString() + ")";
+	}
+
+	@Override
+	public void type(Tipo funcion, Tipo val_switch, Tipo current_class) {
+		if(this.kind == KindP.NO_VACIO) {
+			opnd1.type(null, null, null);
+			opnd2.type(null, null, null);
+		}
 	}
 
 }

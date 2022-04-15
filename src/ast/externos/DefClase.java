@@ -5,11 +5,14 @@ import java.util.Map;
 import java.util.Stack;
 
 import ast.ASTNode;
+import ast.NodeKind;
 import ast.designadores.Identificador;
 import ast.externos.util.CuerpoClase;
 import ast.externos.util.KindExt;
+import ast.tipo.KindType;
+import ast.tipo.Tipo;
 
-public class DefClase implements Externo {
+public class DefClase implements Externo, Tipo {
 
 	private CuerpoClase opnd1;
 	private Identificador opnd2;
@@ -27,17 +30,10 @@ public class DefClase implements Externo {
 		this.ambito = new HashMap<String, ASTNode>();
 	}
 	
-	
-
-
 
 	public CuerpoClase getOpnd1() {
 		return opnd1;
 	}
-
-
-
-
 
 	public Identificador getOpnd2() {
 		return opnd2;
@@ -47,10 +43,40 @@ public class DefClase implements Externo {
 		return "defClase(" + this.opnd1.toString() + "," + this.opnd2.toString() + ")";
 	}
 
-
-
 	public KindExt kindExt() {
 		return KindExt.DEF_CLASE;
 	}
+
+	@Override
+	public KindType kindType() {
+		return KindType.CLASE;
+	}
+
+	@Override
+	public NodeKind nodeKind() {
+		return NodeKind.PROGRAMA;
+	}
+
+	@Override
+	public Tipo getBasicType(Map<String, Tipo> globalTypes) {
+		return this;
+	}
+
+	@Override
+	public void subsUserTypes(Map<String, Tipo> globalTypes) {
+		opnd1.subsUserTypes(globalTypes);
+		opnd2.subsUserTypes(globalTypes);
+	}
+
+	@Override
+	public void type(Tipo funcion, Tipo val_switch, Tipo current_class) {
+		opnd1.type(null, null, this);
+	}
+
+	public Map<String, ASTNode> getAmbito() {
+		return ambito;
+	}
+	
+	
 
 }

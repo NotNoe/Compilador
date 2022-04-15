@@ -1,5 +1,6 @@
 package ast.externos;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Stack;
@@ -9,6 +10,7 @@ import ast.designadores.Identificador;
 import ast.externos.util.KindExt;
 import ast.externos.util.Parametros;
 import ast.instrucciones.BloqueInstrucciones;
+import ast.tipo.KindType;
 import ast.tipo.Tipo;
 
 public class DefFuncion implements Externo {
@@ -17,6 +19,7 @@ public class DefFuncion implements Externo {
 	private Identificador opnd2;
 	private Parametros opnd3;
 	private BloqueInstrucciones opnd4;
+	private ArrayList<Tipo> listaTipos;
 	
 	public void bind (Stack<Map<String, ASTNode>> pila) {
 		pila.peek().put(this.opnd2.getIden(), this);
@@ -67,5 +70,25 @@ public class DefFuncion implements Externo {
 		return "defFuncion(" + this.opnd1.toString() + "," + this.opnd2.toString() + "," +
 				this.opnd3.toString() + "," + this.opnd4.toString() + ")";
 	}
+
+	@Override
+	public void subsUserTypes(Map<String, Tipo> globalTypes) {
+		this.opnd1 = opnd1.getBasicType(globalTypes);
+		opnd3.subsUserTypes(globalTypes);
+		opnd4.subsUserTypes(globalTypes);
+	}
+
+	@Override
+	public void type(Tipo funcion, Tipo val_switch, Tipo current_class) {
+		opnd3.type(funcion, val_switch, current_class);
+		this.listaTipos = new ArrayList<Tipo>();
+		opnd3.getListaTipos(this.listaTipos);
+		opnd4.type(this.opnd1, val_switch, current_class);
+	}
+
+	public ArrayList<Tipo> getListaTipos() {
+		return listaTipos;
+	}
+	
 
 }

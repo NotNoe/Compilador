@@ -5,6 +5,7 @@ import java.util.Stack;
 
 import ast.ASTNode;
 import ast.NodeKind;
+import ast.tipo.Tipo;
 
 public class BloqueInstrucciones implements ASTNode {
 	
@@ -14,7 +15,6 @@ public class BloqueInstrucciones implements ASTNode {
 	
 
 	public BloqueInstrucciones(Instruccion opnd1, BloqueInstrucciones opnd2) {
-		super();
 		this.opnd1 = opnd1;
 		this.opnd2 = opnd2;
 	}
@@ -50,6 +50,22 @@ public class BloqueInstrucciones implements ASTNode {
 	@Override
 	public NodeKind nodeKind() {
 		return NodeKind.BLOQUE_INST;
+	}
+
+	@Override
+	public void subsUserTypes(Map<String, Tipo> globalTypes) {
+		if(opnd1 != null) {
+			opnd1.subsUserTypes(globalTypes);
+			opnd2.subsUserTypes(globalTypes);
+		}
+	}
+
+	@Override
+	public void type(Tipo funcion, Tipo val_switch, Tipo current_class) {
+		if(this.opnd1 != null) {
+			opnd1.type(funcion, val_switch, current_class);
+			opnd2.type(funcion, val_switch, current_class);
+		}
 	}
 
 }

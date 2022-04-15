@@ -119,10 +119,10 @@ FUNCION ::= TIPO:t IDEN:i PAP PARAMETROS:p PCIERRE LAP BLOQUE_INSTRUCCIONES:b LC
 | TIPO IDEN PAP error LAP BLOQUE_INSTRUCCIONES LCIERRE
 | error PAP PARAMETROS PCIERRE LAP BLOQUE_INSTRUCCIONES LCIERRE;
 
-AUX1 ::= TIPO:t IDEN:i COMA AUX1:p {: RESULT = new Parametros(new Parametro(t, false, new Identificador(i.lexema)), p); :}
-| TIPO:t IDEN:i {: RESULT = new Parametros(new Parametro(t, false, new Identificador(i.lexema)), new Parametros()); :}
-| TIPO:t REF IDEN:i {: RESULT = new Parametros(new Parametro(t, true, new Identificador(i.lexema)), new Parametros()); :}
-| TIPO:t REF IDEN:i COMA AUX1:p {: RESULT = new Parametros(new Parametro(t, true, new Identificador(i.lexema)), p); :}
+AUX1 ::= TIPO:t IDEN:i GENCORCHETES:c COMA AUX1:p {: RESULT = new Parametros(new Parametro(t, false, new Identificador(i.lexema), c), p); :}
+| TIPO:t IDEN:i GENCORCHETES:c {: RESULT = new Parametros(new Parametro(t, false, new Identificador(i.lexema), c), new Parametros()); :}
+| TIPO:t REF IDEN:i GENCORCHETES:c {: RESULT = new Parametros(new Parametro(t, true, new Identificador(i.lexema), c), new Parametros()); :}
+| TIPO:t REF IDEN:i GENCORCHETES:c COMA AUX1:p {: RESULT = new Parametros(new Parametro(t, true, new Identificador(i.lexema), c), p); :}
 | error COMA AUX1;
 PARAMETROS ::= AUX1:a {: RESULT = a; :} | {:RESULT = new Parametros(); :} ;
 
@@ -137,7 +137,7 @@ CUERPO_CLASE ::= DECLARACION:d CUERPO_CLASE:c {: RESULT = new CuerpoClase(d, c);
 
 CLASE ::= CLASS LAP CUERPO_CLASE:c LCIERRE IDEN:i PUNTOCOMA {: RESULT = new DefClase(c, new Identificador(i.lexema)); :} ;
 
-DEFTIPO ::= TYPEDEF TIPO:t IDEN:i PUNTOCOMA {: RESULT = new DefTipo(t, new Identificador(i.lexema)); :} 
+DEFTIPO ::= TYPEDEF TIPO:t IDEN:i GENCORCHETES:g PUNTOCOMA{: RESULT = new DefTipo(t, new Identificador(i.lexema), g); :}
 | TYPEDEF error PUNTOCOMA;
 
 

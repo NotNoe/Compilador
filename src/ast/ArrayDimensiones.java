@@ -3,6 +3,8 @@ package ast;
 import java.util.Stack;
 import java.util.Map;
 import ast.expresiones.E;
+import ast.tipo.Array;
+import ast.tipo.Tipo;
 
 public class ArrayDimensiones implements ASTNode {
 	
@@ -45,6 +47,26 @@ public class ArrayDimensiones implements ASTNode {
 	@Override
 	public NodeKind nodeKind() {
 		return NodeKind.ARRAY_DIM;
+	}
+	
+	public Tipo tipar(Tipo t) {
+		if(opnd1 == null) {
+			return t;
+		}else {
+			return new Array(opnd2.tipar(t));
+		}
+	}
+
+	@Override
+	public void subsUserTypes(Map<String, Tipo> globalTypes) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void type(Tipo funcion, Tipo val_switch, Tipo current_class) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

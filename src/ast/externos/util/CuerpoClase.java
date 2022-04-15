@@ -9,6 +9,7 @@ import ast.externos.DefFuncion;
 import ast.externos.DefProcedimiento;
 import ast.externos.Externo;
 import ast.instrucciones.Declaracion;
+import ast.tipo.Tipo;
 
 public class CuerpoClase implements ASTNode {
 
@@ -67,6 +68,22 @@ public class CuerpoClase implements ASTNode {
 	@Override
 	public NodeKind nodeKind() {
 		return NodeKind.CUERPO_CLASE;
+	}
+
+	@Override
+	public void subsUserTypes(Map<String, Tipo> globalTypes) {
+		if(this.kind != KindC.VACIO) {
+			opnd1.subsUserTypes(globalTypes);
+			opnd2.subsUserTypes(globalTypes);
+		}
+	}
+
+	@Override
+	public void type(Tipo funcion, Tipo val_switch, Tipo current_class) {
+		if(this.kind != KindC.VACIO) {
+			opnd1.type(funcion, val_switch, current_class);
+			opnd2.type(funcion, val_switch, current_class);
+		}
 	}
 	
 	

@@ -5,6 +5,10 @@ import java.util.Stack;
 
 import ast.ASTNode;
 import ast.ArrayDimensiones;
+import ast.designadores.Identificador;
+import ast.tipo.Array;
+import ast.tipo.KindType;
+import ast.tipo.Pointer;
 import ast.tipo.Tipo;
 
 public class New extends E {
@@ -40,8 +44,20 @@ public class New extends E {
 
 	@Override
 	public KindE kind() {
-		// TODO Auto-generated method stub
-		return null;
+		return KindE.NEW;
+	}
+
+	@Override
+	public void type(Tipo funcion, Tipo val_switch, Tipo current_class) {
+		opnd1.type(funcion, val_switch, current_class);
+		if(opnd1.kindType() == KindType.ARRAY) {
+			this.tipo = new Pointer(((Array) opnd1).getTipo());
+		}else {
+			this.tipo = new Pointer(opnd1);
+		}
+	}
+	public void subsUserTypes(Map<String, Tipo> globalTypes) {
+		opnd1.subsUserTypes(globalTypes);
 	}
 
 }

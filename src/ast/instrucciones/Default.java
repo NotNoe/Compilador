@@ -6,6 +6,7 @@ import java.util.Stack;
 
 import ast.ASTNode;
 import ast.NodeKind;
+import ast.tipo.Tipo;
 
 public class Default extends SwitchCase {
 	
@@ -33,6 +34,16 @@ public class Default extends SwitchCase {
 		pila.push(new HashMap<String, ASTNode>());
 		this.opnd1.bind(pila);
 		pila.pop();
+	}
+
+	@Override
+	public void subsUserTypes(Map<String, Tipo> globalTypes) {
+		opnd1.subsUserTypes(globalTypes);
+	}
+
+	@Override
+	public void type(Tipo funcion, Tipo val_switch, Tipo current_class) {
+		opnd1.type(funcion, val_switch, current_class);
 	}
 
 }

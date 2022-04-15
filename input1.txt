@@ -2,7 +2,7 @@ typedef int aux;
 
 void main(){
     int a[2] = [5, 2];
-    switch(a){
+    switch(a[0]){
     case 1 {
         int c = 3;
         break;

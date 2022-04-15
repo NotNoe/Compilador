@@ -4,6 +4,8 @@ import java.util.Map;
 import java.util.Stack;
 
 import ast.ASTNode;
+import ast.tipo.Char;
+import ast.tipo.Tipo;
 
 public class Caracter extends E {
 
@@ -17,5 +19,9 @@ public class Caracter extends E {
 
 	  public void bind (Stack<Map<String, ASTNode>> pila) {
 			
+	}
+	@Override
+	public void type(Tipo funcion, Tipo val_switch, Tipo current_class) {
+		this.tipo = new Char();
 	}
 }

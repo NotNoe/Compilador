@@ -1,11 +1,13 @@
 package ast.externos.util;
 
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.Stack;
 
 import ast.ASTNode;
 import ast.KindP;
 import ast.NodeKind;
+import ast.tipo.Tipo;
 
 public class Parametros implements ASTNode {
 
@@ -57,6 +59,28 @@ public class Parametros implements ASTNode {
 	
 	public NodeKind nodeKind() {
 		return NodeKind.PARAMETROS;
+	}
+
+	@Override
+	public void subsUserTypes(Map<String, Tipo> globalTypes) {
+		if(this.kind == KindP.NO_VACIO) {
+			opnd1.subsUserTypes(globalTypes);
+			opnd2.subsUserTypes(globalTypes);
+		}
+	}
+
+	@Override
+	public void type(Tipo funcion, Tipo val_switch, Tipo current_class) {
+		if(this.kind == KindP.NO_VACIO) {
+			opnd1.type(funcion, val_switch, null);
+			opnd2.type(funcion, val_switch, current_class);
+		}
+	}
+
+	public void getListaTipos(ArrayList<Tipo> listaTipos) {
+		if(this.kind == KindP.NO_VACIO) {
+			listaTipos.add(this.opnd1.getOpnd1());
+		}
 	}
 
 }

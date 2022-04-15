@@ -6,6 +6,7 @@ import java.util.Stack;
 import ast.ASTNode;
 import ast.NodeKind;
 import ast.instrucciones.Declaracion;
+import ast.tipo.Tipo;
 
 public class Declaraciones implements ASTNode {
 
@@ -61,6 +62,22 @@ public class Declaraciones implements ASTNode {
 
 	public NodeKind nodeKind() {
 		return NodeKind.DECLARACIONES;
+	}
+
+	@Override
+	public void subsUserTypes(Map<String, Tipo> globalTypes) {
+		if(this.kind != KindD.VACIO) {
+			opnd1.subsUserTypes(globalTypes);
+			opnd2.subsUserTypes(globalTypes);
+		}
+	}
+
+	@Override
+	public void type(Tipo funcion, Tipo val_switch, Tipo current_class) {
+		if(this.kind != KindD.VACIO) {
+			opnd1.type(funcion, val_switch, null);
+			opnd2.type(funcion, val_switch, current_class);
+		}
 	}
 
 }

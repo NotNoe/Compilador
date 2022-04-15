@@ -1,7 +1,11 @@
 package ast.instrucciones;
 
+import java.util.Map;
+import java.util.Stack;
+
 import ast.ASTNode;
 import ast.NodeKind;
+import ast.tipo.Tipo;
 
 public class Cuerpo_Switch implements ASTNode {
 	
@@ -39,6 +43,29 @@ public class Cuerpo_Switch implements ASTNode {
 
 	public Cuerpo_Switch getOpnd2() {
 		return opnd2;
+	}
+
+	public void bind(Stack<Map<String, ASTNode>> pila) {
+		if(opnd1 != null) {
+			opnd1.bind(pila);
+			opnd2.bind(pila);
+		}
+	}
+
+	@Override
+	public void subsUserTypes(Map<String, Tipo> globalTypes) {
+		if(opnd1 != null) {
+			opnd1.subsUserTypes(globalTypes);
+			opnd2.subsUserTypes(globalTypes);
+		}
+	}
+
+	@Override
+	public void type(Tipo funcion, Tipo val_switch, Tipo current_class) {
+		if(opnd1 != null) {
+			opnd1.type(funcion, val_switch, current_class);
+			opnd2.type(funcion, val_switch, current_class);
+		}
 	}
 	
 	

@@ -1,5 +1,9 @@
 package ast.instrucciones;
 
+import java.util.Map;
+import java.util.Stack;
+
+import ast.ASTNode;
 import ast.ArrayDimensiones;
 import ast.designadores.Identificador;
 import ast.expresiones.E;
@@ -68,6 +72,30 @@ public class Declaracion extends Instruccion implements Externo {
 
 	public E getOpnd5() {
 		return opnd5;
+	}
+
+	public void bind(Stack<Map<String, ASTNode>> pila) {
+		pila.peek().put(opnd3.getIden(), this);
+		opnd4.bind(pila);
+		if(opnd5 != null) {
+			opnd5.bind(pila);
+		}
+	}
+
+	@Override
+	public void subsUserTypes(Map<String, Tipo> globalTypes) {
+		this.opnd2 = this.opnd2.getBasicType(globalTypes);
+	}
+
+	@Override
+	public void type(Tipo funcion, Tipo val_switch, Tipo current_class) {
+		this.opnd2 = opnd4.tipar(opnd2);
+		if(opnd5 != null) {
+			this.opnd5.type(funcion, val_switch, current_class);
+			if(!Tipo.equals(opnd2, opnd5.tipo)) {
+				//TODO: error
+			}
+		}
 	}
 	
 	

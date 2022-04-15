@@ -7,6 +7,7 @@ import java.util.Stack;
 import ast.ASTNode;
 import ast.NodeKind;
 import ast.expresiones.E;
+import ast.tipo.Tipo;
 
 public class Case extends SwitchCase {
 	
@@ -43,6 +44,21 @@ public class Case extends SwitchCase {
 
 	public BloqueInstrucciones getOpnd2() {
 		return opnd2;
+	}
+
+	@Override
+	public void subsUserTypes(Map<String, Tipo> globalTypes) {
+		opnd1.subsUserTypes(globalTypes);
+		opnd2.subsUserTypes(globalTypes);
+	}
+
+	@Override
+	public void type(Tipo funcion, Tipo val_switch, Tipo current_class) {
+		opnd1.type(funcion, val_switch, current_class);
+		if(Tipo.equals(opnd1.tipo, val_switch)) {
+			//TODO error
+		}
+		opnd2.type(funcion, val_switch, current_class);
 	}
 	
 	

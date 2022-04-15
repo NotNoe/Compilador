@@ -6,6 +6,7 @@ import java.util.Stack;
 import ast.ASTNode;
 import ast.designadores.Designador;
 import ast.expresiones.E;
+import ast.tipo.Tipo;
 
 public class Asignacion extends Instruccion {
 	
@@ -40,6 +41,19 @@ public class Asignacion extends Instruccion {
 	@Override
 	public KindI kindI() {
 		return KindI.ASIGNACION;
+	}
+
+	@Override
+	public void subsUserTypes(Map<String, Tipo> globalTypes) {
+	}
+
+	@Override
+	public void type(Tipo funcion, Tipo val_switch, Tipo current_class) {
+		opnd1.type(funcion, val_switch, current_class);
+		opnd2.type(funcion, val_switch, current_class);
+		if(!Tipo.equals(opnd1.tipo, opnd2.tipo)) {
+			//TODO error
+		}
 	}
 
 }

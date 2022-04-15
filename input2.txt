@@ -19,7 +19,8 @@ class{
 
 }tClase;
 
-void idonthaveatype(bool &b){ 
+void idonthaveatype(bool &b){
+	tStruct hola; 
     b = false;
 }
 
@@ -29,9 +30,9 @@ int ihaveatype(pointer int k, int j){
 }
 
 void main(){
-    tClase ejemplo = tClase(5);
+    tClase ejemplo;
     ejemplo.protocolo(2);
-    int a = ejemplo.funcion();
+    int a = ejemplo.function();
     bool c = true;
     idonthaveatype(c);
     ihaveatype(&a, 5);

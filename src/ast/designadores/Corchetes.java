@@ -3,8 +3,13 @@ package ast.designadores;
 import java.util.Map;
 import java.util.Stack;
 
+import javax.lang.model.type.TypeKind;
+
 import ast.ASTNode;
 import ast.expresiones.E;
+import ast.tipo.Array;
+import ast.tipo.KindType;
+import ast.tipo.Tipo;
 
 public class Corchetes extends Designador {
 	
@@ -38,6 +43,21 @@ public class Corchetes extends Designador {
 	@Override
 	public KindDes kindDes() {
 		return KindDes.CORCHETES;
+	}
+
+	@Override
+	public void type(Tipo funcion, Tipo val_switch, Tipo current_class) {
+		opnd1.type(funcion, val_switch, null);
+		opnd2.type(funcion, val_switch, null);
+		if(opnd2.tipo.kindType() != KindType.INT) {
+			//TODO: error
+		}else {
+			if(opnd1.tipo.kindType() != KindType.ARRAY) {
+				//TODO: error
+			}else {
+				this.tipo = ((Array) opnd1.tipo).getTipo();
+			}
+		}
 	}
 
 }

@@ -4,6 +4,9 @@ import java.util.Map;
 import java.util.Stack;
 
 import ast.ASTNode;
+import ast.tipo.Bool;
+import ast.tipo.Int;
+import ast.tipo.Tipo;
 
 public class EBin extends E {
 	private E opnd1;
@@ -59,9 +62,6 @@ public class EBin extends E {
 		case "!=":
 			this.op = KindE.DESIG;
 			break;
-		case ".":
-			this.op = KindE.PUNTO;
-			break;
 
 		}
 	}
@@ -99,8 +99,6 @@ public class EBin extends E {
 			return "igu(" + opnd1().toString() + "," + opnd2().toString() + ")";
 		case DESIG:
 			return "desig(" + opnd1().toString() + "," + opnd2().toString() + ")";
-		case PUNTO:
-			return "punto(" + opnd1().toString() + "," + opnd2().toString() + ")";
 		default:
 			return null;
 		}
@@ -112,5 +110,44 @@ public class EBin extends E {
 
 	public E opnd2() {
 		return opnd2;
+	}
+
+	@Override
+	public void type(Tipo funcion, Tipo val_switch, Tipo current_class) {
+		opnd1.type(funcion, val_switch, current_class);
+		opnd2.type(funcion, val_switch, current_class);
+		if(!(Tipo.equals(opnd1.tipo, opnd2.tipo))) {
+			//TODO error
+		}
+		switch (this.op) {
+		case SUMA, RESTA, MUL, DIV, MOD:
+			if(Tipo.equals(opnd1.tipo, new Int())) {
+				this.tipo = new Int();
+			}else {
+				//TODO: error
+				this.tipo = null;
+			}
+			break;
+		case AND, OR:
+			if(Tipo.equals(opnd1.tipo, new Bool())) {
+				this.tipo = new Bool();
+			}else {
+				//TODO: error
+				this.tipo = null;
+			}
+			break;
+		case MENIG, MAYIG, MEN, MAY:
+			if(Tipo.equals(opnd1.tipo, new Int())) {
+				this.tipo = new Bool();
+			}else {
+				//TODO: error
+				this.tipo = null;
+			}
+			break;
+		case IGU, DESIG:
+			this.tipo = new Bool();
+		default:
+			//TODO: error
+		}
 	}
 }

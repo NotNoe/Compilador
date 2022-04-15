@@ -5,34 +5,27 @@ import java.util.Stack;
 
 import ast.ASTNode;
 
-public class Pointer implements Tipo {
+public class Array implements Tipo {
 	
-	private Tipo p;
+	private Tipo tipo;
+	private int dim;
 	
-	public Pointer(Tipo p) {
-		this.p = p;
-	}
-	
-	public Tipo getP() {
-		return p;
-	}
-
-	public String toString() {
-		return "pointer(" + p.toString() + ")";
-	}
-
-	@Override
-	public KindType kindType() {
-		return KindType.POINTER;
+	public Array(Tipo tipo) {
+		this.tipo = tipo;
 	}
 
 	@Override
 	public void bind(Stack<Map<String, ASTNode>> pila) {
-		p.bind(pila);
 	}
-	
+
+	@Override
+	public KindType kindType() {
+		return KindType.ARRAY;
+	}
+
+	@Override
 	public Tipo getBasicType(Map<String, Tipo> globalTypes) {
-		this.p = p.getBasicType(globalTypes);
+		this.tipo = tipo.getBasicType(globalTypes);
 		return this;
 	}
 
@@ -41,5 +34,10 @@ public class Pointer implements Tipo {
 		// TODO Auto-generated method stub
 		
 	}
+
+	public Tipo getTipo() {
+		return tipo;
+	}
+	
 
 }
