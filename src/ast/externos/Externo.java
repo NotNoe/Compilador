@@ -12,5 +12,6 @@ public interface Externo extends ASTNode{
 	public default NodeKind nodeKind() {
 		return NodeKind.PROGRAMA;
 	}
+	
 
 }

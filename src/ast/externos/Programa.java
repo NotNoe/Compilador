@@ -7,6 +7,7 @@ import java.util.Stack;
 import ast.ASTNode;
 import ast.NodeKind;
 import ast.externos.util.KindP;
+import ast.instrucciones.Declaracion;
 import ast.tipo.Tipo;
 
 public class Programa implements ASTNode {
@@ -27,8 +28,10 @@ public class Programa implements ASTNode {
 	}
 	
 	public void vincular() {
+		HashMap<String, ASTNode> globalAmb = new HashMap<String, ASTNode>();
+		this.preBinding(globalAmb);
 		Stack<Map<String, ASTNode>> global = new Stack<Map<String, ASTNode>>();
-		global.push(new HashMap<String, ASTNode>());
+		global.push(globalAmb);
 		this.bind(global);
 	}
 	
@@ -39,7 +42,7 @@ public class Programa implements ASTNode {
 		}
 	}
 	
-	public void tipar() {
+	public void compilar() {
 		this.vincular();
 		Map<String, Tipo> globalTypes = new HashMap<String, Tipo>();
 		getUserTypes(globalTypes);
@@ -78,6 +81,39 @@ public class Programa implements ASTNode {
 	
 
 	public KindP kindP() {return this.kind;}
+	
+	private void preBinding(HashMap<String, ASTNode> globalBind) {
+		if(this.kind != KindP.VACIO)
+			switch(this.opnd1.kindExt()) {
+			case DECLARACION:
+				globalBind.put(((Declaracion) opnd1).getOpnd3().getIden(), opnd1);
+				this.opnd2.preBinding(globalBind);
+				break;
+			case DEF_CLASE:
+				globalBind.put(((DefClase) opnd1).getOpnd2().getIden(), opnd1);
+				this.opnd2.preBinding(globalBind);
+				break;
+			case DEF_FUNCION:
+				globalBind.put(((DefFuncion) opnd1).getOpnd2().getIden(), opnd1);
+				this.opnd2.preBinding(globalBind);
+				break;
+			case DEF_PROCEDIMIENTO:
+				globalBind.put(((DefProcedimiento) opnd1).getOpnd1().getIden(), opnd1);
+				this.opnd2.preBinding(globalBind);
+				break;
+			case DEF_STRUCT:
+				globalBind.put(((DefStruct) opnd1).getOpnd2().getIden(), opnd1);
+				this.opnd2.preBinding(globalBind);
+				break;
+			case DEF_TIPO:
+				globalBind.put(((DefTipo) opnd1).getOpnd2().getIden(), opnd1);
+				this.opnd2.preBinding(globalBind);
+				break;
+			default:
+				throw new RuntimeException("Error en prebinding");
+			
+			}
+	}
 	
 	public Externo getOpnd1() {
 		return opnd1;
