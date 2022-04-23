@@ -58,8 +58,8 @@ public class Corchetes extends Designador {
 
 	@Override
 	public void type(Tipo funcion, Tipo val_switch, Tipo current_class, boolean continuable, boolean breakeable) throws TypeMissmatchException {
-		opnd1.type(funcion, val_switch, null, continuable, breakeable);
-		opnd2.type(funcion, val_switch, null, continuable, breakeable);
+		opnd1.type(funcion, val_switch, current_class, continuable, breakeable);
+		opnd2.type(funcion, val_switch, current_class, continuable, breakeable);
 		if(opnd1.tipo.kindType() != KindType.ARRAY) {
 			throw new TypeMissmatchException("Cannot index a non-array type.", this.fila, this.columna);
 		}else {

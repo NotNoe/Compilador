@@ -19,6 +19,8 @@ public class SeqExp implements ASTNode {
 	public Tipo tipo;
 	
 	public SeqExp(E izq, SeqExp der) {
+		this.izq = izq;
+		this.der = der;
 	}
 	
 	public SeqExp() {

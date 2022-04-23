@@ -138,6 +138,8 @@ public class Punto extends Designador {
 			default:
 				throw new RuntimeException("LOL");
 			}
+		break;
+			
 		default:
 			throw new RuntimeException("LOL");
 		}

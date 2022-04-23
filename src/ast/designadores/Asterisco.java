@@ -40,7 +40,7 @@ public class Asterisco extends Designador {
 
 	@Override
 	public void type(Tipo funcion, Tipo val_switch, Tipo current_class, boolean continuable, boolean breakeable) throws TypeMissmatchException {
-		opnd1.type(funcion, val_switch, null, continuable, breakeable);
+		opnd1.type(funcion, val_switch, current_class, continuable, breakeable);
 		if(opnd1.tipo.kindType() == KindType.POINTER) {
 			this.tipo = ((Pointer) opnd1.tipo).getP();
 		}else {
