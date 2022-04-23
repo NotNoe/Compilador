@@ -10,6 +10,8 @@ import ast.externos.DefProcedimiento;
 import ast.externos.Externo;
 import ast.instrucciones.Declaracion;
 import ast.tipo.Tipo;
+import errors.TypeMissmatchException;
+import errors.UndefinedVariableException;
 
 public class CuerpoClase implements ASTNode {
 
@@ -19,7 +21,11 @@ public class CuerpoClase implements ASTNode {
 	
 	public void bind (Stack<Map<String, ASTNode>> pila) {
 		if(this.kind != KindC.VACIO) {
-			this.opnd1.bind(pila);
+			try {
+				this.opnd1.bind(pila);
+			} catch (UndefinedVariableException e) {
+				e.print();
+			}
 			this.opnd2.bind(pila);
 		}
 	}
@@ -79,11 +85,38 @@ public class CuerpoClase implements ASTNode {
 	}
 
 	@Override
-	public void type(Tipo funcion, Tipo val_switch, Tipo current_class) {
+	public void type(Tipo funcion, Tipo val_switch, Tipo current_class, boolean continuable, boolean breakeable) {
 		if(this.kind != KindC.VACIO) {
-			opnd1.type(funcion, val_switch, current_class);
-			opnd2.type(funcion, val_switch, current_class);
+			try {
+				opnd1.type(funcion, val_switch, current_class, continuable, breakeable);
+			} catch (TypeMissmatchException e) {
+				e.print();
+			}
+			opnd2.type(funcion, val_switch, current_class, continuable, breakeable);
 		}
+	}
+
+	public void preBinding(Map<String, ASTNode> globalBind) {
+		if(this.kind != KindC.VACIO) {
+			switch(this.opnd1.kindExt()) {
+			case DECLARACION:
+				globalBind.put(((Declaracion) opnd1).getOpnd3().getIden(), opnd1);
+				this.opnd2.preBinding(globalBind);
+				break;
+			case DEF_FUNCION:
+				globalBind.put(((DefFuncion) opnd1).getOpnd2().getIden(), opnd1);
+				this.opnd2.preBinding(globalBind);
+				break;
+			case DEF_PROCEDIMIENTO:
+				globalBind.put(((DefProcedimiento) opnd1).getOpnd1().getIden(), opnd1);
+				this.opnd2.preBinding(globalBind);
+				break;
+			default:
+				throw new RuntimeException("Error en prebinding");
+			
+			}
+		}
+		
 	}
 	
 	

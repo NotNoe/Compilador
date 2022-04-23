@@ -6,9 +6,14 @@ import java.util.Stack;
 
 import ast.ASTNode;
 import ast.NodeKind;
+import ast.externos.util.KindExt;
 import ast.externos.util.KindP;
 import ast.instrucciones.Declaracion;
 import ast.tipo.Tipo;
+import constructorast.Main;
+import errors.MainNotFoundException;
+import errors.TypeMissmatchException;
+import errors.UndefinedVariableException;
 
 public class Programa implements ASTNode {
 
@@ -30,6 +35,10 @@ public class Programa implements ASTNode {
 	public void vincular() {
 		HashMap<String, ASTNode> globalAmb = new HashMap<String, ASTNode>();
 		this.preBinding(globalAmb);
+		if(!globalAmb.containsKey("main"))
+			(new MainNotFoundException()).print();
+		else if(((Externo) globalAmb.get("main")).kindExt() != KindExt.DEF_PROCEDIMIENTO)
+			(new MainNotFoundException()).print();
 		Stack<Map<String, ASTNode>> global = new Stack<Map<String, ASTNode>>();
 		global.push(globalAmb);
 		this.bind(global);
@@ -37,7 +46,11 @@ public class Programa implements ASTNode {
 	
 	public void bind (Stack<Map<String, ASTNode>> pila) {
 		if(opnd1 != null) {
-			this.opnd1.bind(pila);
+			try {
+				this.opnd1.bind(pila);
+			} catch (UndefinedVariableException e) {
+				e.print();
+			}
 			this.opnd2.bind(pila);
 		}
 	}
@@ -45,9 +58,17 @@ public class Programa implements ASTNode {
 	public void compilar() {
 		this.vincular();
 		Map<String, Tipo> globalTypes = new HashMap<String, Tipo>();
-		getUserTypes(globalTypes);
+		try {
+			getUserTypes(globalTypes);
+		} catch (TypeMissmatchException e) {
+			e.print();
+		}
 		this.subsUserTypes(globalTypes);
-		this.type(null, null, null);
+		this.type(null, null, null, false, false);
+		if(Main.error)
+			System.exit(1);
+		
+		
 	}
 	
 	
@@ -58,7 +79,7 @@ public class Programa implements ASTNode {
 		}
 	}
 
-	private Map<String, Tipo> getUserTypes(Map<String, Tipo> globalTypes){
+	private Map<String, Tipo> getUserTypes(Map<String, Tipo> globalTypes) throws TypeMissmatchException{
 		if(this.kind == KindP.NO_VACIO) {
 			switch(this.opnd1.kindExt()) {
 			case DEF_CLASE:
@@ -135,10 +156,14 @@ public class Programa implements ASTNode {
 	}
 
 	@Override
-	public void type(Tipo funcion, Tipo val_switch, Tipo current_class) {
+	public void type(Tipo funcion, Tipo val_switch, Tipo current_class, boolean continuable, boolean breakeable) {
 		if(this.kind == KindP.NO_VACIO) {
-			opnd1.type(null, null, null);
-			opnd2.type(null, null, null);
+			try {
+				opnd1.type(null, null, null, continuable, breakeable);
+			} catch (TypeMissmatchException e) {
+				e.print();
+			}
+			opnd2.type(null, null, null, continuable, breakeable);
 		}
 	}
 

@@ -14,13 +14,16 @@ import ast.externos.util.Parametro;
 import ast.instrucciones.Declaracion;
 import ast.tipo.KindType;
 import ast.tipo.Tipo;
+import errors.TypeMissmatchException;
+import errors.UndefinedVariableException;
 
 public class Identificador extends Designador implements Tipo {
 	
 	private String iden;
 	private ASTNode link;
 	
-	public Identificador(String iden) {
+	public Identificador(String iden, int fila, int columna) {
+		super(fila, columna);
 		this.iden = iden;
 	}
 	
@@ -29,7 +32,7 @@ public class Identificador extends Designador implements Tipo {
 		return this.iden;
 	}
 
-	public void bind(Stack<Map<String, ASTNode>> pila) {
+	public void bind(Stack<Map<String, ASTNode>> pila) throws UndefinedVariableException {
 		Stack<Map<String, ASTNode>> aux = new Stack<Map<String, ASTNode>>();
 		while(!pila.empty()) {
 			Map<String, ASTNode> top = pila.peek();
@@ -46,7 +49,7 @@ public class Identificador extends Designador implements Tipo {
 			pila.push(aux.pop());
 		}
 		if(this.link == null) {
-			//TODO ANNADIR ERROR
+			throw new UndefinedVariableException("Undefined use of identifier " + this.iden+ ".", this.fila, this.columna);
 		}
 	}
 	
@@ -64,18 +67,20 @@ public class Identificador extends Designador implements Tipo {
 
 
 	@Override
-	public Tipo getBasicType(Map<String, Tipo> globalTypes) {
+	public Tipo getBasicType(Map<String, Tipo> globalTypes) throws TypeMissmatchException {
 		if(globalTypes.containsKey(this.iden)) {
 			return globalTypes.get(this.iden);
 		}else {
-			//TODO: annadir errores
-			return this;
+			throw new TypeMissmatchException("Cannot resolve type.", this.fila, this.columna);
 		}
 	}
 	
 
+	@SuppressWarnings("incomplete-switch")
 	@Override
-	public void type(Tipo funcion, Tipo val_switch, Tipo current_class) {
+	public void type(Tipo funcion, Tipo val_switch, Tipo current_class, boolean continuable, boolean breakeable) throws TypeMissmatchException {
+		if(this.link == null)
+			throw new TypeMissmatchException("Cannot resolve type.", this.fila, this.columna);
 		if(this.link.nodeKind() == NodeKind.PARAMETRO) {
 			this.tipo = ((Parametro) link).getOpnd1();
 		}else {
@@ -89,22 +94,22 @@ public class Identificador extends Designador implements Tipo {
 			case DEF_PROCEDIMIENTO:
 				this.tipo = null;
 				break;
-			default:
-				//TODO error
+				
 			}
 		}
 	}
 
 
-	public boolean checkTipos(ArrayList<Tipo> listaTipos) {
+	public boolean checkTipos(ArrayList<Tipo> listaTipos) throws TypeMissmatchException {
+		if(this.link == null)
+			throw new TypeMissmatchException("Cannot resolve type.", this.fila, this.columna);
 		ArrayList<Tipo> lista2;
-		if(((Externo) link).kindExt() == KindExt.DECLARACION) {
+		if(((Externo) link).kindExt() == KindExt.DEF_PROCEDIMIENTO) {
 			lista2 = ((DefProcedimiento) link).getListaTipos();
 		}else if(((Externo) link).kindExt() == KindExt.DEF_FUNCION) {
 			lista2 = ((DefFuncion) link).getListaTipos();
 		}else {
 			lista2 = new ArrayList<Tipo>();
-			//TODO error
 		}
 		if(lista2.size() == listaTipos.size()) {
 			for(int i = 0; i < lista2.size(); i++) {
@@ -116,6 +121,12 @@ public class Identificador extends Designador implements Tipo {
 		}else {
 			return false;
 		}
+	}
+
+
+	@Override
+	public String printT() {
+		return "ERR";
 	}
 
 }

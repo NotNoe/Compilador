@@ -9,6 +9,10 @@ import ast.tipo.Tipo;
 
 public class Null extends E {
 	
+	public Null(int fila, int columna) {
+		super(fila, columna);
+	}
+
 	public String toString() {
 		return "null()";
 	}
@@ -22,7 +26,7 @@ public class Null extends E {
 	}
 
 	@Override
-	public void type(Tipo funcion, Tipo val_switch, Tipo current_class) {
+	public void type(Tipo funcion, Tipo val_switch, Tipo current_class, boolean continuable, boolean breakeable) {
 		this.tipo = new NullPointer();
 	}
 

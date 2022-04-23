@@ -9,7 +9,8 @@ import ast.tipo.Tipo;
 
 public class Num extends E {
   private String v;
-  public Num(String v) {
+  public Num(String v, int fila, int columna) {
+	  super(fila, columna);
    this.v = v;   
   }
   public String val() {return v;}
@@ -19,7 +20,7 @@ public class Num extends E {
 		
 	}
 @Override
-public void type(Tipo funcion, Tipo val_switch, Tipo current_class) {
+public void type(Tipo funcion, Tipo val_switch, Tipo current_class, boolean continuable, boolean breakeable) {
 	this.tipo = new Int();
 }
 }

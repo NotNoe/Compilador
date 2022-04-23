@@ -8,6 +8,8 @@ import ast.ASTNode;
 import ast.expresiones.E;
 import ast.tipo.Bool;
 import ast.tipo.Tipo;
+import errors.TypeMissmatchException;
+import errors.UndefinedVariableException;
 
 public class If extends Instruccion {
 
@@ -37,16 +39,16 @@ public class If extends Instruccion {
 
 
 
-	public If(E opnd1, BloqueInstrucciones opnd2) {
-		super();
+	public If(E opnd1, BloqueInstrucciones opnd2, int fila, int columna) {
+		super(fila, columna);
 		this.opnd1 = opnd1;
 		this.opnd2 = opnd2;
 	}
 
 
 
-	public If(E opnd1, BloqueInstrucciones opnd2, BloqueInstrucciones opnd3) {
-		super();
+	public If(E opnd1, BloqueInstrucciones opnd2, BloqueInstrucciones opnd3, int fila, int columna) {
+		super(fila, columna);
 		this.opnd1 = opnd1;
 		this.opnd2 = opnd2;
 		this.opnd3 = opnd3;
@@ -68,7 +70,11 @@ public class If extends Instruccion {
 
 	@Override
 	public void bind(Stack<Map<String, ASTNode>> pila) {
-		opnd1.bind(pila);
+		try {
+			opnd1.bind(pila);
+		} catch (UndefinedVariableException e) {
+			e.print();
+		}
 		pila.add(new HashMap<String, ASTNode>());
 		opnd2.bind(pila);
 		pila.pop();
@@ -93,14 +99,18 @@ public class If extends Instruccion {
 
 
 	@Override
-	public void type(Tipo funcion, Tipo val_switch, Tipo current_class) {
-		opnd1.type(funcion, val_switch, current_class);
-		if(!Tipo.equals(opnd1.tipo, new Bool())) {
-			//TODO error
+	public void type(Tipo funcion, Tipo val_switch, Tipo current_class, boolean continuable, boolean breakeable) {
+		try {
+			opnd1.type(funcion, val_switch, current_class, false, false);
+			if(!Tipo.equals(opnd1.tipo, new Bool()))
+				(new TypeMissmatchException("Type doesn't match, it must be bool, not "+
+					opnd1.tipo.printT(), this.fila, this.columna)).print();
+		} catch (TypeMissmatchException e) {
+			e.print();
 		}
-		opnd2.type(funcion, val_switch, current_class);
+		opnd2.type(funcion, val_switch, current_class, continuable, breakeable);
 		if(opnd3 != null) {
-			opnd3.type(funcion, val_switch, current_class);
+			opnd3.type(funcion, val_switch, current_class, continuable, breakeable);
 		}
 	}
 

@@ -9,7 +9,7 @@ import ast.tipo.Tipo;
 
 public class True extends E {
 
-	  public True() {}
+	  public True(int fila, int columna) {super(fila, columna);}
 	  public String val() {return "true";}
 	  public KindE kind() {return KindE.TRUE;}   
 	  public String toString() {return "true";}  
@@ -17,7 +17,7 @@ public class True extends E {
 			
 		}
 	@Override
-	public void type(Tipo funcion, Tipo val_switch, Tipo current_class) {
+	public void type(Tipo funcion, Tipo val_switch, Tipo current_class, boolean continuable, boolean breakeable) {
 		this.tipo = new Bool();
 	}
 

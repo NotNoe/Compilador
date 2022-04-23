@@ -8,6 +8,10 @@ import ast.tipo.Tipo;
 
 public class This extends Designador {
 	
+	public This(int fila, int columna) {
+		super(fila, columna);
+	}
+
 	public String toString() {
 		return "this()";
 	}
@@ -22,7 +26,8 @@ public class This extends Designador {
 	}
 
 	@Override
-	public void type(Tipo funcion, Tipo val_switch, Tipo current_class) {
+	public void type(Tipo funcion, Tipo val_switch, Tipo current_class, boolean continuable, boolean breakeable) {
+		//TODO Error de this fuera de ambito
 		this.tipo = current_class;
 	}
 

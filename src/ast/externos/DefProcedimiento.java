@@ -19,11 +19,14 @@ public class DefProcedimiento implements Externo {
 	private Parametros opnd2;
 	private BloqueInstrucciones opnd3;
 	private ArrayList<Tipo> listaTipos;
+	public int fila, columna;
 	
-	public DefProcedimiento(Identificador opnd1, Parametros opnd2, BloqueInstrucciones opnd3) {
+	public DefProcedimiento(Identificador opnd1, Parametros opnd2, BloqueInstrucciones opnd3, int fila, int columna) {
 		this.opnd1 = opnd1;
 		this.opnd2 = opnd2;
 		this.opnd3 = opnd3;
+		this.fila = fila;
+		this.columna = columna;
 	}
 
 	public void bind (Stack<Map<String, ASTNode>> pila) {
@@ -63,11 +66,11 @@ public class DefProcedimiento implements Externo {
 	}
 
 	@Override
-	public void type(Tipo funcion, Tipo val_switch, Tipo current_class) {
-		opnd2.type(null, null, current_class);
+	public void type(Tipo funcion, Tipo val_switch, Tipo current_class, boolean continuable, boolean breakeable) {
+		opnd2.type(null, null, current_class, continuable, breakeable);
 		this.listaTipos = new ArrayList<Tipo>();
 		opnd2.getListaTipos(listaTipos);
-		opnd3.type(null, null, current_class);
+		opnd3.type(null, null, current_class, continuable, breakeable);
 	}
 
 	public ArrayList<Tipo> getListaTipos() {

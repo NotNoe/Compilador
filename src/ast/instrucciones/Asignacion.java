@@ -7,6 +7,8 @@ import ast.ASTNode;
 import ast.designadores.Designador;
 import ast.expresiones.E;
 import ast.tipo.Tipo;
+import errors.TypeMissmatchException;
+import errors.UndefinedVariableException;
 
 public class Asignacion extends Instruccion {
 	
@@ -15,8 +17,8 @@ public class Asignacion extends Instruccion {
 	
 	
 
-	public Asignacion(Designador opnd1, E opnd2) {
-		super();
+	public Asignacion(Designador opnd1, E opnd2, int fila, int columna) {
+		super(fila, columna);
 		this.opnd1 = opnd1;
 		this.opnd2 = opnd2;
 	}
@@ -26,8 +28,16 @@ public class Asignacion extends Instruccion {
 	}
 	
 	public void bind (Stack<Map<String, ASTNode>> pila) {
-		this.opnd1.bind(pila);
-		this.opnd2.bind(pila);
+		try {
+			this.opnd1.bind(pila);
+		} catch (UndefinedVariableException e) {
+			e.print();
+		}
+		try {
+			this.opnd2.bind(pila);
+		} catch (UndefinedVariableException e) {
+			e.print();
+		}
 	}
 
 	public Designador getOpnd1() {
@@ -48,11 +58,24 @@ public class Asignacion extends Instruccion {
 	}
 
 	@Override
-	public void type(Tipo funcion, Tipo val_switch, Tipo current_class) {
-		opnd1.type(funcion, val_switch, current_class);
-		opnd2.type(funcion, val_switch, current_class);
-		if(!Tipo.equals(opnd1.tipo, opnd2.tipo)) {
-			//TODO error
+	public void type(Tipo funcion, Tipo val_switch, Tipo current_class, boolean continuable, boolean breakeable) {
+		boolean err = false;
+		try {
+			opnd1.type(funcion, val_switch, current_class, false, false);
+		} catch (TypeMissmatchException e) {
+			e.print();
+			err = true;
+		}
+		try {
+			opnd2.type(funcion, val_switch, current_class, false, false);
+		} catch (TypeMissmatchException e) {
+			e.print();
+			err = true;
+		}
+		if(!err) {
+			if(!Tipo.equals(this.opnd1.tipo, this.opnd2.tipo))
+				(new TypeMissmatchException("Type missmatch between " + this.opnd1.tipo.printT()
+				+ " and " + this.opnd2.tipo.printT()+".", this.fila, this.columna)).print();
 		}
 	}
 

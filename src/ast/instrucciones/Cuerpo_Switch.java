@@ -6,6 +6,8 @@ import java.util.Stack;
 import ast.ASTNode;
 import ast.NodeKind;
 import ast.tipo.Tipo;
+import errors.TypeMissmatchException;
+import errors.UndefinedVariableException;
 
 public class Cuerpo_Switch implements ASTNode {
 	
@@ -47,7 +49,11 @@ public class Cuerpo_Switch implements ASTNode {
 
 	public void bind(Stack<Map<String, ASTNode>> pila) {
 		if(opnd1 != null) {
-			opnd1.bind(pila);
+			try {
+				opnd1.bind(pila);
+			} catch (UndefinedVariableException e) {
+				e.print();
+			}
 			opnd2.bind(pila);
 		}
 	}
@@ -61,10 +67,10 @@ public class Cuerpo_Switch implements ASTNode {
 	}
 
 	@Override
-	public void type(Tipo funcion, Tipo val_switch, Tipo current_class) {
+	public void type(Tipo funcion, Tipo val_switch, Tipo current_class, boolean continuable, boolean breakeable) {
 		if(opnd1 != null) {
-			opnd1.type(funcion, val_switch, current_class);
-			opnd2.type(funcion, val_switch, current_class);
+			opnd1.type(funcion, val_switch, current_class, continuable, breakeable);
+			opnd2.type(funcion, val_switch, current_class, continuable, breakeable);
 		}
 	}
 	

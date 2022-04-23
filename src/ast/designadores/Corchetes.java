@@ -10,6 +10,8 @@ import ast.expresiones.E;
 import ast.tipo.Array;
 import ast.tipo.KindType;
 import ast.tipo.Tipo;
+import errors.TypeMissmatchException;
+import errors.UndefinedVariableException;
 
 public class Corchetes extends Designador {
 	
@@ -17,14 +19,23 @@ public class Corchetes extends Designador {
 	private E opnd2;
 
 	
-	public Corchetes(Designador opnd1, E opnd2) {
+	public Corchetes(Designador opnd1, E opnd2, int fila, int columna) {
+		super(fila, columna);
 		this.opnd1 = opnd1;
 		this.opnd2 = opnd2;
 	}
 	
 	public void bind(Stack<Map<String, ASTNode>> pila) {
-		this.opnd1.bind(pila);
-		this.opnd2.bind(pila);
+		try {
+			this.opnd1.bind(pila);
+		}catch(UndefinedVariableException e) {
+			e.print();
+		}
+		try {
+			this.opnd2.bind(pila);
+		}catch(UndefinedVariableException e) {
+			e.print();
+		}
 	}
 	
 	public Designador getOpnd1() {
@@ -46,14 +57,14 @@ public class Corchetes extends Designador {
 	}
 
 	@Override
-	public void type(Tipo funcion, Tipo val_switch, Tipo current_class) {
-		opnd1.type(funcion, val_switch, null);
-		opnd2.type(funcion, val_switch, null);
-		if(opnd2.tipo.kindType() != KindType.INT) {
-			//TODO: error
+	public void type(Tipo funcion, Tipo val_switch, Tipo current_class, boolean continuable, boolean breakeable) throws TypeMissmatchException {
+		opnd1.type(funcion, val_switch, null, continuable, breakeable);
+		opnd2.type(funcion, val_switch, null, continuable, breakeable);
+		if(opnd1.tipo.kindType() != KindType.ARRAY) {
+			throw new TypeMissmatchException("Cannot index a non-array type.", this.fila, this.columna);
 		}else {
-			if(opnd1.tipo.kindType() != KindType.ARRAY) {
-				//TODO: error
+			if(opnd2.tipo.kindType() != KindType.INT) {
+				throw new TypeMissmatchException("Cannot index by a non-int type.", this.fila, this.columna);
 			}else {
 				this.tipo = ((Array) opnd1.tipo).getTipo();
 			}

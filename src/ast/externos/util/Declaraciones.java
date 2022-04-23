@@ -73,10 +73,10 @@ public class Declaraciones implements ASTNode {
 	}
 
 	@Override
-	public void type(Tipo funcion, Tipo val_switch, Tipo current_class) {
+	public void type(Tipo funcion, Tipo val_switch, Tipo current_class, boolean continuable, boolean breakeable) {
 		if(this.kind != KindD.VACIO) {
-			opnd1.type(funcion, val_switch, null);
-			opnd2.type(funcion, val_switch, current_class);
+			opnd1.type(funcion, val_switch, null, continuable, breakeable);
+			opnd2.type(funcion, val_switch, current_class, continuable, breakeable);
 		}
 	}
 

@@ -5,12 +5,15 @@ import java.util.Stack;
 
 import ast.ASTNode;
 import ast.SeqExp;
+import ast.tipo.Array;
 import ast.tipo.Tipo;
+import errors.TypeMissmatchException;
 
 public class Lista extends E {
 
 	private SeqExp seq;
-	public Lista(SeqExp seq) {
+	public Lista(SeqExp seq, int fila, int columna) {
+		super(fila, columna);
 		this.seq = seq;
 	}
 	
@@ -27,9 +30,9 @@ public class Lista extends E {
 	}
 
 	@Override
-	public void type(Tipo funcion, Tipo val_switch, Tipo current_class) {
-		seq.type(funcion, val_switch, current_class);
-		this.tipo = seq.tipo;
+	public void type(Tipo funcion, Tipo val_switch, Tipo current_class, boolean continuable, boolean breakeable) throws TypeMissmatchException {
+		seq.type(funcion, val_switch, current_class, continuable, breakeable);
+		this.tipo = new Array(seq.tipo);
 	}
 
 }

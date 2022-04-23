@@ -8,7 +8,7 @@ import ast.ASTNode;
 public class EmptyArray implements Tipo {
 
 	@Override
-	public void type(Tipo funcion, Tipo val_switch, Tipo current_class) {
+	public void type(Tipo funcion, Tipo val_switch, Tipo current_class, boolean continuable, boolean breakeable) {
 	}
 
 	@Override
@@ -19,6 +19,10 @@ public class EmptyArray implements Tipo {
 	@Override
 	public KindType kindType() {
 		return KindType.ARRAY_VACIO;
+	}
+	
+	public String printT() {
+		return "[]";
 	}
 
 	@Override

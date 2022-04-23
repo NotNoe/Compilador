@@ -8,12 +8,14 @@ import ast.ArrayDimensiones;
 import ast.designadores.Identificador;
 import ast.externos.util.KindExt;
 import ast.tipo.Tipo;
+import errors.TypeMissmatchException;
 
 public class DefTipo implements Externo {
 
 	private Tipo opnd1;
 	private Identificador opnd2;
 	private ArrayDimensiones opnd3;
+	public int fila, columna;
 	
 	
 	public Tipo getOpnd1() {
@@ -27,10 +29,12 @@ public class DefTipo implements Externo {
 		return opnd2;
 	}
 
-	public DefTipo(Tipo opnd1, Identificador opnd2, ArrayDimensiones opnd3) {
+	public DefTipo(Tipo opnd1, Identificador opnd2, ArrayDimensiones opnd3, int fila, int columna) {
 		this.opnd1 = opnd1;
 		this.opnd2 = opnd2;
 		this.opnd3 = opnd3;
+		this.fila = fila;
+		this.columna = columna;
 	}
 
 	public String toString() {
@@ -47,7 +51,7 @@ public class DefTipo implements Externo {
 		return KindExt.DEF_TIPO;
 	}
 
-	public Tipo getBasicType(Map<String, Tipo> globalTypes) {
+	public Tipo getBasicType(Map<String, Tipo> globalTypes) throws TypeMissmatchException {
 		return opnd3.tipar(opnd1.getBasicType(globalTypes));
 	}
 
@@ -57,7 +61,7 @@ public class DefTipo implements Externo {
 	}
 
 	@Override
-	public void type(Tipo funcion, Tipo val_switch, Tipo current_class) {
+	public void type(Tipo funcion, Tipo val_switch, Tipo current_class, boolean continuable, boolean breakeable) {
 		
 	}
 

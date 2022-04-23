@@ -17,14 +17,18 @@ public class DefClase implements Externo, Tipo {
 	private CuerpoClase opnd1;
 	private Identificador opnd2;
 	private Map<String, ASTNode> ambito;
+	public int fila, columna;
 	
 	public void bind (Stack<Map<String, ASTNode>> pila) {
+		this.opnd1.preBinding(this.ambito);
 		pila.push(this.ambito);
 		this.opnd1.bind(pila);
 		pila.pop();
 	}
 	
-	public DefClase(CuerpoClase opnd1, Identificador opnd2) {
+	public DefClase(CuerpoClase opnd1, Identificador opnd2, int fila, int columna) {
+		this.fila = fila;
+		this.columna = columna;
 		this.opnd1 = opnd1;
 		this.opnd2 = opnd2;
 		this.ambito = new HashMap<String, ASTNode>();
@@ -69,12 +73,17 @@ public class DefClase implements Externo, Tipo {
 	}
 
 	@Override
-	public void type(Tipo funcion, Tipo val_switch, Tipo current_class) {
-		opnd1.type(null, null, this);
+	public void type(Tipo funcion, Tipo val_switch, Tipo current_class, boolean continuable, boolean breakeable) {
+		opnd1.type(null, null, this, continuable, breakeable);
 	}
 
 	public Map<String, ASTNode> getAmbito() {
 		return ambito;
+	}
+
+	@Override
+	public String printT() {
+		return this.opnd2.getIden();
 	}
 	
 	

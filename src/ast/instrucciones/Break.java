@@ -5,10 +5,11 @@ import java.util.Stack;
 
 import ast.ASTNode;
 import ast.tipo.Tipo;
+import errors.OutOfContextControlStatementException;
 
 public class Break extends Instruccion {
 
-	public Break() {}
+	public Break(int fila, int columna) {super(fila, columna);}
 	
 	public KindI kindI() {
 		return KindI.BREAK;
@@ -26,7 +27,8 @@ public class Break extends Instruccion {
 	}
 
 	@Override
-	public void type(Tipo funcion, Tipo val_switch, Tipo current_class) {
-
+	public void type(Tipo funcion, Tipo val_switch, Tipo current_class, boolean continuable, boolean breakeable) {
+		if(!breakeable)
+			(new OutOfContextControlStatementException(this.fila, this.columna)).print();
 	}
 }

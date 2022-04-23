@@ -4,7 +4,10 @@ import java.util.Stack;
 import java.util.Map;
 import ast.expresiones.E;
 import ast.tipo.Array;
+import ast.tipo.Int;
 import ast.tipo.Tipo;
+import errors.TypeMissmatchException;
+import errors.UndefinedVariableException;
 
 public class ArrayDimensiones implements ASTNode {
 	
@@ -16,7 +19,11 @@ public class ArrayDimensiones implements ASTNode {
 	
 	public void bind(Stack<Map<String, ASTNode>> pila) {
 		if (this.opnd1 != null) {
-			this.opnd1.bind(pila);
+			try {
+				this.opnd1.bind(pila);
+			} catch (UndefinedVariableException e) {
+				e.print();
+			}
 			this.opnd2.bind(pila);
 		}
 			
@@ -59,13 +66,24 @@ public class ArrayDimensiones implements ASTNode {
 
 	@Override
 	public void subsUserTypes(Map<String, Tipo> globalTypes) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
 	@Override
-	public void type(Tipo funcion, Tipo val_switch, Tipo current_class) {
-		// TODO Auto-generated method stub
+	public void type(Tipo funcion, Tipo val_switch, Tipo current_class, boolean continuable, boolean breakeable) {
+		if(!(this.opnd1 == null)) {
+			try {
+				this.opnd1.type(funcion, val_switch, current_class, continuable, breakeable);
+				if(!Tipo.equals(this.opnd1.tipo, new Int())){
+					(new TypeMissmatchException("Array dimensions must be integer, not: " +
+							this.opnd1.tipo.printT(), this.opnd1.fila, this.opnd1.columna)).print();
+				}
+				this.opnd2.type(funcion, val_switch, current_class, continuable, breakeable);
+			} catch (TypeMissmatchException e) {
+				e.print();
+			}
+		}
 		
 	}
 

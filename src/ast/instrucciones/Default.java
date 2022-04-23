@@ -42,8 +42,8 @@ public class Default extends SwitchCase {
 	}
 
 	@Override
-	public void type(Tipo funcion, Tipo val_switch, Tipo current_class) {
-		opnd1.type(funcion, val_switch, current_class);
+	public void type(Tipo funcion, Tipo val_switch, Tipo current_class, boolean continuable, boolean breakeable) {
+		opnd1.type(funcion, val_switch, current_class, continuable, breakeable);
 	}
 
 }

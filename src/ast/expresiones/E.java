@@ -9,6 +9,10 @@ import ast.instrucciones.KindI;
 import ast.tipo.Tipo;
 
 public abstract class E extends Instruccion implements ASTNode {
+
+	public E(int fila, int columna) {
+		super(fila, columna);
+	}
 	public Tipo tipo;
     public abstract KindE kind();
     public E opnd1() {throw new UnsupportedOperationException("opnd1");} 

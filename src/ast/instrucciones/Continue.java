@@ -5,10 +5,11 @@ import java.util.Stack;
 
 import ast.ASTNode;
 import ast.tipo.Tipo;
+import errors.OutOfContextControlStatementException;
 
 public class Continue extends Instruccion {
 	
-	public Continue() {}
+	public Continue(int fila, int columna) {super(fila, columna);}
 
 	public KindI kindI() {
 		return KindI.CONTINUE;
@@ -28,8 +29,9 @@ public class Continue extends Instruccion {
 	}
 
 	@Override
-	public void type(Tipo funcion, Tipo val_switch, Tipo current_class) {
-
+	public void type(Tipo funcion, Tipo val_switch, Tipo current_class, boolean continuable, boolean breakeable) {
+		if(!continuable)
+			(new OutOfContextControlStatementException(this.fila, this.columna)).print();
 	}
 
 }

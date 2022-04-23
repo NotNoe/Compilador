@@ -16,15 +16,18 @@ public class Parametro implements ASTNode {
 	private boolean ref;
 	private Identificador opnd2;
 	private ArrayDimensiones opnd3;
+	public int fila, columna;
 	
 	
 	
-	public Parametro(Tipo opnd1, boolean ref, Identificador opnd2, ArrayDimensiones opnd3) {
+	public Parametro(Tipo opnd1, boolean ref, Identificador opnd2, ArrayDimensiones opnd3, int fila, int columna) {
 		super();
 		this.opnd1 = opnd1;
 		this.ref = ref;
 		this.opnd2 = opnd2;
 		this.opnd3 = opnd3;
+		this.fila = fila;
+		this.columna = columna;
 	}
 	
 	public void bind (Stack<Map<String, ASTNode>> pila) {
@@ -70,9 +73,9 @@ public class Parametro implements ASTNode {
 	}
 
 	@Override
-	public void type(Tipo funcion, Tipo val_switch, Tipo current_class) {
+	public void type(Tipo funcion, Tipo val_switch, Tipo current_class, boolean continuable, boolean breakeable) {
 		this.opnd1 = opnd3.tipar(this.opnd1);
-		this.opnd3.type(funcion, val_switch, null);
+		this.opnd3.type(funcion, val_switch, null, continuable, breakeable);
 	}
 
 }

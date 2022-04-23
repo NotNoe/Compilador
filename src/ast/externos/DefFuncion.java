@@ -12,6 +12,7 @@ import ast.externos.util.Parametros;
 import ast.instrucciones.BloqueInstrucciones;
 import ast.tipo.KindType;
 import ast.tipo.Tipo;
+import errors.TypeMissmatchException;
 
 public class DefFuncion implements Externo {
 
@@ -20,6 +21,7 @@ public class DefFuncion implements Externo {
 	private Parametros opnd3;
 	private BloqueInstrucciones opnd4;
 	private ArrayList<Tipo> listaTipos;
+	public int fila, columna;
 	
 	public void bind (Stack<Map<String, ASTNode>> pila) {
 		pila.peek().put(this.opnd2.getIden(), this);
@@ -29,7 +31,9 @@ public class DefFuncion implements Externo {
 		pila.pop();
 	}
 	
-	public DefFuncion(Tipo opnd1, Identificador opnd2, Parametros opnd3, BloqueInstrucciones opnd4) {
+	public DefFuncion(Tipo opnd1, Identificador opnd2, Parametros opnd3, BloqueInstrucciones opnd4, int fila, int columna) {
+		this.fila = fila;
+		this.columna = columna;
 		this.opnd1 = opnd1;
 		this.opnd2 = opnd2;
 		this.opnd3 = opnd3;
@@ -73,17 +77,21 @@ public class DefFuncion implements Externo {
 
 	@Override
 	public void subsUserTypes(Map<String, Tipo> globalTypes) {
-		this.opnd1 = opnd1.getBasicType(globalTypes);
+		try {
+			this.opnd1 = opnd1.getBasicType(globalTypes);
+		} catch (TypeMissmatchException e) {
+			e.print();
+		}
 		opnd3.subsUserTypes(globalTypes);
 		opnd4.subsUserTypes(globalTypes);
 	}
 
 	@Override
-	public void type(Tipo funcion, Tipo val_switch, Tipo current_class) {
-		opnd3.type(funcion, val_switch, current_class);
+	public void type(Tipo funcion, Tipo val_switch, Tipo current_class, boolean continuable, boolean breakeable) {
+		opnd3.type(funcion, val_switch, current_class, continuable, breakeable);
 		this.listaTipos = new ArrayList<Tipo>();
 		opnd3.getListaTipos(this.listaTipos);
-		opnd4.type(this.opnd1, val_switch, current_class);
+		opnd4.type(this.opnd1, val_switch, current_class, continuable, breakeable);
 	}
 
 	public ArrayList<Tipo> getListaTipos() {

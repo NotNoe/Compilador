@@ -17,9 +17,12 @@ public class DefStruct implements Externo, Tipo {
 	private Declaraciones opnd1;
 	private Identificador opnd2;
 	private Map<String, ASTNode> ambito;
+	public int fila, columna;
 	
 	
-	public DefStruct(Declaraciones opnd1, Identificador opnd2) {
+	public DefStruct(Declaraciones opnd1, Identificador opnd2, int fila, int columna) {
+		this.fila = fila;
+		this.columna = columna;
 		this.opnd1 = opnd1;
 		this.opnd2 = opnd2;
 		this.ambito = new HashMap<String, ASTNode>();
@@ -73,13 +76,14 @@ public class DefStruct implements Externo, Tipo {
 	}
 
 	@Override
-	public void type(Tipo funcion, Tipo val_switch, Tipo current_class) {
-		opnd1.type(null, null, null);
+	public void type(Tipo funcion, Tipo val_switch, Tipo current_class, boolean continuable, boolean breakeable) {
+		opnd1.type(null, null, null, continuable, breakeable);
 	}
 
 	public Map<String, ASTNode> getAmbito() {
 		return ambito;
 	}
 
+	public String printT() {return this.opnd2.getIden();}
 	
 }

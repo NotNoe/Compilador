@@ -13,6 +13,10 @@ public class Char implements Tipo {
 	public KindType kindType() {
 		return KindType.CHAR;
 	}
+	
+	public String printT() {
+		return "char";
+	}
 
 	@Override
 	public void bind(Stack<Map<String, ASTNode>> pila) {
@@ -25,13 +29,13 @@ public class Char implements Tipo {
 
 	@Override
 	public void subsUserTypes(Map<String, Tipo> globalTypes) {
-		// TODO Auto-generated method stub
+	
 		
 	}
 
 	@Override
-	public void type(Tipo funcion, Tipo val_switch, Tipo current_class) {
-		// TODO Auto-generated method stub
+	public void type(Tipo funcion, Tipo val_switch, Tipo current_class, boolean continuable, boolean breakeable) {
+		
 		
 	}
 

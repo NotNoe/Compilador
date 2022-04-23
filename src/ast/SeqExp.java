@@ -5,9 +5,12 @@ import java.util.Map;
 import java.util.Stack;
 
 import ast.expresiones.E;
+import ast.externos.util.Delim;
 import ast.tipo.Array;
 import ast.tipo.EmptyArray;
 import ast.tipo.Tipo;
+import errors.TypeMissmatchException;
+import errors.UndefinedVariableException;
 
 public class SeqExp implements ASTNode {
 
@@ -16,8 +19,6 @@ public class SeqExp implements ASTNode {
 	public Tipo tipo;
 	
 	public SeqExp(E izq, SeqExp der) {
-		this.izq = izq;
-		this.der = der;
 	}
 	
 	public SeqExp() {
@@ -26,7 +27,11 @@ public class SeqExp implements ASTNode {
 	
 	public void bind(Stack<Map<String, ASTNode>> pila) {
 		if(this.izq != null) {
-			this.izq.bind(pila);
+			try {
+				this.izq.bind(pila);
+			} catch (UndefinedVariableException e) {
+				e.print();
+			}
 			this.der.bind(pila);
 		}
 	}
@@ -52,22 +57,18 @@ public class SeqExp implements ASTNode {
 	}
 
 	@Override
-	public void type(Tipo funcion, Tipo val_switch, Tipo current_class) {
+	public void type(Tipo funcion, Tipo val_switch, Tipo current_class, boolean continuable, boolean breakeable) throws TypeMissmatchException {
 		if(izq != null) {
-			izq.type(funcion, val_switch, current_class);
-			if(der.izq == null) {
-				der.tipo = izq.tipo;
-				this.tipo = new Array(izq.tipo);
-			}else {
-				der.type(funcion, val_switch, current_class);
-				if(Tipo.equals(izq.tipo, ((Array) der.tipo).getTipo())) {
-					this.tipo = new Array(izq.tipo);
-				}else {
-					//TODO: error
-				}
-			}
+			izq.type(funcion, val_switch, current_class, continuable, breakeable);
+			der.type(funcion, val_switch, current_class, continuable, breakeable);
+			if(Tipo.equals(der.tipo, new Delim()))
+				this.tipo = izq.tipo;
+			else if(Tipo.equals(der.tipo, izq.tipo))
+				this.tipo = izq.tipo;
+			else
+				throw new TypeMissmatchException("Polymorphic arrays are not allowed.", izq.fila, izq.columna);
 		}else {
-			this.tipo = new EmptyArray();
+			this.tipo = new Delim();
 		}
 	}
 

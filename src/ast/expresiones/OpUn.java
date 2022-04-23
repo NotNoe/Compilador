@@ -9,6 +9,8 @@ import ast.tipo.Int;
 import ast.tipo.KindType;
 import ast.tipo.Pointer;
 import ast.tipo.Tipo;
+import errors.TypeMissmatchException;
+import errors.UndefinedVariableException;
 
 public class OpUn extends E {
 
@@ -16,10 +18,15 @@ public class OpUn extends E {
 	private KindE op;
 	
 	public void bind (Stack<Map<String, ASTNode>> pila) {
-		this.opnd1.bind(pila);
+		try {
+			this.opnd1.bind(pila);
+		} catch (UndefinedVariableException e) {
+			e.print();
+		}
 	}
 	
-	public OpUn(E opnd1, String op) {
+	public OpUn(E opnd1, String op, int fila, int columna) {
+		super(fila, columna);
 		this.opnd1 = opnd1;
 		switch(op) {
 		case "&":
@@ -58,8 +65,8 @@ public class OpUn extends E {
 	}
 
 	@Override
-	public void type(Tipo funcion, Tipo val_switch, Tipo current_class) {
-		opnd1.type(funcion, val_switch, current_class);
+	public void type(Tipo funcion, Tipo val_switch, Tipo current_class, boolean continuable, boolean breakeable) throws TypeMissmatchException {
+		opnd1.type(funcion, val_switch, current_class, continuable, breakeable);
 		switch(this.op) {
 		case REF:
 			this.tipo = new Pointer(this.opnd1.tipo);
@@ -68,18 +75,20 @@ public class OpUn extends E {
 			if(this.opnd1.tipo.kindType() == KindType.BOOL) {
 				this.tipo = new Bool();
 			}else {
-				//TODO: error
+				throw new TypeMissmatchException("Type expected for not operator is bool, not (" +
+						opnd1.tipo.printT() + ".", this.fila, this.columna);
 			}
 			break;
 		case MENOS:
 			if(this.opnd1.tipo.kindType() == KindType.INT) {
 				this.tipo = new Int();
 			}else {
-				//TODO: error
+				throw new TypeMissmatchException("Type expected for minus operator is int, not (" +
+						opnd1.tipo.printT() + ".", this.fila, this.columna);
 			}
 			break;
 		default:
-			//TODO error
+			throw new RuntimeException("Algo ha explotado");
 		}
 	}
 

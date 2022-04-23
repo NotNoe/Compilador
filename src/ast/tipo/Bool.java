@@ -14,6 +14,9 @@ public class Bool implements Tipo {
 		return KindType.BOOL;
 	}
 
+	public String printT() {
+		return "bool";
+	}
 	@Override
 	public void bind(Stack<Map<String, ASTNode>> pila) {
 	}
@@ -29,8 +32,8 @@ public class Bool implements Tipo {
 	}
 
 	@Override
-	public void type(Tipo funcion, Tipo val_switch, Tipo current_class) {
-		// TODO Auto-generated method stub
+	public void type(Tipo funcion, Tipo val_switch, Tipo current_class, boolean continuable, boolean breakeable) {
+		
 		
 	}
 

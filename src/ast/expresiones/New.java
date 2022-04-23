@@ -10,20 +10,26 @@ import ast.tipo.Array;
 import ast.tipo.KindType;
 import ast.tipo.Pointer;
 import ast.tipo.Tipo;
+import errors.TypeMissmatchException;
+import errors.UndefinedVariableException;
 
 public class New extends E {
 	
 	private Tipo opnd1;
 	private ArrayDimensiones opnd2;
 	
-	public New(Tipo opnd1, ArrayDimensiones opnd2) {
-		super();
+	public New(Tipo opnd1, ArrayDimensiones opnd2, int fila, int columna) {
+		super(fila, columna);
 		this.opnd1 = opnd1;
 		this.opnd2 = opnd2;
 	}
 	
 	public void bind (Stack<Map<String, ASTNode>> pila) {
-		this.opnd1.bind(pila);
+		try {
+			this.opnd1.bind(pila);
+		} catch (UndefinedVariableException e) {
+			e.print();
+		}
 		this.opnd2.bind(pila);
 	}
 
@@ -48,8 +54,9 @@ public class New extends E {
 	}
 
 	@Override
-	public void type(Tipo funcion, Tipo val_switch, Tipo current_class) {
-		opnd1.type(funcion, val_switch, current_class);
+	public void type(Tipo funcion, Tipo val_switch, Tipo current_class, boolean continuable, boolean breakeable) throws TypeMissmatchException {
+		if(opnd1.kindType() == KindType.IDENTIFICADOR)
+			throw new TypeMissmatchException("Unable to resolve type.", this.fila, this.columna);
 		if(opnd1.kindType() == KindType.ARRAY) {
 			this.tipo = new Pointer(((Array) opnd1).getTipo());
 		}else {

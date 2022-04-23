@@ -8,6 +8,10 @@ import ast.tipo.Tipo;
 
 public abstract class Designador extends E {
 	
+	public Designador(int fila, int columna) {
+		super(fila, columna);
+	}
+	
 	public KindE kind() {return KindE.DESIGNADOR;}
 	public abstract KindDes kindDes();
 	public void subsUserTypes(Map<String, Tipo> globalTypes) {}
