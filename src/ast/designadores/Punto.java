@@ -46,7 +46,7 @@ public class Punto extends Designador {
 		case DESIGNADOR:
 			break;
 		default:
-			// TODO error
+			throw new RuntimeException("LOL");
 		}
 	}
 

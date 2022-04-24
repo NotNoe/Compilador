@@ -164,7 +164,7 @@ public class EBin extends E {
 				throw new TypeMissmatchException("Type missmatch for equality operators between " +
 						opnd1.tipo.printT() + " and " + opnd2.tipo.printT()+".", this.fila, this.columna);
 			}
-				
+			break;	
 		default:
 			throw new RuntimeException("Algo ha explotado");
 		}
