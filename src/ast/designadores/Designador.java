@@ -15,4 +15,6 @@ public abstract class Designador extends E {
 	public KindE kind() {return KindE.DESIGNADOR;}
 	public abstract KindDes kindDes();
 	public void subsUserTypes(Map<String, Tipo> globalTypes) {}
+
+	public abstract String getDir();
 }

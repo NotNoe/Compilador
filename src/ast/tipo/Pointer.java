@@ -10,6 +10,7 @@ import errors.UndefinedVariableException;
 public class Pointer implements Tipo {
 	
 	private Tipo p;
+	public int size = 4;
 	
 	public Pointer(Tipo p) {
 		this.p = p;
@@ -50,6 +51,11 @@ public class Pointer implements Tipo {
 	
 	public String printT() {
 		return "pointer " + this.p.printT();
+	}
+
+	@Override
+	public int getSize() {
+		return this.size;
 	}
 
 }

@@ -129,4 +129,51 @@ public class Identificador extends Designador implements Tipo {
 		return "ERR";
 	}
 
+
+	@Override
+	public int getSize() {
+		return this.tipo.getSize();
+	}
+
+
+	@Override
+	public String generateCode(String code, int delta) {
+		String aux = "";
+		if(this.link.nodeKind() == NodeKind.PARAMETRO) {
+			//TODO
+			return null;
+		}else {
+			switch(((Externo)link).kindExt()) {
+			case DECLARACION:
+				Declaracion dec = (Declaracion) link;
+				for(int i = 0; i < dec.getOpnd2().getSize() / 4; i++) {
+					aux = aux + "i32.const " + (dec.getDelta() + i) + "\n" + "i32.load\n";
+				}
+				return aux;
+			case DEF_FUNCION:
+				//TODO
+				return null;
+			case DEF_PROCEDIMIENTO:
+				//TODO
+				return null;
+			default:
+				//TODO
+				return null;
+			}
+		}
+	}
+
+
+	@Override
+	public String getDir() {
+		Declaracion dec = (Declaracion) link;
+		return "i32.const " + dec.getDelta() + "\n";
+	}
+
+
+	@Override
+	protected int precalcular(int i) {
+		return i;
+	}
+
 }

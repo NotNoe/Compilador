@@ -30,4 +30,15 @@ public class Null extends E {
 		this.tipo = new NullPointer();
 	}
 
+	@Override
+	public String generateCode(String code, int delta) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	protected int precalcular(int i) {
+		return i;
+	}
+
 }

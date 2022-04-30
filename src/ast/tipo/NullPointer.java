@@ -6,6 +6,8 @@ import java.util.Stack;
 import ast.ASTNode;
 
 public class NullPointer implements Tipo {
+	
+	public int size = 4;
 
 	@Override
 	public void type(Tipo funcion, Tipo val_switch, Tipo current_class, boolean continuable, boolean breakeable) {
@@ -29,6 +31,11 @@ public class NullPointer implements Tipo {
 	
 	public String printT() {
 		return "null";
+	}
+
+	@Override
+	public int getSize() {
+		return this.size;
 	}
 
 }

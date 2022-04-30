@@ -31,4 +31,15 @@ public class Break extends Instruccion {
 		if(!breakeable)
 			(new OutOfContextControlStatementException(this.fila, this.columna)).print();
 	}
+
+	@Override
+	public String generateCode(String code, int delta) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	protected int precalcular(int i) {
+		return i;
+	}
 }

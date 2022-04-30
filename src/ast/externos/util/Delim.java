@@ -9,6 +9,8 @@ import ast.tipo.Tipo;
 import errors.TypeMissmatchException;
 
 public class Delim implements Tipo {
+	
+	public int size = 0;
 
 	@Override
 	public void type(Tipo funcion, Tipo val_switch, Tipo current_class, boolean continuable, boolean breakeable) {
@@ -33,6 +35,11 @@ public class Delim implements Tipo {
 	@Override
 	public String printT() {
 		return "Delim";
+	}
+
+	@Override
+	public int getSize() {
+		return 0;
 	}
 	
 	

@@ -8,12 +8,12 @@ void main(){
         break;
     }
     case 2 {
-        if(a == 2){
+        if(a[0] == 2){
             aux b = 3;
         }
     }
     default {
-        int d = [3];
+        int d = 3;
     }
     } 
 }

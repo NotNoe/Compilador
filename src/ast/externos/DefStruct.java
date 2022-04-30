@@ -18,6 +18,7 @@ public class DefStruct implements Externo, Tipo {
 	private Identificador opnd2;
 	private Map<String, ASTNode> ambito;
 	public int fila, columna;
+	private int size;
 	
 	
 	public DefStruct(Declaraciones opnd1, Identificador opnd2, int fila, int columna) {
@@ -85,5 +86,21 @@ public class DefStruct implements Externo, Tipo {
 	}
 
 	public String printT() {return this.opnd2.getIden();}
+
+	public int precalcular(int delta) {
+		this.size = this.opnd1.precalcular(0);
+		return delta;
+	}
+
+	@Override
+	public int getSize() {
+		return this.size;
+	}
+
+	@Override
+	public String generateCode(String code, int delta) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 }

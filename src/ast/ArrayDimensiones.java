@@ -3,6 +3,7 @@ package ast;
 import java.util.Stack;
 import java.util.Map;
 import ast.expresiones.E;
+import ast.expresiones.Num;
 import ast.tipo.Array;
 import ast.tipo.Int;
 import ast.tipo.Tipo;
@@ -13,6 +14,8 @@ public class ArrayDimensiones implements ASTNode {
 	
 	private E opnd1;
 	private ArrayDimensiones opnd2;
+	private int size = 0;
+	
 	
 	public ArrayDimensiones() {
 	}
@@ -60,7 +63,8 @@ public class ArrayDimensiones implements ASTNode {
 		if(opnd1 == null) {
 			return t;
 		}else {
-			return new Array(opnd2.tipar(t));
+			this.size = ((Num) this.opnd1).getValue();
+			return new Array(opnd2.tipar(t), ((Num) this.opnd1).getValue());
 		}
 	}
 

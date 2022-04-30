@@ -158,4 +158,21 @@ public class Punto extends Designador {
 		}
 	}
 
+	@Override
+	public String generateCode(String code, int delta) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getDir() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	protected int precalcular(int i) {
+		return i;
+	}
+
 }

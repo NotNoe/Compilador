@@ -77,6 +77,23 @@ public class DefProcedimiento implements Externo {
 		return listaTipos;
 	}
 
+	@Override
+	public String generateCode(String code, int delta) {
+		if(this.opnd1.getIden().equals("main")){
+			return code + "(func $main\n" + this.opnd3.generateCode("", delta) + ")\n";
+		}
+				
+		return this.opnd3.generateCode(code, delta);
+	}
+
+	public int precalcular(int i) {
+		if(this.opnd1.getIden().equals("main")){
+			return this.opnd3.precalcular(0);
+		}else {
+			return this.opnd3.precalcular(this.opnd2.precalcular(0));
+		}
+	}
+
 	
 	
 	 

@@ -17,6 +17,7 @@ public class Parametro implements ASTNode {
 	private Identificador opnd2;
 	private ArrayDimensiones opnd3;
 	public int fila, columna;
+	public int delta = 0;
 	
 	
 	
@@ -76,6 +77,17 @@ public class Parametro implements ASTNode {
 	public void type(Tipo funcion, Tipo val_switch, Tipo current_class, boolean continuable, boolean breakeable) {
 		this.opnd1 = opnd3.tipar(this.opnd1);
 		this.opnd3.type(funcion, val_switch, null, continuable, breakeable);
+	}
+
+	public int precalcular(int i) {
+		this.delta = i;
+		return i + this.opnd1.getSize();
+	}
+
+	@Override
+	public String generateCode(String code, int delta) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

@@ -67,4 +67,15 @@ public class New extends E {
 		opnd1.subsUserTypes(globalTypes);
 	}
 
+	@Override
+	public String generateCode(String code, int delta) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	protected int precalcular(int i) {
+		return i;
+	}
+
 }

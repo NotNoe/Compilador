@@ -10,6 +10,7 @@ public abstract interface Tipo extends ASTNode {
 	public default NodeKind nodeKind() {
 		return NodeKind.TIPO;
 	}
+	public int getSize();
 	public abstract KindType kindType();
 	public abstract Tipo getBasicType(Map<String, Tipo> globalTypes) throws TypeMissmatchException;
 	public default void subsUserTypes(Map<String, Tipo> globalTypes) {
@@ -38,7 +39,8 @@ public abstract interface Tipo extends ASTNode {
 			case POINTER:
 				return equals(((Pointer) tipo1).getP(), ((Pointer) tipo2).getP());
 			case ARRAY:
-				return equals(((Array) tipo1).getTipo(), ((Array) tipo2).getTipo());
+				return (((Array) tipo1).size == ((Array) tipo2).size) && 
+						equals(((Array) tipo1).getTipo(), ((Array) tipo2).getTipo());
 			case NULL_POINTER, ARRAY_VACIO, DELIM:
 				return true;
 			default:

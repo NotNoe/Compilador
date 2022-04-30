@@ -114,4 +114,27 @@ public class If extends Instruccion {
 		}
 	}
 
+
+
+	@Override
+	public String generateCode(String code, int delta) {
+		if(this.opnd3 != null) {
+			return this.opnd1.generateCode(code, delta) + "if\n" + this.opnd2.generateCode(code, delta) +
+					"else\n" + this.opnd3.generateCode(code, delta) + "end\n";
+		}else {
+			return this.opnd1.generateCode(code, delta) + "if\n" + this.opnd2.generateCode(code, delta) + "end\n";
+		}
+	}
+
+
+
+	@Override
+	protected int precalcular(int i) {
+		if(this.opnd3 != null) {
+			return this.opnd3.precalcular(this.opnd2.precalcular(i));
+		}else {
+			return this.opnd2.precalcular(i);
+		}
+	}
+
 }

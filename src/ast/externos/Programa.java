@@ -32,8 +32,8 @@ public class Programa implements ASTNode {
 		this.opnd2 = opnd2;
 	}
 	
-	public void vincular() {
-		HashMap<String, ASTNode> globalAmb = new HashMap<String, ASTNode>();
+	public void vincular(HashMap<String, ASTNode> globalAmb) {
+		
 		this.preBinding(globalAmb);
 		if(!globalAmb.containsKey("main"))
 			(new MainNotFoundException()).print();
@@ -56,7 +56,8 @@ public class Programa implements ASTNode {
 	}
 	
 	public void compilar() {
-		this.vincular();
+		HashMap<String, ASTNode> globalAmb = new HashMap<String, ASTNode>();
+		this.vincular(globalAmb);
 		Map<String, Tipo> globalTypes = new HashMap<String, Tipo>();
 		try {
 			getUserTypes(globalTypes);
@@ -65,9 +66,23 @@ public class Programa implements ASTNode {
 		}
 		this.subsUserTypes(globalTypes);
 		this.type(null, null, null, false, false);
+		
 		if(Main.error)
 			System.exit(1);
 		
+		int delta = this.precalcular(0);
+		DefProcedimiento main = (DefProcedimiento) globalAmb.get("main");
+		String code = "(module\r\n"
+				+ "(import \"runtime\" \"print\" (func $print (param i32)))\r\n"
+				+ "(import \"runtime\" \"read\" (func $read (result i32)))\r\n"
+				+ "(memory 2000)\r\n"
+				+ "(start $main)\r\n";
+		
+		code = main.generateCode(code, delta);
+		code += "(export \"main\" (func $main))\r\n"
+				+ ")";
+		
+		System.out.println(code);
 		
 	}
 	
@@ -165,6 +180,33 @@ public class Programa implements ASTNode {
 			}
 			opnd2.type(null, null, null, continuable, breakeable);
 		}
+	}
+	
+	private int precalcular(int delta) {
+		if(this.kind == KindP.NO_VACIO) {
+			switch(this.opnd1.kindExt()) {
+			case DECLARACION:
+				return this.opnd2.precalcular(((Declaracion) opnd1).precalcular(delta));
+			case DEF_CLASE:
+				return this.opnd2.precalcular(((DefClase) opnd1).precalcular(0));
+			case DEF_STRUCT:
+				return this.opnd2.precalcular(((DefStruct) opnd1).precalcular(0));
+			case DEF_FUNCION:
+				return this.opnd2.precalcular(((DefFuncion) opnd1).precalcular(0));
+			case DEF_PROCEDIMIENTO:
+				return this.opnd2.precalcular(((DefProcedimiento) opnd1).precalcular(0));
+			default:
+				return this.opnd2.precalcular(delta);
+			}
+		}else {
+			return delta;
+		}
+		
+	}
+
+	@Override
+	public String generateCode(String code, int delta) {
+		throw new RuntimeException("No se deberia haber llegado aquí");
 	}
 
 }

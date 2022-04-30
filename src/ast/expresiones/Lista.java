@@ -31,8 +31,18 @@ public class Lista extends E {
 
 	@Override
 	public void type(Tipo funcion, Tipo val_switch, Tipo current_class, boolean continuable, boolean breakeable) throws TypeMissmatchException {
-		seq.type(funcion, val_switch, current_class, continuable, breakeable);
-		this.tipo = new Array(seq.tipo);
+		seq.type(funcion, val_switch, current_class, continuable, breakeable, true);
+		this.tipo = new Array(seq.tipo, seq.size);
+	}
+
+	@Override
+	public String generateCode(String code, int delta) {
+		return this.seq.generateCode(code, delta);
+	}
+
+	@Override
+	protected int precalcular(int i) {
+		return i;
 	}
 
 }

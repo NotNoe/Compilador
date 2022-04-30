@@ -65,6 +65,17 @@ public class Switch extends Instruccion {
 		}
 		opnd2.type(funcion, opnd1.tipo, current_class, continuable, true);
 	}
+
+	@Override
+	public String generateCode(String code, int delta) {
+		// TODO solo numeros
+		return null;
+	}
+
+	@Override
+	protected int precalcular(int i) {
+		return this.opnd2.precalcular(i);
+	}
 	
 	
 

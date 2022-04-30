@@ -1,0 +1,15 @@
+void main(){
+int r = 0;
+int b[20];
+int N = 10;
+b[0] = 1;
+b[1] = 1;
+for(int i = 0; i <= N; i = i + 1;){
+    if(i == 0 || i ==1){
+	b[i] = 1;
+    }else{
+	b[i] = b[i-1] + b[i-2];
+    }
+}
+r = b[N];
+} 

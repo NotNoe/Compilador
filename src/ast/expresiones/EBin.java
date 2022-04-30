@@ -169,4 +169,43 @@ public class EBin extends E {
 			throw new RuntimeException("Algo ha explotado");
 		}
 	}
+
+	@Override
+	public String generateCode(String code, int delta) {
+		switch (this.op) {
+		case SUMA:
+			return this.opnd1.generateCode(code, delta) + this.opnd2.generateCode(code, delta) + "i32.add\n";
+		case RESTA:
+			return this.opnd1.generateCode(code, delta) + this.opnd2.generateCode(code, delta) + "i32.sub\n";
+		case MUL:
+			return this.opnd1.generateCode(code, delta) + this.opnd2.generateCode(code, delta) + "i32.mul\n";
+		case DIV:
+			return this.opnd1.generateCode(code, delta) + this.opnd2.generateCode(code, delta) + "i32.div_s\n";
+		case MOD:
+			return this.opnd1.generateCode(code, delta) + this.opnd2.generateCode(code, delta) + "i32.rem_u\n";
+		case AND:
+			return this.opnd1.generateCode(code, delta) + this.opnd2.generateCode(code, delta) + "i32.and\n";
+		case OR:
+			return this.opnd1.generateCode(code, delta) + this.opnd2.generateCode(code, delta) + "i32.or\n";
+		case MENIG:
+			return this.opnd1.generateCode(code, delta) + this.opnd2.generateCode(code, delta) + "i32.le_s\n";
+		case MAYIG:
+			return this.opnd1.generateCode(code, delta) + this.opnd2.generateCode(code, delta) + "i32.ge_s\n";
+		case MEN:
+			return this.opnd1.generateCode(code, delta) + this.opnd2.generateCode(code, delta) + "i32.lt_s\n";
+		case MAY:
+			return this.opnd1.generateCode(code, delta) + this.opnd2.generateCode(code, delta) + "i32.gt_s\n";
+		case IGU:
+			return this.opnd1.generateCode(code, delta) + this.opnd2.generateCode(code, delta) + "i32.eq\n";
+		case DESIG:
+			return this.opnd1.generateCode(code, delta) + this.opnd2.generateCode(code, delta) + "i32.ne\n";
+		default:
+			return null;
+		}
+	}
+
+	@Override
+	protected int precalcular(int i) {
+		return i;
+	}
 }

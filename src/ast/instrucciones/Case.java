@@ -77,4 +77,15 @@ public class Case extends SwitchCase {
 		opnd2.type(funcion, val_switch, current_class, continuable, breakeable);
 	}
 
+	@Override
+	public String generateCode(String code, int delta) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	protected int precalcular(int i) {
+		return this.opnd2.precalcular(i);
+	}
+
 }

@@ -7,6 +7,7 @@ import ast.ASTNode;
 
 public class Bool implements Tipo {
 	
+	public int size = 4;
 	public String toString() {return "bool()";}
 
 	@Override
@@ -35,6 +36,11 @@ public class Bool implements Tipo {
 	public void type(Tipo funcion, Tipo val_switch, Tipo current_class, boolean continuable, boolean breakeable) {
 		
 		
+	}
+
+	@Override
+	public int getSize() {
+		return this.size;
 	}
 
 }

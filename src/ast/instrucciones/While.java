@@ -73,6 +73,17 @@ public class While extends Instruccion {
 		
 		opnd2.type(funcion, val_switch, current_class, true, true);
 	}
+
+	@Override
+	public String generateCode(String code, int delta) {
+		return "block\n loop\n" + this.opnd1.generateCode(code, delta) + "i32.eqz\n" + "br_if 1\n" 
+				+ this.opnd2.generateCode(code, delta) + "br 0\n" + "end\n" + "end\n";
+	}
+
+	@Override
+	protected int precalcular(int i) {
+		return this.opnd2.precalcular(i);
+	}
 	
 	
 

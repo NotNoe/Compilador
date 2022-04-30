@@ -79,4 +79,16 @@ public class Asignacion extends Instruccion {
 		}
 	}
 
+	@Override
+	public String generateCode(String code, int delta) {
+		String aux = "";
+		//TODO: asignacion array
+		return  opnd1.getDir() + opnd2.generateCode(code, delta) + "i32.store\n";
+	}
+
+	@Override
+	protected int precalcular(int i) {
+		return i;
+	}
+
 }

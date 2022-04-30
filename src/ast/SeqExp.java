@@ -17,6 +17,7 @@ public class SeqExp implements ASTNode {
 	private E izq;
 	private SeqExp der;
 	public Tipo tipo;
+	public int size = 0;
 	
 	public SeqExp(E izq, SeqExp der) {
 		this.izq = izq;
@@ -58,17 +59,21 @@ public class SeqExp implements ASTNode {
 		}
 	}
 
-	@Override
-	public void type(Tipo funcion, Tipo val_switch, Tipo current_class, boolean continuable, boolean breakeable) throws TypeMissmatchException {
+	public void type(Tipo funcion, Tipo val_switch, Tipo current_class, boolean continuable, boolean breakeable, boolean esLista) throws TypeMissmatchException {
 		if(izq != null) {
 			izq.type(funcion, val_switch, current_class, continuable, breakeable);
-			der.type(funcion, val_switch, current_class, continuable, breakeable);
+			der.type(funcion, val_switch, current_class, continuable, breakeable, esLista);
+			this.size = 1 + der.size;
 			if(Tipo.equals(der.tipo, new Delim()))
 				this.tipo = izq.tipo;
 			else if(Tipo.equals(der.tipo, izq.tipo))
 				this.tipo = izq.tipo;
 			else
-				throw new TypeMissmatchException("Polymorphic arrays are not allowed.", izq.fila, izq.columna);
+				if(esLista) {
+					throw new TypeMissmatchException("Polymorphic arrays are not allowed.", izq.fila, izq.columna);
+				}else {
+					this.tipo = izq.tipo;
+				}
 		}else {
 			this.tipo = new Delim();
 		}
@@ -77,6 +82,14 @@ public class SeqExp implements ASTNode {
 	public void getListaTipos(ArrayList<Tipo> listaTipos) {
 		if(izq != null) {
 			listaTipos.add(izq.tipo);
+			this.der.getListaTipos(listaTipos);
 		}
+	}
+
+	@Override
+	public void type(Tipo funcion, Tipo val_switch, Tipo current_class, boolean continuable, boolean breakeable)
+			throws TypeMissmatchException {
+		throw new RuntimeException("No se debería llamar");
+		
 	}
 }

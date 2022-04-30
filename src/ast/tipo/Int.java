@@ -7,6 +7,7 @@ import ast.ASTNode;
 
 public class Int implements Tipo{
 	
+	 public int size = 4;
 	 public String toString() {return "int()";}  
 	 
 	 public Int(){}
@@ -39,6 +40,11 @@ public class Int implements Tipo{
 	public void type(Tipo funcion, Tipo val_switch, Tipo current_class, boolean continuable, boolean breakeable) {
 		
 		
+	}
+
+	@Override
+	public int getSize() {
+		return this.size;
 	}
 
 }

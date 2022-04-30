@@ -7,6 +7,7 @@ import ast.ASTNode;
 
 public class Char implements Tipo {
 	
+	int size = 4;
 	public String toString() {return "char()";}
 
 	@Override
@@ -37,6 +38,11 @@ public class Char implements Tipo {
 	public void type(Tipo funcion, Tipo val_switch, Tipo current_class, boolean continuable, boolean breakeable) {
 		
 		
+	}
+
+	@Override
+	public int getSize() {
+		return this.size;
 	}
 
 }

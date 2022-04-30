@@ -46,4 +46,15 @@ public class Default extends SwitchCase {
 		opnd1.type(funcion, val_switch, current_class, continuable, breakeable);
 	}
 
+	@Override
+	public String generateCode(String code, int delta) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	protected int precalcular(int i) {
+		return this.opnd1.precalcular(i);
+	}
+
 }

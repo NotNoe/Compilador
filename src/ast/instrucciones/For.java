@@ -100,4 +100,16 @@ public class For extends Instruccion {
 			
 	}
 
+	@Override
+	public String generateCode(String code, int delta) {
+		return this.opnd1.generateCode(code, delta) + "block\n loop\n" + this.opnd2.generateCode(code, delta) +
+				"i32.eqz\n" + "br_if 1\n"  + this.opnd4.generateCode(code, delta) + this.opnd3.generateCode(code, delta) 
+				+ "br 0\n" + "end\n" + "end\n";
+	}
+
+	@Override
+	protected int precalcular(int i) {
+		return this.opnd4.precalcular(this.opnd3.precalcular(this.opnd1.precalcular(i)));
+	}
+
 }

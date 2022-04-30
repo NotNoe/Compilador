@@ -25,4 +25,12 @@ public class Caracter extends E {
 	public void type(Tipo funcion, Tipo val_switch, Tipo current_class, boolean continuable, boolean breakeable) {
 		this.tipo = new Char();
 	}
+	@Override
+	public String generateCode(String code, int delta) {
+		return "";
+	}
+	@Override
+	protected int precalcular(int i) {
+		return i;
+	}
 }

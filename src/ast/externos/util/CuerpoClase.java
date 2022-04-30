@@ -118,6 +118,19 @@ public class CuerpoClase implements ASTNode {
 		}
 		
 	}
+
+	public int precalcular(int delta) {
+		if(this.kind != KindC.VACIO) {
+			switch(this.opnd1.kindExt()) {
+			case DECLARACION:
+				return this.opnd2.precalcular(((Declaracion) opnd1).precalcular(delta));
+			default:
+				return this.opnd2.precalcular(delta);
+			}
+		}else {
+			return delta;
+		}
+	}
 	
 	
 	

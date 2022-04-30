@@ -65,4 +65,10 @@ public class DefTipo implements Externo {
 		
 	}
 
+	@Override
+	public String generateCode(String code, int delta) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

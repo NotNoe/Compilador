@@ -19,5 +19,13 @@ public class False extends E {
 	public void type(Tipo funcion, Tipo val_switch, Tipo current_class, boolean continuable, boolean breakeable) {
 		this.tipo = new Bool();
 	}
+	@Override
+	public String generateCode(String code, int delta) {
+		return "i32.const 0\n";
+	}
+	@Override
+	protected int precalcular(int i) {
+		return i;
+	}
 	  
 }

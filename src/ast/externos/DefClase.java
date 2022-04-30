@@ -18,6 +18,7 @@ public class DefClase implements Externo, Tipo {
 	private Identificador opnd2;
 	private Map<String, ASTNode> ambito;
 	public int fila, columna;
+	private int size = 0;
 	
 	public void bind (Stack<Map<String, ASTNode>> pila) {
 		this.opnd1.preBinding(this.ambito);
@@ -84,6 +85,22 @@ public class DefClase implements Externo, Tipo {
 	@Override
 	public String printT() {
 		return this.opnd2.getIden();
+	}
+
+	public int precalcular(int delta) {
+		this.size = this.opnd1.precalcular(0);
+		return delta;
+	}
+
+	@Override
+	public int getSize() {
+		return this.size;
+	}
+
+	@Override
+	public String generateCode(String code, int delta) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 	

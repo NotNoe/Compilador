@@ -20,6 +20,8 @@ public class Declaracion extends Instruccion implements Externo {
 	private Identificador opnd3;
 	private ArrayDimensiones opnd4;
 	private E opnd5;
+	private int size;
+	private int delta;
 
 	public KindExt kindExt() {
 		return KindExt.DECLARACION;
@@ -117,5 +119,34 @@ public class Declaracion extends Instruccion implements Externo {
 
 		}
 	}
+
+	public int precalcular(int delta) {
+		this.delta = delta;
+		this.size = this.opnd2.getSize();
+		return delta + this.size;
+	}
+
+	@Override
+	public String generateCode(String code, int delta) {
+		String aux = "";
+		if(this.opnd5 == null) {
+			for(int i = 0; i < this.opnd2.getSize(); i = i + 4) {
+				aux = aux + "i32.const " + this.delta + "\n" +"i32.const 0\n" + "i32.store offset=" + i + "\n";
+			}
+			return aux;
+		}else {
+			//TODO:asignacion array
+			aux += "i32.const " + this.delta + "\n";
+			aux += this.opnd5.generateCode(code, delta);
+			aux += "i32.store\n";
+			return aux;
+		}
+	}
+
+	public int getDelta() {
+		return delta;
+	}
+	
+	
 
 }

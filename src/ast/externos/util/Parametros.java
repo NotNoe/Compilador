@@ -84,4 +84,14 @@ public class Parametros implements ASTNode {
 		}
 	}
 
+	public int precalcular(int i) {
+		return this.opnd2.precalcular(this.opnd1.precalcular(i));
+	}
+
+	@Override
+	public String generateCode(String code, int delta) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

@@ -52,7 +52,7 @@ public class Llamada extends E {
 
 	@Override
 	public void type(Tipo funcion, Tipo val_switch, Tipo current_class, boolean continuable, boolean breakeable) throws TypeMissmatchException {
-		this.seq.type(funcion, val_switch, current_class, continuable, breakeable);
+		this.seq.type(funcion, val_switch, current_class, continuable, breakeable, false);
 		this.listaTipos = new ArrayList<Tipo>();
 		this.seq.getListaTipos(listaTipos);
 		this.tipo = link.tipo;
@@ -70,10 +70,21 @@ public class Llamada extends E {
 	}
 	
 	public ArrayList<Tipo> tiparArgumentos() throws TypeMissmatchException{
-		this.seq.type(null, null, null, false, false);
+		this.seq.type(null, null, null, false, false, false);
 		this.listaTipos = new ArrayList<Tipo>();
 		this.seq.getListaTipos(listaTipos);
 		return this.listaTipos;
+	}
+
+	@Override
+	public String generateCode(String code, int delta) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	protected int precalcular(int i) {
+		return i;
 	}
 	
 

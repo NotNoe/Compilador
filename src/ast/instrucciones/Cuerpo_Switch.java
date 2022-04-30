@@ -73,6 +73,16 @@ public class Cuerpo_Switch implements ASTNode {
 			opnd2.type(funcion, val_switch, current_class, continuable, breakeable);
 		}
 	}
+
+	@Override
+	public String generateCode(String code, int delta) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public int precalcular(int i) {
+		return this.opnd2.precalcular(this.opnd1.precalcular(i));
+	}
 	
 	
 

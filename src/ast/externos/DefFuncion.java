@@ -97,6 +97,16 @@ public class DefFuncion implements Externo {
 	public ArrayList<Tipo> getListaTipos() {
 		return listaTipos;
 	}
+
+	public int precalcular(int i) {
+		return this.opnd4.precalcular(this.opnd3.precalcular(0));
+	}
+
+	@Override
+	public String generateCode(String code, int delta) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 
 }

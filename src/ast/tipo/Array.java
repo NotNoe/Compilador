@@ -9,14 +9,15 @@ import errors.TypeMissmatchException;
 public class Array implements Tipo {
 	
 	private Tipo tipo;
-	private int dim;
+	public int size;
 	
-	public Array(Tipo tipo) {
+	public Array(Tipo tipo, int size) {
 		this.tipo = tipo;
+		this.size = size;
 	}
 	
 	public String printT() {
-		return this.tipo.printT() + "[]";
+		return this.tipo.printT() + "[" + this.size + "]";
 	}
 
 	@Override
@@ -42,6 +43,17 @@ public class Array implements Tipo {
 
 	public Tipo getTipo() {
 		return tipo;
+	}
+
+	@Override
+	public int getSize() {
+		return this.size * this.tipo.getSize();
+	}
+
+	@Override
+	public String generateCode(String code, int delta) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 

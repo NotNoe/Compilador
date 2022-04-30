@@ -80,4 +80,12 @@ public class Declaraciones implements ASTNode {
 		}
 	}
 
+	public int precalcular(int delta) {
+		if(this.kind == KindD.NO_VACIO) {
+			return this.opnd2.precalcular(this.opnd1.precalcular(delta));
+		}else {
+			return delta;
+		}
+	}
+
 }

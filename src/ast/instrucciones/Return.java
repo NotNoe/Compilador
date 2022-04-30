@@ -63,4 +63,16 @@ public class Return extends Instruccion {
 		
 	}
 
+
+	@Override
+	public String generateCode(String code, int delta) {
+		return "return\n";
+	}
+
+
+	@Override
+	protected int precalcular(int i) {
+		return i;
+	}
+
 }
