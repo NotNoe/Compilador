@@ -33,9 +33,8 @@ public class Break extends Instruccion {
 	}
 
 	@Override
-	public String generateCode(String code, int delta) {
-		// TODO Auto-generated method stub
-		return null;
+	public String generateCode(String code, int delta, int depth) {
+		return "br " + depth + "\n";
 	}
 
 	@Override

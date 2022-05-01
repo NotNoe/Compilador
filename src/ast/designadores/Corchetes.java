@@ -72,20 +72,25 @@ public class Corchetes extends Designador {
 	}
 
 	@Override
-	public String generateCode(String code, int delta) {
-		return this.opnd1.getDir() + "i32.const " + this.tipo.getSize() + "\n" + this.opnd2.generateCode(code, delta) 
+	public String generateCode(String code, int delta, int depth) {
+		return this.opnd1.getDir(delta) + "i32.const " + this.tipo.getSize() + "\n" + this.opnd2.generateCode(code, delta, depth) 
 		+ "i32.mul\n"+ "i32.add\n" + "i32.load\n";
 	}
 
 	@Override
-	public String getDir() {
-		return this.opnd1.getDir() + "i32.const " + this.tipo.getSize() + "\n" + this.opnd2.generateCode("", 0) 
+	public String getDir(int delta) {
+		return this.opnd1.getDir(delta) + "i32.const " + this.tipo.getSize() + "\n" + this.opnd2.generateCode("", 0, 0) 
 		+ "i32.mul\n"+ "i32.add\n";
 	}
 
 	@Override
 	protected int precalcular(int i) {
 		return i;
+	}
+
+	@Override
+	public int getDelta() {
+		return this.opnd1.getDelta();
 	}
 
 }

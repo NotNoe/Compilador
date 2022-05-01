@@ -101,9 +101,9 @@ public class For extends Instruccion {
 	}
 
 	@Override
-	public String generateCode(String code, int delta) {
-		return this.opnd1.generateCode(code, delta) + "block\n loop\n" + this.opnd2.generateCode(code, delta) +
-				"i32.eqz\n" + "br_if 1\n"  + this.opnd4.generateCode(code, delta) + this.opnd3.generateCode(code, delta) 
+	public String generateCode(String code, int delta, int depth) {
+		return this.opnd1.generateCode(code, delta, depth) + "block\n loop\n" + this.opnd2.generateCode(code, delta, depth) +
+				"i32.eqz\n" + "br_if 1\n"  + this.opnd4.generateCode(code, delta, 1) + this.opnd3.generateCode(code, delta, 1) 
 				+ "br 0\n" + "end\n" + "end\n";
 	}
 

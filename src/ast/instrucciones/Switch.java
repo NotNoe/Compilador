@@ -1,11 +1,13 @@
 package ast.instrucciones;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Stack;
 
 import ast.ASTNode;
 import ast.expresiones.E;
+import ast.expresiones.Num;
 import ast.tipo.Tipo;
 import errors.TypeMissmatchException;
 import errors.UndefinedVariableException;
@@ -67,9 +69,47 @@ public class Switch extends Instruccion {
 	}
 
 	@Override
-	public String generateCode(String code, int delta) {
-		// TODO solo numeros
-		return null;
+	public String generateCode(String code, int delta, int depth) {
+		String aux = "";
+		ArrayList<SwitchCase> casos = new ArrayList<SwitchCase>();
+		this.opnd2.getCases(casos);
+		int max = 0;
+		HashMap<Integer, Integer> map= new HashMap<Integer, Integer>();
+		for(int i = 0; i < casos.size(); i++) {
+			aux += "block\n";
+			if(casos.get(i) instanceof Case) {
+				int val = ((Num) ((Case) casos.get(i)).getOpnd1()).getValue();
+				map.put(val, i);
+				if(max < val) {
+					max = val;
+				}
+			}else {
+				map.put(-1, i);
+			}
+		}
+		aux += "block\n";
+		aux += this.opnd1.generateCode(code, delta, depth);
+		aux += "br_table ";
+		for(int i = 0; i <= max; i++) {
+			if(map.containsKey(i)) {
+				aux += map.get(i).toString() + " ";
+			}else {
+				aux += map.get(-1).toString() + " ";
+			}
+		}
+		aux += map.get(-1).toString() + "\n";
+		aux += "end\n";
+		int i = 0;
+		for(SwitchCase c : casos) {
+			if(c instanceof Case) {
+				aux += ((Case) c).getOpnd2().generateCode(code, delta, (casos.size() - 1 - i));
+			}else {
+				aux += ((Default) c).getOpnd1().generateCode(code, delta, (casos.size() - 1 - i));
+			}
+			aux += "end\n";
+			i++;
+		}
+		return aux;
 	}
 
 	@Override

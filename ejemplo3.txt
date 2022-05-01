@@ -1,0 +1,17 @@
+struct{
+int a = 5;
+int b;
+}miStruct;
+
+class{
+bool a = true;
+int b[4];
+}miClass;
+
+void main(){
+miStruct s;
+s.b = 10;
+miClass c;
+c.a = false;
+c.b[2] = 45;
+}

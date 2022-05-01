@@ -78,12 +78,12 @@ public class DefProcedimiento implements Externo {
 	}
 
 	@Override
-	public String generateCode(String code, int delta) {
+	public String generateCode(String code, int delta, int depth) {
 		if(this.opnd1.getIden().equals("main")){
-			return code + "(func $main\n" + this.opnd3.generateCode("", delta) + ")\n";
+			return code + "(func $main\n" + this.opnd3.generateCode("", delta, depth) + ")\n";
 		}
 				
-		return this.opnd3.generateCode(code, delta);
+		return this.opnd3.generateCode(code, delta, depth);
 	}
 
 	public int precalcular(int i) {

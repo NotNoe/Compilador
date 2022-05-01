@@ -78,7 +78,7 @@ public class Programa implements ASTNode {
 				+ "(memory 2000)\r\n"
 				+ "(start $main)\r\n";
 		
-		code = main.generateCode(code, delta);
+		code = main.generateCode(code, delta, 0);
 		code += "(export \"main\" (func $main))\r\n"
 				+ ")";
 		
@@ -205,7 +205,7 @@ public class Programa implements ASTNode {
 	}
 
 	@Override
-	public String generateCode(String code, int delta) {
+	public String generateCode(String code, int delta, int depth) {
 		throw new RuntimeException("No se deberia haber llegado aquí");
 	}
 

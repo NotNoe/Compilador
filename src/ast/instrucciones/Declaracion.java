@@ -7,6 +7,8 @@ import ast.ASTNode;
 import ast.ArrayDimensiones;
 import ast.designadores.Identificador;
 import ast.expresiones.E;
+import ast.externos.DefClase;
+import ast.externos.DefStruct;
 import ast.externos.Externo;
 import ast.externos.util.KindExt;
 import ast.tipo.Tipo;
@@ -127,24 +129,54 @@ public class Declaracion extends Instruccion implements Externo {
 	}
 
 	@Override
-	public String generateCode(String code, int delta) {
+	public String generateCode(String code, int delta, int depth) {
+		switch(this.opnd2.kindType()) {
+		case STRUCT: 
+			return ((DefStruct) opnd2).getCodeStruct(this.delta);
+		
+		case CLASE:
+			return ((DefClase) opnd2).getCodeClass(this.delta);
+		default:{
+			String aux = "";
+			if(this.opnd5 == null) {
+				for(int i = 0; i < this.opnd2.getSize(); i = i + 4) {
+					aux = aux + "i32.const " + this.delta + "\n" +"i32.const 0\n" + "i32.store offset=" + i + "\n";
+				}
+				return aux;
+			}else {
+				//TODO:asignacion array
+				aux += "i32.const " + this.delta + "\n";
+				aux += this.opnd5.generateCode(code, delta, depth);
+				aux += "i32.store\n";
+				return aux;
+			}
+		}
+		}
+		
+	}
+
+	public int getDelta() {
+		return this.delta;
+	}
+	
+	public int getSize() {
+		return this.size;
+	}
+
+	public String getCodeExtern(int dir) {
 		String aux = "";
 		if(this.opnd5 == null) {
 			for(int i = 0; i < this.opnd2.getSize(); i = i + 4) {
-				aux = aux + "i32.const " + this.delta + "\n" +"i32.const 0\n" + "i32.store offset=" + i + "\n";
+				aux = aux + "i32.const " + (dir + this.delta) + "\n" +"i32.const 0\n" + "i32.store offset=" + i + "\n";
 			}
 			return aux;
 		}else {
 			//TODO:asignacion array
-			aux += "i32.const " + this.delta + "\n";
-			aux += this.opnd5.generateCode(code, delta);
+			aux += "i32.const " + (dir + this.delta) + "\n";
+			aux += this.opnd5.generateCode("", dir, 0);
 			aux += "i32.store\n";
 			return aux;
 		}
-	}
-
-	public int getDelta() {
-		return delta;
 	}
 	
 	

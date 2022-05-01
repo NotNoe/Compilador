@@ -88,4 +88,19 @@ public class Declaraciones implements ASTNode {
 		}
 	}
 
+	public String getCodeDec(int delta) {
+		if(this.opnd1!=null) {
+			return this.opnd1.getCodeExtern(delta) + this.opnd2.getCodeDec(delta);
+		}else {
+			return "";
+		}
+		
+	}
+
+	@Override
+	public String generateCode(String code, int delta, int depth) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

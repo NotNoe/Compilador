@@ -1,5 +1,6 @@
 package ast.instrucciones;
 
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.Stack;
 
@@ -75,13 +76,25 @@ public class Cuerpo_Switch implements ASTNode {
 	}
 
 	@Override
-	public String generateCode(String code, int delta) {
+	public String generateCode(String code, int delta, int depth) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	public int precalcular(int i) {
-		return this.opnd2.precalcular(this.opnd1.precalcular(i));
+		if(this.opnd1 != null) {
+			return this.opnd2.precalcular(this.opnd1.precalcular(i));
+		}else {
+			return i;
+		}
+		
+	}
+
+	public void getCases(ArrayList<SwitchCase> casos) {
+		if(opnd1 != null) {
+			casos.add(this.opnd1);
+			this.opnd2.getCases(casos);
+		}
 	}
 	
 	

@@ -117,12 +117,12 @@ public class If extends Instruccion {
 
 
 	@Override
-	public String generateCode(String code, int delta) {
+	public String generateCode(String code, int delta, int depth) {
 		if(this.opnd3 != null) {
-			return this.opnd1.generateCode(code, delta) + "if\n" + this.opnd2.generateCode(code, delta) +
-					"else\n" + this.opnd3.generateCode(code, delta) + "end\n";
+			return this.opnd1.generateCode(code, delta, depth) + "if\n" + this.opnd2.generateCode(code, delta, depth) +
+					"else\n" + this.opnd3.generateCode(code, delta, depth) + "end\n";
 		}else {
-			return this.opnd1.generateCode(code, delta) + "if\n" + this.opnd2.generateCode(code, delta) + "end\n";
+			return this.opnd1.generateCode(code, delta, depth) + "if\n" + this.opnd2.generateCode(code, delta, depth) + "end\n";
 		}
 	}
 

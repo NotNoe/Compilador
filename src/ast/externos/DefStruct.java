@@ -98,9 +98,13 @@ public class DefStruct implements Externo, Tipo {
 	}
 
 	@Override
-	public String generateCode(String code, int delta) {
+	public String generateCode(String code, int delta, int depth) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	public String getCodeStruct(int delta) {
+		return this.opnd1.getCodeDec(delta);
 	}
 	
 }

@@ -137,7 +137,7 @@ public class Identificador extends Designador implements Tipo {
 
 
 	@Override
-	public String generateCode(String code, int delta) {
+	public String generateCode(String code, int delta, int depth) {
 		String aux = "";
 		if(this.link.nodeKind() == NodeKind.PARAMETRO) {
 			//TODO
@@ -165,7 +165,7 @@ public class Identificador extends Designador implements Tipo {
 
 
 	@Override
-	public String getDir() {
+	public String getDir(int delta) {
 		Declaracion dec = (Declaracion) link;
 		return "i32.const " + dec.getDelta() + "\n";
 	}
@@ -174,6 +174,12 @@ public class Identificador extends Designador implements Tipo {
 	@Override
 	protected int precalcular(int i) {
 		return i;
+	}
+
+
+	@Override
+	public int getDelta() {
+		return ((Declaracion) this.link).getDelta();
 	}
 
 }

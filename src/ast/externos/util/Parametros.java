@@ -85,11 +85,15 @@ public class Parametros implements ASTNode {
 	}
 
 	public int precalcular(int i) {
-		return this.opnd2.precalcular(this.opnd1.precalcular(i));
+		if(this.opnd1 != null) {
+			return this.opnd2.precalcular(this.opnd1.precalcular(i));
+		}else {
+			return i;
+		}
 	}
 
 	@Override
-	public String generateCode(String code, int delta) {
+	public String generateCode(String code, int delta, int depth) {
 		// TODO Auto-generated method stub
 		return null;
 	}

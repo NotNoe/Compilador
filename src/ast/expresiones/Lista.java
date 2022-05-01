@@ -36,8 +36,8 @@ public class Lista extends E {
 	}
 
 	@Override
-	public String generateCode(String code, int delta) {
-		return this.seq.generateCode(code, delta);
+	public String generateCode(String code, int delta, int depth) {
+		return this.seq.generateCode(code, delta, depth);
 	}
 
 	@Override

@@ -16,5 +16,7 @@ public abstract class Designador extends E {
 	public abstract KindDes kindDes();
 	public void subsUserTypes(Map<String, Tipo> globalTypes) {}
 
-	public abstract String getDir();
+	public abstract String getDir(int delta);
+
+	public abstract int getDelta();
 }

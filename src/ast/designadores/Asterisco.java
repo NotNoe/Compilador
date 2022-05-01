@@ -49,13 +49,13 @@ public class Asterisco extends Designador {
 	}
 
 	@Override
-	public String generateCode(String code, int delta) {
+	public String generateCode(String code, int delta, int depth) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public String getDir() {
+	public String getDir(int delta) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -63,6 +63,11 @@ public class Asterisco extends Designador {
 	@Override
 	protected int precalcular(int i) {
 		return i;
+	}
+
+	@Override
+	public int getDelta() {
+		return this.opnd1.getDelta();
 	}
 
 }

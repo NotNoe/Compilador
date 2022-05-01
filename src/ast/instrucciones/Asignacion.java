@@ -80,10 +80,10 @@ public class Asignacion extends Instruccion {
 	}
 
 	@Override
-	public String generateCode(String code, int delta) {
+	public String generateCode(String code, int delta, int depth) {
 		String aux = "";
 		//TODO: asignacion array
-		return  opnd1.getDir() + opnd2.generateCode(code, delta) + "i32.store\n";
+		return  opnd1.getDir(delta) + opnd2.generateCode(code, delta, depth) + "i32.store\n";
 	}
 
 	@Override

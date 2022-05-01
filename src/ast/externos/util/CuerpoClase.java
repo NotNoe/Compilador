@@ -131,6 +131,25 @@ public class CuerpoClase implements ASTNode {
 			return delta;
 		}
 	}
+
+	public String getCode(int delta) {
+		if(this.kind != KindC.VACIO) {
+			if(this.opnd1.kindExt() == KindExt.DECLARACION) {
+				return ((Declaracion) opnd1).getCodeExtern(delta) + this.opnd2.getCode(delta);
+			}else {
+				return this.opnd2.getCode(delta);
+			}
+		}else {
+			return "";
+		}
+		
+	}
+
+	@Override
+	public String generateCode(String code, int delta, int depth) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 	
 	

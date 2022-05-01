@@ -10,7 +10,7 @@ import errors.UndefinedVariableException;
 public interface ASTNode {
 	public void subsUserTypes(Map<String, Tipo> globalTypes);
     public void type(Tipo funcion, Tipo val_switch, Tipo current_class, boolean continuable, boolean breakeable) throws TypeMissmatchException; 
-	public String generateCode(String code, int delta); // for the future
+	public String generateCode(String code, int delta, int depth); // for the future
     public void bind(Stack<Map<String, ASTNode>> pila) throws UndefinedVariableException;
     public NodeKind nodeKind();
     public String toString();

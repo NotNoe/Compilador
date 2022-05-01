@@ -77,7 +77,7 @@ public class Llamada extends E {
 	}
 
 	@Override
-	public String generateCode(String code, int delta) {
+	public String generateCode(String code, int delta, int depth) {
 		// TODO Auto-generated method stub
 		return null;
 	}

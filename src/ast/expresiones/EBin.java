@@ -171,34 +171,34 @@ public class EBin extends E {
 	}
 
 	@Override
-	public String generateCode(String code, int delta) {
+	public String generateCode(String code, int delta, int depth) {
 		switch (this.op) {
 		case SUMA:
-			return this.opnd1.generateCode(code, delta) + this.opnd2.generateCode(code, delta) + "i32.add\n";
+			return this.opnd1.generateCode(code, delta, depth) + this.opnd2.generateCode(code, delta, depth) + "i32.add\n";
 		case RESTA:
-			return this.opnd1.generateCode(code, delta) + this.opnd2.generateCode(code, delta) + "i32.sub\n";
+			return this.opnd1.generateCode(code, delta, depth) + this.opnd2.generateCode(code, delta, depth) + "i32.sub\n";
 		case MUL:
-			return this.opnd1.generateCode(code, delta) + this.opnd2.generateCode(code, delta) + "i32.mul\n";
+			return this.opnd1.generateCode(code, delta, depth) + this.opnd2.generateCode(code, delta, depth) + "i32.mul\n";
 		case DIV:
-			return this.opnd1.generateCode(code, delta) + this.opnd2.generateCode(code, delta) + "i32.div_s\n";
+			return this.opnd1.generateCode(code, delta, depth) + this.opnd2.generateCode(code, delta, depth) + "i32.div_s\n";
 		case MOD:
-			return this.opnd1.generateCode(code, delta) + this.opnd2.generateCode(code, delta) + "i32.rem_u\n";
+			return this.opnd1.generateCode(code, delta, depth) + this.opnd2.generateCode(code, delta, depth) + "i32.rem_u\n";
 		case AND:
-			return this.opnd1.generateCode(code, delta) + this.opnd2.generateCode(code, delta) + "i32.and\n";
+			return this.opnd1.generateCode(code, delta, depth) + this.opnd2.generateCode(code, delta, depth) + "i32.and\n";
 		case OR:
-			return this.opnd1.generateCode(code, delta) + this.opnd2.generateCode(code, delta) + "i32.or\n";
+			return this.opnd1.generateCode(code, delta, depth) + this.opnd2.generateCode(code, delta, depth) + "i32.or\n";
 		case MENIG:
-			return this.opnd1.generateCode(code, delta) + this.opnd2.generateCode(code, delta) + "i32.le_s\n";
+			return this.opnd1.generateCode(code, delta, depth) + this.opnd2.generateCode(code, delta, depth) + "i32.le_s\n";
 		case MAYIG:
-			return this.opnd1.generateCode(code, delta) + this.opnd2.generateCode(code, delta) + "i32.ge_s\n";
+			return this.opnd1.generateCode(code, delta, depth) + this.opnd2.generateCode(code, delta, depth) + "i32.ge_s\n";
 		case MEN:
-			return this.opnd1.generateCode(code, delta) + this.opnd2.generateCode(code, delta) + "i32.lt_s\n";
+			return this.opnd1.generateCode(code, delta, depth) + this.opnd2.generateCode(code, delta, depth) + "i32.lt_s\n";
 		case MAY:
-			return this.opnd1.generateCode(code, delta) + this.opnd2.generateCode(code, delta) + "i32.gt_s\n";
+			return this.opnd1.generateCode(code, delta, depth) + this.opnd2.generateCode(code, delta, depth) + "i32.gt_s\n";
 		case IGU:
-			return this.opnd1.generateCode(code, delta) + this.opnd2.generateCode(code, delta) + "i32.eq\n";
+			return this.opnd1.generateCode(code, delta, depth) + this.opnd2.generateCode(code, delta, depth) + "i32.eq\n";
 		case DESIG:
-			return this.opnd1.generateCode(code, delta) + this.opnd2.generateCode(code, delta) + "i32.ne\n";
+			return this.opnd1.generateCode(code, delta, depth) + this.opnd2.generateCode(code, delta, depth) + "i32.ne\n";
 		default:
 			return null;
 		}

@@ -159,20 +159,50 @@ public class Punto extends Designador {
 	}
 
 	@Override
-	public String generateCode(String code, int delta) {
-		// TODO Auto-generated method stub
-		return null;
+	public String generateCode(String code, int delta, int depth) {
+		switch (opnd1.tipo.kindType()) {
+		case STRUCT:
+			String aux = this.getDir(delta);
+			return aux + "i32.load\n";
+		case CLASE:
+			return this.getDir(delta) + "i32.load\n";
+		default:
+			//TODO
+			return null;
+		}
 	}
 
 	@Override
-	public String getDir() {
-		// TODO Auto-generated method stub
-		return null;
+	public String getDir(int delta) {
+		switch (opnd1.tipo.kindType()) {
+		case STRUCT: {
+			Map<String, ASTNode> ambito = ((DefStruct) opnd1.tipo).getAmbito();
+			String iden = ((Identificador) opnd2).getIden();
+			int delta_ini = opnd1.getDelta();
+			int dec_delta = ((Declaracion) ambito.get(iden)).getDelta();
+			return "i32.const " + (delta_ini + dec_delta) + "\n";
+		}
+		case CLASE: {
+			Map<String, ASTNode> ambito = ((DefClase) opnd1.tipo).getAmbito();
+			String iden = ((Identificador) opnd2).getIden();
+			int delta_ini = opnd1.getDelta();
+			int dec_delta = ((Declaracion) ambito.get(iden)).getDelta();
+			return "i32.const " + (delta_ini + dec_delta) + "\n";
+		}
+		default:
+			//TODO:Clases
+			return null;
+		}
 	}
 
 	@Override
 	protected int precalcular(int i) {
 		return i;
+	}
+
+	@Override
+	public int getDelta() {
+		return this.opnd1.getDelta();
 	}
 
 }

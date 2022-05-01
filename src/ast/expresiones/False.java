@@ -20,7 +20,7 @@ public class False extends E {
 		this.tipo = new Bool();
 	}
 	@Override
-	public String generateCode(String code, int delta) {
+	public String generateCode(String code, int delta, int depth) {
 		return "i32.const 0\n";
 	}
 	@Override

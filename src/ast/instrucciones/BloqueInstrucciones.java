@@ -79,9 +79,9 @@ public class BloqueInstrucciones implements ASTNode {
 	}
 
 	@Override
-	public String generateCode(String code, int delta) {
+	public String generateCode(String code, int delta, int depth) {
 		if(this.opnd1 != null) {
-			return this.opnd1.generateCode(code, delta) + this.opnd2.generateCode(code, delta);
+			return this.opnd1.generateCode(code, delta, depth) + this.opnd2.generateCode(code, delta, depth);
 		}else {;
 			return "";
 		}

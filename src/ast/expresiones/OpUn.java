@@ -93,15 +93,15 @@ public class OpUn extends E {
 	}
 
 	@Override
-	public String generateCode(String code, int delta) {
+	public String generateCode(String code, int delta, int depth) {
 		switch(this.op) {
 		case REF:
 			//TODO:
 			return null;
 		case NEG:
-			return this.opnd1.generateCode(code, delta) + "i32.eqz\n";
+			return this.opnd1.generateCode(code, delta, depth) + "i32.eqz\n";
 		case MENOS:
-			return "i32.const 0\n" + this.opnd1.generateCode(code, delta) + "i32.sub\n";
+			return "i32.const 0\n" + this.opnd1.generateCode(code, delta, depth) + "i32.sub\n";
 		default:
 			return null;
 		}
