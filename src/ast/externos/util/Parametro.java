@@ -9,6 +9,7 @@ import ast.NodeKind;
 import ast.designadores.Identificador;
 import ast.tipo.KindType;
 import ast.tipo.Tipo;
+import errors.TypeMissmatchException;
 
 public class Parametro implements ASTNode {
 
@@ -70,7 +71,11 @@ public class Parametro implements ASTNode {
 
 	@Override
 	public void subsUserTypes(Map<String, Tipo> globalTypes) {
-		opnd1.subsUserTypes(globalTypes);
+		try {
+			this.opnd1 = this.opnd1.getBasicType(globalTypes);
+		} catch (TypeMissmatchException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override

@@ -192,7 +192,12 @@ public class Identificador extends Designador implements Tipo {
 
 	@Override
 	public int getDelta() {
-		return ((Declaracion) this.link).getDelta();
+		if(this.link.nodeKind() != NodeKind.PARAMETRO) {
+			return ((Declaracion) this.link).getDelta();
+		}else {
+			return ((Parametro) this.link).delta;
+		}
+		
 	}
 
 	public ArrayList<Parametro> getParams() {
