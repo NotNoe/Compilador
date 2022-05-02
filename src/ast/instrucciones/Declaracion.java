@@ -140,14 +140,19 @@ public class Declaracion extends Instruccion implements Externo {
 			String aux = "";
 			if(this.opnd5 == null) {
 				for(int i = 0; i < this.opnd2.getSize(); i = i + 4) {
-					aux = aux + "i32.const " + this.delta + "\n" +"i32.const 0\n" + "i32.store offset=" + i + "\n";
+					aux += "get_local $localsStart\n" +
+							"i32.const " + this.delta + "\n" +
+							"i32.add\n" +
+							"i32.const 0\n" + "i32.store offset=" + i + "\n";
 				}
 				return aux;
 			}else {
 				//TODO:asignacion array
-				aux += "i32.const " + this.delta + "\n";
-				aux += this.opnd5.generateCode(code, delta, depth);
-				aux += "i32.store\n";
+				aux += "get_local $localsStart\n" +
+					"i32.const " + this.delta + "\n" +
+					"i32.add\n" +
+					this.opnd5.generateCode(code, delta, depth) +
+					"i32.store\n";
 				return aux;
 			}
 		}
@@ -167,12 +172,17 @@ public class Declaracion extends Instruccion implements Externo {
 		String aux = "";
 		if(this.opnd5 == null) {
 			for(int i = 0; i < this.opnd2.getSize(); i = i + 4) {
-				aux = aux + "i32.const " + (dir + this.delta) + "\n" +"i32.const 0\n" + "i32.store offset=" + i + "\n";
+				aux = aux + "get_local $localsStart\n" +
+						"i32.const " + (dir + this.delta) + "\n" +
+						"i32.add\n" +
+						"i32.const 0\n" + "i32.store offset=" + i + "\n";
 			}
 			return aux;
 		}else {
 			//TODO:asignacion array
+			aux += "get_local $localsStart\n";
 			aux += "i32.const " + (dir + this.delta) + "\n";
+			aux += "i32.add\n";
 			aux += this.opnd5.generateCode("", dir, 0);
 			aux += "i32.store\n";
 			return aux;

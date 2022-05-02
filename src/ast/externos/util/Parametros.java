@@ -98,4 +98,13 @@ public class Parametros implements ASTNode {
 		return null;
 	}
 
+	public ArrayList<Parametro> getParams(ArrayList<Parametro> arrayList) {
+		if(this.opnd1 != null) {
+			arrayList.add(opnd1);
+			return this.opnd2.getParams(arrayList);
+		}else {
+			return arrayList;
+		}
+	}
+
 }

@@ -1,0 +1,11 @@
+void swap(int & x, int & y){
+   int z = x;
+   x = y;
+   y = z;
+}
+
+void main(){
+   int x = 0;
+   int y = 1;
+   swap(x,y);
+}

@@ -1,0 +1,28 @@
+class{
+   int b [4];
+   bool a = false;
+   void constr(int v[4]){
+	for(int i = 0; i < 4; i = i + 1;){
+		this.b[i] = v[i];
+	}
+	this.a = true;
+   }
+}miClass;
+
+void change(miClass d){
+   d.a = true;
+}
+
+void main(){
+   bool a = false;
+   int v[4];
+   for(int i = 0; i < 4; i = i + 1;){
+	v[i] = 10 - i;
+   }
+   miClass c;
+   c.constr(v);
+   miClass d;
+   change(d);
+   a = d.a;
+}
+

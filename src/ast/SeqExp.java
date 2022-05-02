@@ -92,4 +92,18 @@ public class SeqExp implements ASTNode {
 		throw new RuntimeException("No se debería llamar");
 		
 	}
+
+	public ArrayList<E> getListaExp(ArrayList<E> arrayList) {
+		if(this.izq != null) {
+			arrayList.add(izq);
+			return this.der.getListaExp(arrayList);
+		}else {
+			return arrayList;
+		}
+	}
+
+	@Override
+	public String generateCode(String code, int delta, int depth) {
+		return null;
+	}
 }

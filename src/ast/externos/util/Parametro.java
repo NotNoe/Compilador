@@ -81,7 +81,12 @@ public class Parametro implements ASTNode {
 
 	public int precalcular(int i) {
 		this.delta = i;
-		return i + this.opnd1.getSize();
+		if(this.ref) {
+			return i + 4;
+		}else {
+			return i + this.opnd1.getSize();
+		}
+		
 	}
 
 	@Override
@@ -89,5 +94,7 @@ public class Parametro implements ASTNode {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	
 
 }

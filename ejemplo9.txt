@@ -1,0 +1,20 @@
+class{
+    int x;
+    bool b = false;
+    void build(int a){
+	this.x = a;
+	this.b = true;
+    }
+    bool func(){
+	return this.b;
+    }
+}myClass;
+
+void main(){
+   bool b;
+   int a;
+   myClass c;
+   c.build(10);
+   b = c.func();
+   a = c.x;
+}

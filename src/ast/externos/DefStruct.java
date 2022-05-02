@@ -89,7 +89,7 @@ public class DefStruct implements Externo, Tipo {
 
 	public int precalcular(int delta) {
 		this.size = this.opnd1.precalcular(0);
-		return delta;
+		return this.size;
 	}
 
 	@Override

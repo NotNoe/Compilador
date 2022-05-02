@@ -9,8 +9,10 @@ import ast.NodeKind;
 import ast.designadores.Identificador;
 import ast.externos.util.CuerpoClase;
 import ast.externos.util.KindExt;
+import ast.instrucciones.Declaracion;
 import ast.tipo.KindType;
 import ast.tipo.Tipo;
+import java.util.ArrayList;
 
 public class DefClase implements Externo, Tipo {
 
@@ -19,6 +21,7 @@ public class DefClase implements Externo, Tipo {
 	private Map<String, ASTNode> ambito;
 	public int fila, columna;
 	private int size = 0;
+	private ArrayList<Declaracion> decList;
 	
 	public void bind (Stack<Map<String, ASTNode>> pila) {
 		this.opnd1.preBinding(this.ambito);
@@ -89,7 +92,7 @@ public class DefClase implements Externo, Tipo {
 
 	public int precalcular(int delta) {
 		this.size = this.opnd1.precalcular(0);
-		return delta;
+		return this.size;
 	}
 
 	@Override
@@ -99,12 +102,17 @@ public class DefClase implements Externo, Tipo {
 
 	@Override
 	public String generateCode(String code, int delta, int depth) {
-		// TODO Auto-generated method stub
-		return null;
+		this.decList = new ArrayList<Declaracion>();
+		this.opnd1.getDecList(decList);
+		return this.opnd1.generateCode(code, this.decList.size()*4, depth);
 	}
 
 	public String getCodeClass(int delta) {
 		return this.opnd1.getCode(delta);
+	}
+
+	public ArrayList<Declaracion> getDecList() {
+		return decList;
 	}
 	
 	

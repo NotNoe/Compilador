@@ -11,6 +11,9 @@ public abstract interface Tipo extends ASTNode {
 		return NodeKind.TIPO;
 	}
 	public int getSize();
+	public default String generateCode(String code, int delta, int depth) {
+		return "";
+	};
 	public abstract KindType kindType();
 	public abstract Tipo getBasicType(Map<String, Tipo> globalTypes) throws TypeMissmatchException;
 	public default void subsUserTypes(Map<String, Tipo> globalTypes) {

@@ -7,6 +7,7 @@ import java.util.Stack;
 
 import ast.ASTNode;
 import ast.designadores.Identificador;
+import ast.externos.util.Parametro;
 import ast.externos.util.KindExt;
 import ast.externos.util.Parametros;
 import ast.instrucciones.BloqueInstrucciones;
@@ -20,6 +21,7 @@ public class DefProcedimiento implements Externo {
 	private BloqueInstrucciones opnd3;
 	private ArrayList<Tipo> listaTipos;
 	public int fila, columna;
+	public int size;
 	
 	public DefProcedimiento(Identificador opnd1, Parametros opnd2, BloqueInstrucciones opnd3, int fila, int columna) {
 		this.opnd1 = opnd1;
@@ -32,6 +34,7 @@ public class DefProcedimiento implements Externo {
 	public void bind (Stack<Map<String, ASTNode>> pila) {
 		pila.peek().put(this.opnd1.getIden(), this);
 		pila.push(new HashMap<String, ASTNode>());
+		this.opnd1.setLink(this);
 		this.opnd2.bind(pila);
 		this.opnd3.bind(pila);
 		pila.pop();
@@ -62,14 +65,14 @@ public class DefProcedimiento implements Externo {
 	@Override
 	public void subsUserTypes(Map<String, Tipo> globalTypes) {
 		opnd2.subsUserTypes(globalTypes);
+		opnd2.type(null, null, null, false, false);
+		this.listaTipos = new ArrayList<Tipo>();
+		opnd2.getListaTipos(listaTipos);
 		opnd3.subsUserTypes(globalTypes);
 	}
 
 	@Override
 	public void type(Tipo funcion, Tipo val_switch, Tipo current_class, boolean continuable, boolean breakeable) {
-		opnd2.type(null, null, current_class, continuable, breakeable);
-		this.listaTipos = new ArrayList<Tipo>();
-		opnd2.getListaTipos(listaTipos);
 		opnd3.type(null, null, current_class, continuable, breakeable);
 	}
 
@@ -79,19 +82,36 @@ public class DefProcedimiento implements Externo {
 
 	@Override
 	public String generateCode(String code, int delta, int depth) {
-		if(this.opnd1.getIden().equals("main")){
-			return code + "(func $main\n" + this.opnd3.generateCode("", delta, depth) + ")\n";
-		}
+		String aux = "(func $"+this.opnd1.getIden() + " (type $_sig_void)\n"
+				+ "(local $localsStart i32)\r\n"
+				+ "(local $temp i32)\n" 
+				+ "i32.const " + (this.size + 8) + "\n"
+				+ "call $reserveStack  ;; returns old MP (dynamic link)\r\n"
+				+ "   set_local $temp\r\n"
+				+ "   get_global $MP\r\n"
+				+ "   get_local $temp\r\n"
+				+ "   i32.store\r\n"
+				+ "   get_global $MP\r\n"
+				+ "   get_global $SP\r\n"
+				+ "   i32.store offset=4\r\n"
+				+ "   get_global $MP\r\n"
+				+ "   i32.const 8\r\n"
+				+ "   i32.add\r\n"
+				+ "   set_local $localsStart\n"
+				+ this.opnd3.generateCode(code, delta, 0)
+				+ "call $freeStack\n"
+				+ ")\n";
 				
-		return this.opnd3.generateCode(code, delta, depth);
+		return aux;
 	}
 
 	public int precalcular(int i) {
-		if(this.opnd1.getIden().equals("main")){
-			return this.opnd3.precalcular(0);
-		}else {
-			return this.opnd3.precalcular(this.opnd2.precalcular(0));
-		}
+		this.size = this.opnd3.precalcular(this.opnd2.precalcular(i));
+		return this.size;
+	}
+
+	public ArrayList<Parametro> getParams() {
+		return this.opnd2.getParams(new ArrayList<Parametro>());
 	}
 
 	

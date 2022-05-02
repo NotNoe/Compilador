@@ -41,6 +41,12 @@ public class Delim implements Tipo {
 	public int getSize() {
 		return 0;
 	}
+
+	@Override
+	public String generateCode(String code, int delta, int depth) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 	
 }

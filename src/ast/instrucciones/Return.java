@@ -66,7 +66,7 @@ public class Return extends Instruccion {
 
 	@Override
 	public String generateCode(String code, int delta, int depth) {
-		return "return\n";
+		return this.opnd1.generateCode(code, delta, depth) + "call $freeStack\n" + "return\n";
 	}
 
 

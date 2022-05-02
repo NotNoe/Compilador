@@ -42,8 +42,7 @@ public class This extends Designador {
 
 	@Override
 	public String getDir(int delta) {
-		// TODO Auto-generated method stub
-		return null;
+		return "get_global $SP\n";
 	}
 
 	@Override

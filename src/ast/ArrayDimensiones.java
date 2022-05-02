@@ -91,4 +91,10 @@ public class ArrayDimensiones implements ASTNode {
 		
 	}
 
+	@Override
+	public String generateCode(String code, int delta, int depth) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

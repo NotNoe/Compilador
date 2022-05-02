@@ -55,6 +55,8 @@ public class Asignacion extends Instruccion {
 
 	@Override
 	public void subsUserTypes(Map<String, Tipo> globalTypes) {
+		this.opnd1.subsUserTypes(globalTypes);
+		this.opnd2.subsUserTypes(globalTypes);
 	}
 
 	@Override

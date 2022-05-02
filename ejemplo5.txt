@@ -1,0 +1,30 @@
+int hf(int n){
+   if(n<0){
+      return 0;
+   }else{
+      if(n==0){
+	return 0;
+      }else{
+	return n - hm(hf(n-1));
+      }  
+   } 
+}
+
+void main(){
+int n = 5;
+int r;
+r = hf(n);
+}
+
+int hm(int n){
+   if(n<0){
+      return 0;
+   }else{
+      if(n==0){
+	return 0;
+      }else{
+	return n - hf(hm(n-1));
+      }  
+   } 
+}
+

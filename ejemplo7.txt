@@ -1,0 +1,13 @@
+void sum_digits(int & n, int &sum){
+   if(n > 0){
+	sum = sum + n % 10;
+	n = n / 10;
+	sum_digits(n, sum);
+   }
+}
+
+void main(){
+   int n = 123456789;
+   int m = 0;
+   sum_digits(n,m);
+}

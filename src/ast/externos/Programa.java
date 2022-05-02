@@ -71,14 +71,81 @@ public class Programa implements ASTNode {
 			System.exit(1);
 		
 		int delta = this.precalcular(0);
-		DefProcedimiento main = (DefProcedimiento) globalAmb.get("main");
 		String code = "(module\r\n"
+				+ "(type $_sig_i32i32i32 (func (param i32 i32 i32) ))\r\n"
+				+ "(type $_sig_i32ri32 (func (param i32) (result i32)))\r\n"
+				+ "(type $_sig_i32 (func (param i32)))\r\n"
+				+ "(type $_sig_ri32 (func (result i32)))\r\n"
+				+ "(type $_sig_void (func ))\n"
 				+ "(import \"runtime\" \"print\" (func $print (param i32)))\r\n"
 				+ "(import \"runtime\" \"read\" (func $read (result i32)))\r\n"
+				+ "(import \"runtime\" \"exceptionHandler\" (func $exception (type $_sig_i32)))\n"
 				+ "(memory 2000)\r\n"
+				+ "(global $SP (mut i32) (i32.const 0)) ;; start of stack\r\n"
+				+ "(global $MP (mut i32) (i32.const 0)) ;; mark pointer\r\n"
+				+ "(global $NP (mut i32) (i32.const 131071996)) ;; heap 2000*64*1024-4\n"
 				+ "(start $main)\r\n";
 		
-		code = main.generateCode(code, delta, 0);
+		code += this.generateCode(code, delta, 0);
+		code += "(func $reserveStack (param $size i32)\r\n"
+				+ "   (result i32)\r\n"
+				+ "   get_global $MP\r\n"
+				+ "   get_global $SP\r\n"
+				+ "   set_global $MP\r\n"
+				+ "   get_global $SP\r\n"
+				+ "   get_local $size\r\n"
+				+ "   i32.add\r\n"
+				+ "   set_global $SP\r\n"
+				+ "   get_global $SP\r\n"
+				+ "   get_global $NP\r\n"
+				+ "   i32.gt_u\r\n"
+				+ "   if\r\n"
+				+ "   i32.const 3\r\n"
+				+ "   call $exception\r\n"
+				+ "   end\r\n"
+				+ ")\r\n"
+				+ "(func $freeStack (type $_sig_void)\r\n"
+				+ "   get_global $MP\r\n"
+				+ "   i32.load\r\n"
+				+ "   i32.load offset=4\r\n"
+				+ "   set_global $SP\r\n"
+				+ "   get_global $MP\r\n"
+				+ "   i32.load\r\n"
+				+ "   set_global $MP   \r\n"
+				+ ")\r\n"
+				+ "(func $reserveHeap (type $_sig_i32)\r\n"
+				+ "   (param $size i32)\r\n"
+				+ ";; ....\r\n"
+				+ ")\r\n"
+				+ "(func $copyn (type $_sig_i32i32i32) ;; copy $n i32 slots from $src to $dest\r\n"
+				+ "   (param $src i32)\r\n"
+				+ "   (param $dest i32)\r\n"
+				+ "   (param $n i32)\r\n"
+				+ "   block\r\n"
+				+ "     loop\r\n"
+				+ "       get_local $n\r\n"
+				+ "       i32.eqz\r\n"
+				+ "       br_if 1\r\n"
+				+ "       get_local $n\r\n"
+				+ "       i32.const 1\r\n"
+				+ "       i32.sub\r\n"
+				+ "       set_local $n\r\n"
+				+ "       get_local $dest\r\n"
+				+ "       get_local $src\r\n"
+				+ "       i32.load\r\n"
+				+ "       i32.store\r\n"
+				+ "       get_local $dest\r\n"
+				+ "       i32.const 4\r\n"
+				+ "       i32.add\r\n"
+				+ "       set_local $dest\r\n"
+				+ "       get_local $src\r\n"
+				+ "       i32.const 4\r\n"
+				+ "       i32.add\r\n"
+				+ "       set_local $src\r\n"
+				+ "       br 0\r\n"
+				+ "     end\r\n"
+				+ "   end\r\n"
+				+ ")";
 		code += "(export \"main\" (func $main))\r\n"
 				+ ")";
 		
@@ -206,7 +273,23 @@ public class Programa implements ASTNode {
 
 	@Override
 	public String generateCode(String code, int delta, int depth) {
-		throw new RuntimeException("No se deberia haber llegado aquí");
+		if(this.opnd1 != null) {
+			switch(this.opnd1.kindExt()) {
+			case DEF_CLASE:
+				return ((DefClase) opnd1).generateCode(code, delta, depth) +
+						this.opnd2.generateCode(code, 0, depth);
+			case DEF_FUNCION:
+				return ((DefFuncion) opnd1).generateCode(code, delta, depth) + 
+						this.opnd2.generateCode(code, 0, depth);
+			case DEF_PROCEDIMIENTO:
+				return ((DefProcedimiento) opnd1).generateCode(code, delta, depth) +
+						this.opnd2.generateCode(code, 0, depth);
+			default:
+				return "";
+			}
+		}else {
+			return "";
+		}
 	}
 
 }

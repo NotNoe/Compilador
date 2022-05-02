@@ -1,5 +1,6 @@
 package ast.externos.util;
 
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.Stack;
 
@@ -18,6 +19,7 @@ public class CuerpoClase implements ASTNode {
 	private Externo opnd1;
 	private CuerpoClase opnd2;
 	private KindC kind;
+	
 	
 	public void bind (Stack<Map<String, ASTNode>> pila) {
 		if(this.kind != KindC.VACIO) {
@@ -147,9 +149,28 @@ public class CuerpoClase implements ASTNode {
 
 	@Override
 	public String generateCode(String code, int delta, int depth) {
-		// TODO Auto-generated method stub
-		return null;
+		if(this.kind != KindC.VACIO) {
+			switch(this.opnd1.kindExt()) {
+			case DEF_FUNCION:
+				((DefFuncion) opnd1).precalcular(delta);
+				return opnd1.generateCode(code, delta, depth) + this.opnd2.generateCode(code, delta, depth);
+			case DEF_PROCEDIMIENTO:
+				((DefProcedimiento) opnd1).precalcular(delta);
+				return opnd1.generateCode(code, delta, depth) + this.opnd2.generateCode(code, delta, depth);
+			default:
+				return this.opnd2.generateCode(code, delta, depth);
+			}
+		}else {
+			return "";
+		}
 	}
+
+	public void getDecList(ArrayList<Declaracion> decList) {
+		if(this.kind != KindC.VACIO && this.opnd1 instanceof Declaracion) {
+			decList.add((Declaracion)this.opnd1);
+		}
+	}
+
 	
 	
 	

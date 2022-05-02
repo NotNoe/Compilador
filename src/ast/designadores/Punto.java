@@ -6,11 +6,13 @@ import java.util.Stack;
 
 import ast.ASTNode;
 import ast.expresiones.E;
+import ast.expresiones.KindE;
 import ast.expresiones.Llamada;
 import ast.externos.DefClase;
 import ast.externos.DefFuncion;
 import ast.externos.DefProcedimiento;
 import ast.externos.DefStruct;
+import ast.externos.util.Parametro;
 import ast.instrucciones.Declaracion;
 import ast.tipo.Tipo;
 import errors.TypeMissmatchException;
@@ -161,11 +163,73 @@ public class Punto extends Designador {
 	@Override
 	public String generateCode(String code, int delta, int depth) {
 		switch (opnd1.tipo.kindType()) {
-		case STRUCT:
+		case STRUCT: {
 			String aux = this.getDir(delta);
 			return aux + "i32.load\n";
+		}
 		case CLASE:
-			return this.getDir(delta) + "i32.load\n";
+			switch(this.opnd2.kind()) {
+			case DESIGNADOR:
+				return this.getDir(delta) + "i32.load\n";
+			case LLAMADA:{
+				Llamada llam = (Llamada) this.opnd2;
+				DefClase cl = (DefClase) opnd1.tipo;
+				ASTNode def = cl.getAmbito().get(llam.getIden().getIden());
+				ArrayList<Parametro> params;
+				ArrayList<Declaracion> decs = cl.getDecList();
+				if(def instanceof DefFuncion) {
+					params = ((DefFuncion) def).getParams();
+				}else {
+					params = ((DefProcedimiento) def).getParams();
+				}				 
+				ArrayList<E> exps = llam.getSeq().getListaExp(new ArrayList<E>());
+				
+				String aux = "";
+				int offset = 0; 
+				for(int i = 0; i < decs.size(); i++) {
+					aux += "get_global $SP\n" + 
+							"i32.const " + (8 + offset) + "\n" +
+							"i32.add\n" +
+							"get_local $localsStart\n" +
+							"i32.const " + (this.opnd1.getDelta() + decs.get(i).getDelta()) + "\n"+
+							"i32.add\n"+
+							"i32.store\n";
+					offset += 4;
+				}
+				
+				for(int i = 0; i < params.size(); i++) {
+					Parametro p = params.get(i);
+					E exp = exps.get(i);
+					if(p.isRef()) {
+						aux += "get_global $SP\n"+
+								((Designador) exp).getDir(0) +
+								"i32.store offset=" + (8+offset) + "\n";
+						offset += 4;
+					}else {
+						if(exp.kind() == KindE.DESIGNADOR) {
+							aux +=  ((Designador) exp).getDir(0) +
+									"get_global $SP\n" +
+									"i32.const " + (8+offset) + "\n" +
+									"i32.add\n" +
+									"i32.const " + (exp.tipo.getSize() / 4) + "\n" +
+									"call $copyn\n";
+							offset += exp.tipo.getSize();
+						}else {
+							aux += "get_global $SP\n" +
+									exp.generateCode(code, delta, depth) + 
+									"i32.store offset=" + (8+offset) + "\n";
+							offset += 4;
+						}
+					}
+				}
+				aux += "call $" + llam.getIden().getIden() + "\n";
+				return aux;
+						
+			}
+			default:
+				throw new RuntimeException("No se debería llegar aqui");
+			}
+			
 		default:
 			//TODO
 			return null;
@@ -174,24 +238,38 @@ public class Punto extends Designador {
 
 	@Override
 	public String getDir(int delta) {
-		switch (opnd1.tipo.kindType()) {
-		case STRUCT: {
-			Map<String, ASTNode> ambito = ((DefStruct) opnd1.tipo).getAmbito();
-			String iden = ((Identificador) opnd2).getIden();
-			int delta_ini = opnd1.getDelta();
-			int dec_delta = ((Declaracion) ambito.get(iden)).getDelta();
-			return "i32.const " + (delta_ini + dec_delta) + "\n";
-		}
-		case CLASE: {
+		if(this.opnd1 instanceof This) {
 			Map<String, ASTNode> ambito = ((DefClase) opnd1.tipo).getAmbito();
 			String iden = ((Identificador) opnd2).getIden();
-			int delta_ini = opnd1.getDelta();
 			int dec_delta = ((Declaracion) ambito.get(iden)).getDelta();
-			return "i32.const " + (delta_ini + dec_delta) + "\n";
-		}
-		default:
-			//TODO:Clases
-			return null;
+			return "get_local $localsStart\n" +
+			"i32.const " + dec_delta + "\n" +
+			"i32.add\n" +
+			"i32.load\n";
+		}else {
+			switch (opnd1.tipo.kindType()) {
+			case STRUCT: {
+				Map<String, ASTNode> ambito = ((DefStruct) opnd1.tipo).getAmbito();
+				String iden = ((Identificador) opnd2).getIden();
+				int delta_ini = opnd1.getDelta();
+				int dec_delta = ((Declaracion) ambito.get(iden)).getDelta();
+				return  "get_local $localsStart\n" +
+						"i32.const " + (delta_ini + dec_delta) + "\n" +
+						"i32.add\n";
+			}
+			case CLASE: {
+				Map<String, ASTNode> ambito = ((DefClase) opnd1.tipo).getAmbito();
+				String iden = ((Identificador) opnd2).getIden();
+				int delta_ini = opnd1.getDelta();
+				int dec_delta = ((Declaracion) ambito.get(iden)).getDelta();
+				return "get_local $localsStart\n" +
+						"i32.const " + (delta_ini + dec_delta) + "\n" +
+						"i32.add\n";
+			}
+			default:
+				//TODO:Clases
+				return null;
+			}
 		}
 	}
 
@@ -204,5 +282,12 @@ public class Punto extends Designador {
 	public int getDelta() {
 		return this.opnd1.getDelta();
 	}
+
+	@Override
+	public void subsUserTypes(Map<String, Tipo> globalTypes) {
+		this.opnd1.subsUserTypes(globalTypes);
+	}
+	
+	
 
 }
