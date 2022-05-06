@@ -1,5 +1,6 @@
 package ast.externos;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Stack;
@@ -55,7 +56,7 @@ public class Programa implements ASTNode {
 		}
 	}
 	
-	public void compilar() {
+	public String compilar() {
 		HashMap<String, ASTNode> globalAmb = new HashMap<String, ASTNode>();
 		this.vincular(globalAmb);
 		Map<String, Tipo> globalTypes = new HashMap<String, Tipo>();
@@ -148,8 +149,7 @@ public class Programa implements ASTNode {
 				+ ")";
 		code += "(export \"main\" (func $main))\r\n"
 				+ ")";
-		
-		System.out.println(code);
+		return code;
 		
 	}
 	
@@ -285,7 +285,7 @@ public class Programa implements ASTNode {
 				return ((DefProcedimiento) opnd1).generateCode(code, delta, depth) +
 						this.opnd2.generateCode(code, 0, depth);
 			default:
-				return "";
+				return this.opnd2.generateCode(code, 0, depth);
 			}
 		}else {
 			return "";

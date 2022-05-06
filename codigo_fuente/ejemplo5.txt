@@ -11,9 +11,8 @@ int hf(int n){
 }
 
 void main(){
-int n = 5;
-int r;
-r = hf(n);
+int n = read();
+print(hf(n));
 }
 
 int hm(int n){

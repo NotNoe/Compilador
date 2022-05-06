@@ -1,7 +1,6 @@
 void main(){
-   int n = 10;
-   int r;
-   r = fibo(n);
+   int n = read();
+   print(fibo(n));
 }
 
 int fibo(int n){

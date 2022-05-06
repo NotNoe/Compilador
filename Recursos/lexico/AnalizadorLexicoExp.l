@@ -55,6 +55,8 @@ typedef = typedef
 else = else
 pointer = pointer
 null = NULL
+print = print
+read = read
 
 
 digitoPositivo = [1-9]
@@ -122,6 +124,8 @@ caracter = "'"[^]"'"
 {else}			  {return ops.unidadElse();}
 {pointer}		  {return ops.unidadPointer();}
 {null}			  {return ops.unidadNull();}
+{print}			  {return ops.unidadPrint();}
+{read}			  {return ops.unidadRead();}
 
 
 {identificador}		  {return ops.unidadIdenti();}

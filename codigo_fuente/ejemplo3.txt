@@ -10,8 +10,11 @@ int b[4];
 
 void main(){
 miStruct s;
-s.b = 10;
+s.b = read();
+int a = read();
 miClass c;
 c.a = false;
 c.b[2] = 45;
+print(s.b);
+print(a);
 }

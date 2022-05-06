@@ -1,2 +1,10 @@
-
+------- INTENTAR HACER YO
+- Los arrays no pueden tener dimension dinamica 
+- Asignacion directa de listas (int a[2] = [1, 2];)
+- Punteros (todo, no existen)
+- Pasar clases por referencia (funcion(&miClase);)
+-------- QUITAR DE LA DOCUMENTACION
+- Chars
+- No se pueden pasar listas literales a funciones (hola([1, 2])
 -------- AÑADIR A LA DOCUMENTACION
+- Read y print

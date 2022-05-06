@@ -35,6 +35,7 @@ public class Asignacion extends Instruccion {
 		}
 		try {
 			this.opnd2.bind(pila);
+			
 		} catch (UndefinedVariableException e) {
 			e.print();
 		}

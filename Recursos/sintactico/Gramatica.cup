@@ -35,7 +35,7 @@ SWITCH, BREAK, CONTINUE, CONST, VOID, DEFAULT, CASE, NEW, RETURN,
 TRUE, FALSE, THIS, DELETE, SUMA, AST, RESTA, DIV,
 AND, OR, PAP, PCIERRE, CAP, CCIERRE, LAP, LCIERRE, MAYORIG,
 MAYOR, MENORIG, MENOR, IGUAL, DESIG, NEG, ASIG, REF, MOD,
-PUNTO, PUNTOCOMA, COMA, TYPEDEF, ELSE, POINTER, NULL; 
+PUNTO, PUNTOCOMA, COMA, TYPEDEF, ELSE, POINTER, NULL, PRINT, READ; 
 
 terminal TokenValue IDEN, ENT, CARACTER;
 
@@ -152,7 +152,8 @@ INSTRUCCION ::= DECLARACION:d {:RESULT = d; :}
 | CONTINUE:c PUNTOCOMA {:RESULT = new Continue(c.fila, c.columna); :}
 | BORRADO:d {:RESULT = d; :} 
 | EXPRESION:d PUNTOCOMA {:RESULT = d; :} 
-| CONDICIONAL:d {:RESULT = d; :} ;
+| CONDICIONAL:d {:RESULT = d; :} 
+| PRINT:p PAP EXPRESION:e PCIERRE PUNTOCOMA {:RESULT = new Print(p.fila, p.columna, e); :};
 
 
 CONDICIONAL ::= IF:i PAP EXPRESION:e PCIERRE LAP BLOQUE_INSTRUCCIONES:b LCIERRE {: RESULT = new If(e, b, i.fila, i.columna); :} 
@@ -230,7 +231,8 @@ E15 ::= TRUE:t {: RESULT = new True(t.fila, t.columna); :}
 | LLAMADA:l {: RESULT = l; :}
 | DESIGNADOR:d {: RESULT = d; :}
 | NEW:n TIPO:t GENCORCHETES:c {: RESULT = new New(t, c, n.fila, n.columna); :}
-| NULL:n {: RESULT = new Null(n.fila, n.columna); :} ;
+| NULL:n {: RESULT = new Null(n.fila, n.columna); :} 
+| READ:r PAP PCIERRE {: RESULT = new Read(r.fila, r.columna); :};
 
 
 

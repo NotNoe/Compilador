@@ -177,4 +177,14 @@ public Symbol unidadElse() {
 	return new UnidadLexica(alex.fila(),alex.columna(),ClaseLexica.ELSE,"else");
 }
 
+public Symbol unidadPrint() {
+	return new UnidadLexica(alex.fila(),alex.columna(),ClaseLexica.PRINT,"print");
+}
+
+public Symbol unidadRead() {
+	return new UnidadLexica(alex.fila(),alex.columna(),ClaseLexica.READ,"read");
+}
+
+
+
 }
