@@ -106,7 +106,7 @@ Toda asignación será una construcción de la forma o bien un identificador de 
 
 \subsection{Llamada a función}
 Una instrucción de la forma identificador, paréntesis de apertura, una serie de identificadores de variable o literales separados por comas, y terminado por un cierre de paréntesis.
-En cualquier lugar donde pudiera ir un literal de cualquier tipo, también podrá aparecer una llamada de función en su lugar. En lugar de un identificador como nombre de función, podrá usarse la palabra reservada build, que tendrá la función de constructor en una clase (cuando le demos semántica).
+En cualquier lugar donde pudiera ir un literal de cualquier tipo, también podrá aparecer una llamada de función en su lugar. En lugar de un identificador como nombre de función, podrá usarse la palabra reservada build, esta palabra reservada solo se puede utilizar para nombrar funciones, pero no tiene ningún significado especial (es legacy code, se iba a utilizar para un tipo de funciones especiales, pero al final no).
 
 \subsection{Expresiones aritméticas}
 
@@ -418,6 +418,9 @@ No existe la memoria dinámica. Es decir, no podemos declarar variables tipo pun
 
 \section{Compilación de un programa}
 En esta sección describiremos como compilar y ejecutar código nuevo, así como ejecutar el código que damos de ejemplo.
+
+\subsection{Expresiones sueltas}
+Nuestro lenguaje no permite poner en mitad del código una expresión. Esto es aceptado por el compilador, pero a la hora de generar el código, dará un error (se quedará basura en la pila de wasm).
 
 \subsection{Ejecutar código de ejemplo}
 En el directorio del proyecto existe una carpeta llamada ``codigo\_fuente''. En esta carpeta figuran todos los ejemplos de nuestro lenguaje (tanto los compilables, como los que tienen errores en compilación). Los llamados ``ejemplo\textit{n}.txt'' son los compilables, los otros tienen errores de compilación.

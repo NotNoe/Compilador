@@ -1,15 +1,16 @@
 typedef int aux;
 
 void main(){
-    int a[2] = [5,2];
-    switch(a[0]){
+    int hola;
+    switch(adios){
     case 1 {
         int c = 3;
         break;
     }
     case 2 {
         if(a[0] == 2){
-            aux b = 3;
+	    bool c = false;
+            aux b = c;
         }
     }
     default {
