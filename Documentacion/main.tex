@@ -13,6 +13,8 @@
 \usepackage{xcolor}
 \usepackage{listings}
 
+\renewcommand{\thefootnote}{\fnsymbol{footnote}}
+
 \definecolor{mGreen}{rgb}{0,0.6,0}
 \definecolor{mGray}{rgb}{0.5,0.5,0.5}
 \definecolor{mPurple}{rgb}{0.58,0,0.82}
@@ -45,7 +47,7 @@
 \newtheorem{example}{Ejemplo}[section]
 \title{%
   Definición de la sintaxis del lenguaje C$--$ \\
-  \large Procesadores del Lenguaje Entrega 1}
+  \large Procesadores del Lenguaje Definitivo}
 
 \author{Óscar Calvet Sisó, Noelia Barranco Godoy}
 \date{}
@@ -61,20 +63,20 @@ El objetivo de este documento es el de especificar la sintaxis de nuestro lengua
 \noindent Nuestro lenguaje implementará comentarios de una sola linea al estilo de C. Cabe destacar que la cadena // estará prohibida dentro de los comentarios. Por último, al final expondremos una lista de palabras reservadas. Estas son palabras que por su construcción bien podrían ser identificadores, pero nosotros las prohibiremos porque se usarán en otros contextos.
 
 \section{Identificadores y ámbitos de definición}
-El lenguaje permite declarar variables (o constantes) simples y arrays de cualquiera de los tipos descritos más adelante (incluidos arrays de varias dimensiones). Estas variables podrán estar alojadas en memoria estática o dinámica. Como es habitual, habrá anidamiento de bloques con sus respectivos y funciones, que podrán tener argumentos de cualquier tipo.
+El lenguaje permite declarar variables (o constantes\footnote[1]{Ver seccion \ref{r}}) simples y arrays de cualquiera de los tipos descritos más adelante (incluidos arrays de varias dimensiones). Estas variables podrán estar alojadas en memoria estática o dinámica\footnotemark[1]. Como es habitual, habrá anidamiento de bloques con sus respectivos y funciones, que podrán tener argumentos de cualquier tipo\footnotemark[1].
 
 \noindent Las funciones solo se podrán definir en el ámbito más general del proyecto (fuera de cualquier función), así como, los tipos de usuario, tipos estructurados y clases. Las funciones podrán recibir como argumentos parámentros de cualquier tipo, incluido punteros o referencias.
 
-\noindent En el ámbito global, también se podrán declarar variables, definir tipos nuevos .
+\noindent En el ámbito global, también se podrán declarar variables\footnotemark[1]y definir tipos nuevos .
 
 \section{Tipos}
 
 \subsection{Tipos básicos y de usuario}
 
-En nuestro lenguaje existirán tres tipos básicos, el tipo entero (con identificador int), el tipo booleano (con identificador bool) y el tipo caracter (con identificador char). Además, el usuario podrá declarar pseudónimos de cualquier tipo del lenguaje así como, clases y estructurados.
+En nuestro lenguaje existirán tres tipos básicos, el tipo entero (con identificador int), el tipo booleano (con identificador bool) y el tipo caracter\footnotemark[1] (con identificador char). Además, el usuario podrá declarar pseudónimos de cualquier tipo del lenguaje así como, clases y estructurados.
 
 \subsection{Arrays y punteros}
-Con todos estos tipos, podremos crear arrays y punteros. La notación que identifica a los arrays será la habitual, es decir, el identificador seguido de tantos corchetes de apertura y cierre como dimensiones tenga el array. Los arrays no serán polimórficos.
+Con todos estos tipos, podremos crear arrays y punteros\footnotemark[1]. La notación que identifica a los arrays será la habitual, es decir, el identificador seguido de tantos corchetes de apertura y cierre como dimensiones tenga el array. Los arrays no serán polimórficos.
 
 La notación pertinente a los punteros serán el identificador precedido de la palabra reservada 'pointer' seguida de otra identificador de tipo. Añadiremos pues un operador de referencia que, dada una variable cualquiera devuelva un puntero que apunte a esa variable, que se expresará con el "\&".
 
@@ -86,7 +88,7 @@ A nivel sintáctico, todas las funciones estarán tipadas. Para esto exisistirá
 
 Todo tipo que no sea una función se declará de la siguiente manera: identificador de tipo seguido de un identificador (no seguido de un paréntesis para diferenciarlo de una función). Adicionalmente, podrá ir seguido del signo igual y de una expresión del tipo a declarar. 
 
-\noindent Los tipos de array se declararán de la forma una expresión de tipo existente seguida del símbolo [, una expresión y ]. Los tipos punteros se definirán con la palabra reservada 'pointer' seguida de un tipo cualquiera y terminada en un identificador seguido de un número arbitrario de corchetes cada uno conteniendo una expresión.
+\noindent Los tipos de array se declararán de la forma una expresión de tipo existente seguida del símbolo [, una expresión\footnotemark[1] y ]. Los tipos punteros se definirán con la palabra reservada 'pointer' seguida de un tipo cualquiera y terminada en un identificador seguido de un número arbitrario de corchetes cada uno conteniendo una expresión.
 
 \noindent Las funciones se declararán de la siguiente forma: un identificador de tipo (o identificador void), seguido de un identificador y de un parentesis. Una sucesión de declaración de variables separadas por comas, terminado por un paréntesis de cierre y seguido de un bloque de código de nuestro lenguaje.
 
@@ -118,12 +120,14 @@ También se considerarán expresiones booleanas las que contienen dos identifica
 
 Finalmente también existirán expresiones booleanas de la forma siguiente: dos expresiones aritméticas separadas por los operadores "$<=, >=, >, <$" de manera infija, representado las comparaciones aritméticas.
 
+\subsection{Expresión read}
+Una expresión particular es read, que tendrá como sintaxis la palabra reservada read, seguida de un paréntesis de apertura y otro de cierre. Esta devolverá siempre un int, que será leido del buffer de entrada del programa.
 
 
-\subsection{Expresiones de caracteres}
+\subsection{Expresiones de caracteres\footnotemark[1]}
 Estas solamente serán de la forma comillas simples, seguida de un caracter ASCII y cerrado por otra comilla.
 
-\subsection{Expresiones de arrays}
+\subsection{Expresiones de arrays\footnotemark[1]}
 Al definir un array, siempre se hará de manera constante, osea la apertura de un corchete seguida de uan secuencia de literales separados por coma y terminado en corchete de cierre
 
 
@@ -153,7 +157,7 @@ Para la instrucción condicional simple utilizaremos la sintaxis siguiente: la p
 
 Para la instrucción condicional compuesta utilizaremos la sintaxis siguiente: la palabra reservada if seguida de paréntesis que contendrán una expresión (será de tipo booleana) y a continuación llaves que contendrán instrucciones. Seguidamente aparecerá la palabra reservada else seguida de llaves que contendrán instrucciones.
 
-\subsection{Instrucción switch}
+\subsection{Instrucción switch\footnotemark[1]}
 
 Para la instrucción switch utilizaremos la siguiente sintaxis: la palabra reservada switch seguida de paréntesis que contendrán un identificador seguido de llaves que contendrán bloques de cases consistentes del la palabra reservada case seguida de un identicador seguido de código entre llaves. Existe un bloque case especial que en lugar de empezar por la palabra case empieza por la palabra default.
 
@@ -169,13 +173,17 @@ La instrucción continue tendrá la sintaxis de siguiente: la palabra 'continue'
 
 La instrucción return tendrá la siguiente sintaxis: la palabra reservada 'return' seguida de una expresión. Se utilizará argumento de retorno de una función.
 
-\subsection{Instrucción new}
+\subsection{Instrucción new\footnotemark[1]}
 
 La instrucción new tendrá la siguiente sintaxis: la palabra reservada 'new' seguida de un identificador de tipo simple o compuesto. Podrá estar seguido de una o más aperturas de corchete con un número entre ellos, esto indicará que son arrays. Se utilizará para reservar memoria dinámica.
 
-\subsection{Instrucción delete}
+\subsection{Instrucción delete\footnotemark[1]}
 
 La instrucción delete tendrá la siguiente sintaxis: la palabra reservada 'delete' seguida de un identificador. Se utilizará para eliminar memoria dinámica.
+
+\subsection{Instrucción print}
+
+La instrucción print tendrá como sintaxis la palabra print, seguida de un paréntesis de apertura, un identificador de tipo básico (o tipo de usuario que referencie a uno básico) y un paréntesis de cierre. Esta instrucción imprimirá por pantalla este valor.
 
 \subsection{Definición de tipos de usuario}
 La palabra reservada 'typedef' se usará en el ámbito global para definir alias de cualquier tipo.
@@ -290,8 +298,58 @@ void main(){
 }
 \end{lstlisting}
 
+\begin{lstlisting}[style=CStyle]
+int hf(int n){
+   if(n<0){
+      return 0;
+   }else{
+      if(n==0){
+	return 0;
+      }else{
+	return n - hm(hf(n-1));
+      }  
+   } 
+}
+
+void main(){
+int n = read();
+print(hf(n));
+}
+
+int hm(int n){
+   if(n<0){
+      return 0;
+   }else{
+      if(n==0){
+	return 0;
+      }else{
+	return n - hf(hm(n-1));
+      }  
+   } 
+}
+
+\end{lstlisting}
+
+
+\begin{lstlisting}[style=CStyle]
+void main(){
+   int n = read();
+   print(fibo(n));
+}
+
+int fibo(int n){
+   if(n < 2){
+	return 1;
+}else{
+   return fibo(n-1) + fibo(n-2);
+}
+}
+
+
+\end{lstlisting}
+
 \section{Palabras reservadas}
-\begin{multicols}{4}
+\begin{multicols}{5}
 \begin{itemize}
     \item int
     \item char
@@ -316,8 +374,65 @@ void main(){
     \item delete
     \item typedef
     \item pointer
+    \item read
+    \item print
 
 \end{itemize}
 \end{multicols}
+
+\section{Cambios y recortes}
+\label{r}
+Hemos implementado todo lo descrito anteriormente menos la generación de código (osea, léxico, sintáctico, binding, tipado, gestión de errores...), no obstante, a la hora de generación de código (por las limitaciones que te comentamos en aquél correo) ha habido algunos cambios y recortes. Todo lo expuesto a continuación ha sido implementado completamente hasta la generación de código (no incluida), respecto a la generación de código, algunas cosas han sido implememntadas parcialmente o con simplificaciones, mientras que otras no han sido implementadas directamente.
+
+\subsection{Chars}
+El tipo char directamente no existe. Aunque la sintaxis y el tipado funcionan bien para este tipo, no se llega a generar código que lo maneje, por esto no se puede usar este tipo en los programas (aunque la sintaxis lo permita).
+
+\subsection{Switch}
+El switch funciona correctamente, pero con una limitación. Los valores de las distintas clausulas "case" tienen que ser enteros positivos.
+
+\subsection{Tipos de las funciones}
+Aunque la sintaxis lo permita, la generación de código no permite que las funciones devuelvan tipos no básicos (los alias de tipo de usuario que referencien a tipos básicos, se consideran básicos).
+
+\subsection{Continue}
+La instrucción de control continue no genera código. Si se hace la comprobación de que cuando aparece esté en un sitio permitido, pero no se llega a generar el código que la implementa.
+
+\subsection{Constantes}
+Si bien se pueden declarar variables como constantes, en ningún momento se considera un error de compilación el intentar cambiar el valor a una de estas, así que aunque se declaren como constantes, funcionan como variables normales.
+
+\subsection{Dimensión de los arrays}
+Al declarar un array, la dimensión tiene que tener un valor constante, no puede declararse con una variable.
+
+\subsection{Asignación de listas}
+Las listas no se pueden asignar de forma directa. La instrucción ``int a[2] = [1,2]'' no genera correctamente el código. Para trabajar con listas, tendríamos que declararlas primero y luego poner los valores uno a uno: ``int a[2]; a[0] = 1; a[1] = 2;''.
+
+\subsection{Paso de parámetros a función}
+En los parámetros de una función, no se pueden pasar listas de manera literal, solo mediante identificadores. Para hacer ``funcion([1,2]);'' habría que hacer ``int aux[2]; aux[0] = 1; aux[1] = 2; funcion(aux);''.
+
+Además, tampoco se pueden pasar clases por referencia.
+
+\subsection{Declaraciones globales}
+No existen las declaraciones globales.
+
+\subsection{Memoria dinámica}
+No existe la memoria dinámica. Es decir, no podemos declarar variables tipo puntero, no podemos pedir espacio en el heap con la instrucción ``new'' y, por supuesto, no podemos borrar memoria dinámica con la instrucción ``delete''. Por tanto, los punteros realmente no existen.
+
+\section{Compilación de un programa}
+En esta sección describiremos como compilar y ejecutar código nuevo, así como ejecutar el código que damos de ejemplo.
+
+\subsection{Ejecutar código de ejemplo}
+En el directorio del proyecto existe una carpeta llamada ``codigo\_fuente''. En esta carpeta figuran todos los ejemplos de nuestro lenguaje (tanto los compilables, como los que tienen errores en compilación). Los llamados ``ejemplo\textit{n}.txt'' son los compilables, los otros tienen errores de compilación.
+
+Si se desea hacer un código nuevo, el código fuente (formato txt) tendrá que estar en la carpeta mencionada anteriormente.
+
+Para los códigos que ofrecemos como ejemplo, ya están compilados en la carpeta ``compilados''. En esta carpeta hay, por cada código fuente, un archivo wat (que se genera de manera intermedia al compilar, pero que hemos decidido no borrar con propósito de poder leer el código generado), un archivo wasm (que es el archivo binario que se ejecuta) y un archivo js, todos con el mismo nombre que el código fuente.
+
+Para ejecutar cualquiera de estos códigos, simplemente abrir una consola en esta carpeta y ejecutar el comando ``node ejemplo\textit{n}.js''. Seguidamente habrá que introducir tantos números como requiera la entrada del programa en particular.
+
+\subsection{Crear código nuevo}
+Para crear un código nuevo, o modificar uno existente, el procedimiento es el siguiente. Primero creamos nuestro código, un fichero de texto plano (formato .txt), y lo colocamos en la carpeta ``codigo\_fuente''. Ejecutamos el main de nuestro compilador (el programa de java), lo que creará en el directorio del proyecto dos archivos nuevos.
+
+El primero es simplemente el archivo wat, que podemos borrar si queremos (no lo borramos automáticamente para poder leer el código ensamblador generado). El segundo es el archivo wasm, que será necesario para ejecutar.
+
+Para poder ejecutar el programa, simplemente abrir el archivo "exe.js" y modificar la línea 50 (para que el nombre del archivo a ejecutar sea el correcto) y la línea 57 (Si nuestro programa no va a tener entrada, comentar la línea, si nuestro programa va a tener entrada por consola, descomentarla y poner en la función cuántas entradas tiene que leer).
 
 \end{document}

@@ -15,7 +15,7 @@ import ast.tipo.Tipo;
 
 public class DefProcedimiento implements Externo {
 	
-	private Tipo tipo = null;
+
 	private Identificador opnd1;
 	private Parametros opnd2;
 	private BloqueInstrucciones opnd3;

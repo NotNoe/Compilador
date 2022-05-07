@@ -200,6 +200,7 @@ public class Identificador extends Designador implements Tipo {
 		
 	}
 
+	@SuppressWarnings("incomplete-switch")
 	public ArrayList<Parametro> getParams() {
 		switch (((Externo) this.link).kindExt()) {
 		case DECLARACION:

@@ -2,6 +2,7 @@ package errors;
 
 import constructorast.Main;
 
+@SuppressWarnings("serial")
 public class OutOfContextControlStatementException extends Exception {
 	private int fila;
 	private int columna;

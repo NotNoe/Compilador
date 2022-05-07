@@ -12,4 +12,5 @@ for(int i = 0; i <= N; i = i + 1;){
     }
 }
 r = b[N];
+print(r);
 } 

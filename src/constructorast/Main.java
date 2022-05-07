@@ -24,7 +24,8 @@ public class Main {
 	 String code = aux.compilar();
 	 String maquina = args[0].substring(0, args[0].length() - 3);
 	 maquina += "wat";
-	 File archivo = new File(maquina);
+	 @SuppressWarnings("unused")
+	File archivo = new File(maquina);
 	 FileWriter out = new FileWriter(maquina);
 	 out.write(code);
 	 out.flush();

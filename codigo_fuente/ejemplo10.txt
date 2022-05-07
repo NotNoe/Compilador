@@ -24,5 +24,6 @@ void main(){
    miClass d;
    change(d);
    a = d.a;
+   print(a);
 }
 

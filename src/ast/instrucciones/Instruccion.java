@@ -2,7 +2,6 @@ package ast.instrucciones;
 
 import ast.ASTNode;
 import ast.NodeKind;
-import ast.tipo.Tipo;
 
 public abstract class Instruccion implements ASTNode{
 	
@@ -14,7 +13,6 @@ public abstract class Instruccion implements ASTNode{
     	this.fila = fila;
     	this.columna = columna;
     }
-    //public abstract void type(Tipo funcion, Tipo val_switch, Tipo current_class, boolean continuable, boolean breakeable);
 	protected abstract int precalcular(int i);
 	
 

@@ -14,6 +14,7 @@ public class ArrayDimensiones implements ASTNode {
 	
 	private E opnd1;
 	private ArrayDimensiones opnd2;
+	@SuppressWarnings("unused")
 	private int size = 0;
 	
 	

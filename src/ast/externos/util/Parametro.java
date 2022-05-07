@@ -7,7 +7,6 @@ import ast.ASTNode;
 import ast.ArrayDimensiones;
 import ast.NodeKind;
 import ast.designadores.Identificador;
-import ast.tipo.KindType;
 import ast.tipo.Tipo;
 import errors.TypeMissmatchException;
 

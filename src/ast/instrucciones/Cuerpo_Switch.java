@@ -7,7 +7,6 @@ import java.util.Stack;
 import ast.ASTNode;
 import ast.NodeKind;
 import ast.tipo.Tipo;
-import errors.TypeMissmatchException;
 import errors.UndefinedVariableException;
 
 public class Cuerpo_Switch implements ASTNode {

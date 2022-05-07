@@ -5,7 +5,6 @@ import java.util.Stack;
 
 import ast.ASTNode;
 import ast.ArrayDimensiones;
-import ast.designadores.Identificador;
 import ast.tipo.Array;
 import ast.tipo.KindType;
 import ast.tipo.Pointer;

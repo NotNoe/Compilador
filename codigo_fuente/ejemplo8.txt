@@ -7,12 +7,11 @@ int sum_vec(int v[5]){
 }
 
 void main(){
-   int r;
    int v[5];
    v[0] = 0;
    v[1] = 1;
    v[2] = 2;
    v[3] = 3;
    v[4] = 4;
-   r = sum_vec(v);
+   print(sum_vec(v));
 }

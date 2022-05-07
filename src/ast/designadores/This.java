@@ -5,7 +5,6 @@ import java.util.Stack;
 
 import ast.ASTNode;
 import ast.tipo.Tipo;
-import errors.OutOfContextControlStatementException;
 import errors.TypeMissmatchException;
 
 public class This extends Designador {

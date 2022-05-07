@@ -18,7 +18,6 @@ import ast.externos.*;
 import ast.externos.util.*;
 import ast.instrucciones.*;
 import ast.tipo.*;
-import java_cup.runtime.ComplexSymbolFactory.Location;
 
 /** CUP v0.11b beta 20140220 generated parser.
   * @version Fri May 06 12:35:12 CEST 2022
@@ -1290,7 +1289,7 @@ public class AnalizadorSintactico extends java_cup.runtime.lr_parser {
   public java_cup.runtime.Symbol do_action(
     int                        act_num,
     java_cup.runtime.lr_parser parser,
-    java.util.Stack            stack,
+    @SuppressWarnings("rawtypes") java.util.Stack            stack,
     int                        top)
     throws java.lang.Exception
   {
@@ -1348,7 +1347,7 @@ class CUP$AnalizadorSintactico$actions {
   public final java_cup.runtime.Symbol CUP$AnalizadorSintactico$do_action_part00000000(
     int                        CUP$AnalizadorSintactico$act_num,
     java_cup.runtime.lr_parser CUP$AnalizadorSintactico$parser,
-    java.util.Stack            CUP$AnalizadorSintactico$stack,
+    @SuppressWarnings("rawtypes") java.util.Stack            CUP$AnalizadorSintactico$stack,
     int                        CUP$AnalizadorSintactico$top)
     throws java.lang.Exception
     {
@@ -2988,7 +2987,7 @@ class CUP$AnalizadorSintactico$actions {
   public final java_cup.runtime.Symbol CUP$AnalizadorSintactico$do_action(
     int                        CUP$AnalizadorSintactico$act_num,
     java_cup.runtime.lr_parser CUP$AnalizadorSintactico$parser,
-    java.util.Stack            CUP$AnalizadorSintactico$stack,
+    @SuppressWarnings("rawtypes") java.util.Stack            CUP$AnalizadorSintactico$stack,
     int                        CUP$AnalizadorSintactico$top)
     throws java.lang.Exception
     {

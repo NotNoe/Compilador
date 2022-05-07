@@ -3,8 +3,6 @@ package ast.designadores;
 import java.util.Map;
 import java.util.Stack;
 
-import javax.lang.model.type.TypeKind;
-
 import ast.ASTNode;
 import ast.expresiones.E;
 import ast.tipo.Array;

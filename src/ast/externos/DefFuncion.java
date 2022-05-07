@@ -11,7 +11,6 @@ import ast.externos.util.Parametro;
 import ast.externos.util.KindExt;
 import ast.externos.util.Parametros;
 import ast.instrucciones.BloqueInstrucciones;
-import ast.tipo.KindType;
 import ast.tipo.Tipo;
 import errors.TypeMissmatchException;
 

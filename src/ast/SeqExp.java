@@ -6,8 +6,6 @@ import java.util.Stack;
 
 import ast.expresiones.E;
 import ast.externos.util.Delim;
-import ast.tipo.Array;
-import ast.tipo.EmptyArray;
 import ast.tipo.Tipo;
 import errors.TypeMissmatchException;
 import errors.UndefinedVariableException;
